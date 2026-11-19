@@ -1,0 +1,15 @@
+# Structural lint gate for the spec, run before codegen. The `recommended` ruleset enables `struct`, which
+# validates schema objects against the OpenAPI meta-schema; openapi-generator would accept those mistakes and
+# silently turn them into empty or mis-bound models.
+apis:
+  gnomewars:
+    root: shared/api/gnomewars-openapi.yaml
+
+extends:
+  - recommended
+
+rules:
+  # No auth by design. security-defined is `error` in recommended and would fail once per operation.
+  security-defined: off
+  # The repo's LICENSE is not declared in the spec.
+  info-license: off

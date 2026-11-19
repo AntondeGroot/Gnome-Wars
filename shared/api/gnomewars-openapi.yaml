@@ -1,0 +1,25 @@
+openapi: 3.1.0
+info:
+  title: Gnome Wars API
+  version: 1.0.0
+  description: |
+    OpenApi definition for the Gnome Wars game.
+
+servers:
+  - url: /
+    description: Same origin as the deployed app (local dev runs at http://localhost:4400)
+
+tags:
+  - name: health
+    description: Liveness of the server
+
+paths:
+  /health:
+    get:
+      tags: [health]
+      operationId: getHealth
+      summary: Check if the server is healthy
+      description: Check if the server is healthy
+      responses:
+        '200':
+          description: A healthy server returns status 200
