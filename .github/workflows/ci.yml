@@ -1,0 +1,15 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # The job id must stay `ci`: the `protectMain` ruleset requires a status check with that name.
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: replace with install/lint/test/build once the Angular app exists.
+      - run: echo "No build yet"
