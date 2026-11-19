@@ -21,6 +21,9 @@
   <properties>
     <java.version>25</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <openapi-generator.version>7.26.0</openapi-generator.version>
+    <openapi.spec>${project.basedir}/../shared/api/gnomewars-openapi.yaml</openapi.spec>
+    <openapi.output>${project.build.directory}/generated-sources/openapi</openapi.output>
   </properties>
 
   <dependencies>
@@ -45,6 +48,21 @@
       <artifactId>spring-boot-starter-websocket</artifactId>
     </dependency>
 
+    <!-- Required by the OpenAPI-generated code -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.55</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.12</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -65,6 +83,66 @@
             <arg>-Werror</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+
+      <!-- Spring interfaces and DTOs from the shared spec. The output is under target/, so generated
+           code never enters git and is regenerated on every build. -->
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator.version}</version>
+        <executions>
+          <execution>
+            <id>openapi-gnomewars</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${openapi.spec}</inputSpec>
+              <generatorName>spring</generatorName>
+              <output>${openapi.output}</output>
+              <apiPackage>nl.adg.gnomewars.generated.api</apiPackage>
+              <modelPackage>nl.adg.gnomewars.generated.model</modelPackage>
+              <!-- Suffix models with "Dto" so they never collide with domain types. Only the Java name
+                   changes; the JSON wire format is untouched. -->
+              <modelNameSuffix>Dto</modelNameSuffix>
+              <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+              <configOptions>
+                <delegatePattern>true</delegatePattern>
+                <!-- One interface per tag, so the names match the client's services. -->
+                <useTags>true</useTags>
+                <sourceFolder>src/main/java</sourceFolder>
+                <useJakartaEe>true</useJakartaEe>
+                <useSpringBoot3>true</useSpringBoot3>
+                <!-- Optional container fields default to null rather than an empty collection, so the
+                     wire keeps omitting them. -->
+                <containerDefaultToNull>true</containerDefaultToNull>
+                <generateJsonIncludeAnnotations>false</generateJsonIncludeAnnotations>
+                <generateJsonSetterNullsAnnotations>false</generateJsonSetterNullsAnnotations>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Adds the generated sources to the compile path -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-generated-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${openapi.output}/src/main/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -88,6 +166,19 @@
                 <configuration>
                   <executable>npm</executable>
                   <arguments><argument>ci</argument></arguments>
+                  <workingDirectory>${project.basedir}/../client</workingDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>npm-generate</id>
+                <phase>prepare-package</phase>
+                <goals><goal>exec</goal></goals>
+                <configuration>
+                  <executable>npm</executable>
+                  <arguments>
+                    <argument>run</argument>
+                    <argument>generate</argument>
+                  </arguments>
                   <workingDirectory>${project.basedir}/../client</workingDirectory>
                 </configuration>
               </execution>

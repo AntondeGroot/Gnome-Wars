@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.26.0",
+    "generators": {
+      "gnomewars": {
+        "generatorName": "typescript-angular",
+        "inputSpec": "../shared/api/gnomewars-openapi.yaml",
+        "output": "src/generated",
+        "additionalProperties": {
+          "ngVersion": "22",
+          "withInterfaces": true,
+          "fileNaming": "camelCase",
+          "supportsES6": true,
+          "enumPropertyNaming": "UPPERCASE"
+        }
+      }
+    }
+  }
+}
