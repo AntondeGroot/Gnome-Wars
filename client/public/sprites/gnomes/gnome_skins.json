@@ -1,0 +1,577 @@
+{
+ "how_it_works": "Every gnome frame is drawn once (gnome_template_1x.png). Each pixel uses one of the flat key colours below; swap each key colour for a skin's colour at load time (or in a shader) to get that skin. New skin: pick the 8 base colours in the colour lab, then derive the shades with the rules in \"derive\".",
+ "frame_order": [
+  "down_idle",
+  "down_walk_0",
+  "down_walk_1",
+  "down_walk_2",
+  "down_walk_3",
+  "up_idle",
+  "up_walk_0",
+  "up_walk_1",
+  "up_walk_2",
+  "up_walk_3",
+  "right_idle",
+  "right_walk_0",
+  "right_walk_1",
+  "right_walk_2",
+  "right_walk_3",
+  "left_idle",
+  "left_walk_0",
+  "left_walk_1",
+  "left_walk_2",
+  "left_walk_3"
+ ],
+ "tile": 16,
+ "keys": {
+  "outline": "#000000",
+  "hat": "#ff0000",
+  "hat_dark": "#800000",
+  "hat_light": "#ff8080",
+  "skin": "#ffcc99",
+  "ear": "#cc9966",
+  "nose": "#ff6699",
+  "beard": "#ffffff",
+  "beard_shade": "#c0c0c0",
+  "tunic": "#996633",
+  "tunic_shade": "#663300",
+  "belt": "#333300",
+  "boots": "#330000"
+ },
+ "skins": {
+  "red": {
+   "outline": "#1f2a1d",
+   "hat": "#d63c3c",
+   "hat_dark": "#9a2424",
+   "hat_light": "#ff8070",
+   "skin": "#f2c095",
+   "ear": "#d99a70",
+   "nose": "#e9806e",
+   "beard": "#f7f4ee",
+   "beard_shade": "#d6d0c6",
+   "tunic": "#8a5a34",
+   "tunic_shade": "#6a4428",
+   "belt": "#4b3121",
+   "boots": "#4a3020"
+  },
+  "purple": {
+   "outline": "#1f2a1d",
+   "hat": "#7b4fd6",
+   "hat_dark": "#4f2e9a",
+   "hat_light": "#b293ff",
+   "skin": "#f2c095",
+   "ear": "#d99a70",
+   "nose": "#e9806e",
+   "beard": "#f7f4ee",
+   "beard_shade": "#d6d0c6",
+   "tunic": "#8a5a34",
+   "tunic_shade": "#6a4428",
+   "belt": "#4b3121",
+   "boots": "#4a3020"
+  },
+  "night": {
+   "outline": "#1f2a1d",
+   "hat": "#2f3f8a",
+   "hat_dark": "#222d63",
+   "hat_light": "#7e88b6",
+   "skin": "#f2c095",
+   "ear": "#dca87f",
+   "nose": "#e9806e",
+   "beard": "#dfe6f0",
+   "beard_shade": "#c7ced6",
+   "tunic": "#4a5a6a",
+   "tunic_shade": "#394552",
+   "belt": "#4b3121",
+   "boots": "#2b2b3a"
+  }
+ },
+ "derive": {
+  "hat_dark": "hat mixed 28% towards black",
+  "hat_light": "hat mixed 38% towards white",
+  "ear": "skin mixed 18% towards #7a3a1a",
+  "beard_shade": "beard mixed 13% towards #2a2a2a",
+  "tunic_shade": "tunic mixed 23% towards black"
+ },
+ "atlas_frames": {
+  "template/down_idle": {
+   "x": 0,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/down_walk_0": {
+   "x": 16,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/down_walk_1": {
+   "x": 32,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/down_walk_2": {
+   "x": 48,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/down_walk_3": {
+   "x": 64,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/up_idle": {
+   "x": 80,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/up_walk_0": {
+   "x": 96,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/up_walk_1": {
+   "x": 112,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/up_walk_2": {
+   "x": 128,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/up_walk_3": {
+   "x": 144,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/right_idle": {
+   "x": 160,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/right_walk_0": {
+   "x": 176,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/right_walk_1": {
+   "x": 192,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/right_walk_2": {
+   "x": 208,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/right_walk_3": {
+   "x": 224,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/left_idle": {
+   "x": 240,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/left_walk_0": {
+   "x": 256,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/left_walk_1": {
+   "x": 272,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/left_walk_2": {
+   "x": 288,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "template/left_walk_3": {
+   "x": 304,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "red/down_idle": {
+   "x": 0,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/down_walk_0": {
+   "x": 16,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/down_walk_1": {
+   "x": 32,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/down_walk_2": {
+   "x": 48,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/down_walk_3": {
+   "x": 64,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/up_idle": {
+   "x": 80,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/up_walk_0": {
+   "x": 96,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/up_walk_1": {
+   "x": 112,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/up_walk_2": {
+   "x": 128,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/up_walk_3": {
+   "x": 144,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/right_idle": {
+   "x": 160,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/right_walk_0": {
+   "x": 176,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/right_walk_1": {
+   "x": 192,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/right_walk_2": {
+   "x": 208,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/right_walk_3": {
+   "x": 224,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/left_idle": {
+   "x": 240,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/left_walk_0": {
+   "x": 256,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/left_walk_1": {
+   "x": 272,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/left_walk_2": {
+   "x": 288,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "red/left_walk_3": {
+   "x": 304,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "purple/down_idle": {
+   "x": 0,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/down_walk_0": {
+   "x": 16,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/down_walk_1": {
+   "x": 32,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/down_walk_2": {
+   "x": 48,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/down_walk_3": {
+   "x": 64,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/up_idle": {
+   "x": 80,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/up_walk_0": {
+   "x": 96,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/up_walk_1": {
+   "x": 112,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/up_walk_2": {
+   "x": 128,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/up_walk_3": {
+   "x": 144,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/right_idle": {
+   "x": 160,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/right_walk_0": {
+   "x": 176,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/right_walk_1": {
+   "x": 192,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/right_walk_2": {
+   "x": 208,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/right_walk_3": {
+   "x": 224,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/left_idle": {
+   "x": 240,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/left_walk_0": {
+   "x": 256,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/left_walk_1": {
+   "x": 272,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/left_walk_2": {
+   "x": 288,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "purple/left_walk_3": {
+   "x": 304,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "night/down_idle": {
+   "x": 0,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/down_walk_0": {
+   "x": 16,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/down_walk_1": {
+   "x": 32,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/down_walk_2": {
+   "x": 48,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/down_walk_3": {
+   "x": 64,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/up_idle": {
+   "x": 80,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/up_walk_0": {
+   "x": 96,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/up_walk_1": {
+   "x": 112,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/up_walk_2": {
+   "x": 128,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/up_walk_3": {
+   "x": 144,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/right_idle": {
+   "x": 160,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/right_walk_0": {
+   "x": 176,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/right_walk_1": {
+   "x": 192,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/right_walk_2": {
+   "x": 208,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/right_walk_3": {
+   "x": 224,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/left_idle": {
+   "x": 240,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/left_walk_0": {
+   "x": 256,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/left_walk_1": {
+   "x": 272,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/left_walk_2": {
+   "x": 288,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "night/left_walk_3": {
+   "x": 304,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  }
+ }
+}
