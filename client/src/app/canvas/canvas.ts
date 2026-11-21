@@ -32,6 +32,11 @@ export class Canvas {
     const img = new Image();
     img.src = 'sprites/arena/ground/grass_0.png';
     await img.decode();
-    ctx.drawImage(img, 0, 0);
+
+    for (let x = 0; x <= 16; x++) {
+      for (let y = 0; y <= 12; y++) {
+        ctx.drawImage(img, x*16, y*16);
+      }
+    }
   }
 }
