@@ -1,5 +1,6 @@
 import { afterNextRender, Component, ElementRef, viewChild } from '@angular/core';
 import { SpriteSheet } from '../sprite-atlas';
+import { ArenaMap, BACKYARD } from '../arena-map';
 
 const TILE = 16;
 const COLUMNS = 17; // 272 / 16
@@ -26,10 +27,21 @@ export class Canvas {
       return;
     }
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
-
     const sheet = await SpriteSheet.load();
-    this.drawLawn(ctx, sheet);
-    sheet.drawFrame(ctx, 'hedge', 2 * TILE, 2 * TILE);
+    this.drawMap(ctx, sheet, BACKYARD);
+  }
+
+  private drawMap(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap){
+    for (const [y, row] of map.grid.entries()) {
+      for (const [x, letter] of [...row].entries()) {
+        // 1. look the letter up in map.legend → frame name
+        const frameName = map.legend[letter];
+        if(frameName == undefined){
+          throw new Error(`Undefined character found in backyard.json grid: ${letter}`)
+        }
+        sheet.drawFrame(ctx, frameName, x*TILE, y*TILE);
+      }
+    }
   }
 
   private drawLawn(ctx: CanvasRenderingContext2D, sheet: SpriteSheet): void {
