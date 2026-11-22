@@ -1,6 +1,7 @@
 import { afterNextRender, Component, ElementRef, viewChild } from '@angular/core';
 import { SpriteSheet } from '../sprite-atlas';
 import { ArenaMap, BACKYARD } from '../arena-map';
+import { autotileFrame, isAutotile } from '../autotile';
 
 const TILE = 16;
 
@@ -42,9 +43,10 @@ export class Canvas {
   private drawProps(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
     for (const [y, row] of map.grid.entries()) {
       for (const [x, letter] of [...row].entries()) {
-        const frameName = map.legend[letter];
-        if (frameName === null) continue;
+        const name = map.legend[letter];
+        if (name === null) continue;
 
+        const frameName = isAutotile(name) ? autotileFrame(name, map.grid, x, y) : name;
         sheet.drawFrame(ctx, frameName, x * TILE, y * TILE);
       }
     }
