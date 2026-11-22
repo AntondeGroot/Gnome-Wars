@@ -1,4 +1,9 @@
 import { afterNextRender, Component, ElementRef, viewChild } from '@angular/core';
+import { SpriteSheet } from '../sprite-atlas';
+
+const TILE = 16;
+const COLUMNS = 17; // 272 / 16
+const ROWS = 13; // 208 / 16
 
 @Component({
   imports: [],
@@ -16,26 +21,21 @@ export class Canvas {
   }
 
   private async draw(): Promise<void> {
-    const canvas = this.canvasRef().nativeElement;
-    const ctx = canvas.getContext('2d');
+    const ctx = this.canvasRef().nativeElement.getContext('2d');
     if (ctx == null) {
       return;
     }
+    ctx.imageSmoothingEnabled = false; // keep pixels crisp
 
-    ctx.imageSmoothingEnabled = false; // keep pixels crisp once we draw images (step B2)
-    ctx.fillStyle = '#5a9e3a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height); // the whole 272 × 208 drawing surface
-    await this.drawGrass(ctx);
+    const sheet = await SpriteSheet.load();
+    this.drawLawn(ctx, sheet);
+    sheet.drawFrame(ctx, 'hedge', 2 * TILE, 2 * TILE);
   }
 
-  private async drawGrass(ctx: CanvasRenderingContext2D): Promise<void> {
-    const img = new Image();
-    img.src = 'sprites/arena/ground/grass_0.png';
-    await img.decode();
-
-    for (let x = 0; x <= 16; x++) {
-      for (let y = 0; y <= 12; y++) {
-        ctx.drawImage(img, x*16, y*16);
+  private drawLawn(ctx: CanvasRenderingContext2D, sheet: SpriteSheet): void {
+    for (let x = 0; x < COLUMNS; x++) {
+      for (let y = 0; y < ROWS; y++) {
+        sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
       }
     }
   }
