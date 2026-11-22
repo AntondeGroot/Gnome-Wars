@@ -5,7 +5,7 @@ import backyard from '../../../shared/maps/backyard.json';
 
 export interface ArenaMap {
   grid: string[];
-  legend: Record<string, string>;
+  legend: Record<string, string | null>;
 }
 
 export const BACKYARD: ArenaMap = backyard;

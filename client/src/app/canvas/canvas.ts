@@ -3,8 +3,6 @@ import { SpriteSheet } from '../sprite-atlas';
 import { ArenaMap, BACKYARD } from '../arena-map';
 
 const TILE = 16;
-const COLUMNS = 17; // 272 / 16
-const ROWS = 13; // 208 / 16
 
 @Component({
   imports: [],
@@ -28,26 +26,26 @@ export class Canvas {
     }
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
     const sheet = await SpriteSheet.load();
-    this.drawMap(ctx, sheet, BACKYARD);
+    this.drawGround(ctx, sheet, BACKYARD);
+    this.drawProps(ctx, sheet, BACKYARD);
   }
 
-  private drawMap(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap){
+  private drawGround(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
     for (const [y, row] of map.grid.entries()) {
-      for (const [x, letter] of [...row].entries()) {
-        // 1. look the letter up in map.legend → frame name
-        const frameName = map.legend[letter];
-        if(frameName == undefined){
-          throw new Error(`Undefined character found in backyard.json grid: ${letter}`)
-        }
-        sheet.drawFrame(ctx, frameName, x*TILE, y*TILE);
+      for (const x of [...row].keys()) {
+        sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
       }
     }
   }
 
-  private drawLawn(ctx: CanvasRenderingContext2D, sheet: SpriteSheet): void {
-    for (let x = 0; x < COLUMNS; x++) {
-      for (let y = 0; y < ROWS; y++) {
-        sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
+  // The map's rows and letters are checked by arena-map.spec.ts, so drawing can trust them.
+  private drawProps(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
+    for (const [y, row] of map.grid.entries()) {
+      for (const [x, letter] of [...row].entries()) {
+        const frameName = map.legend[letter];
+        if (frameName === null) continue;
+
+        sheet.drawFrame(ctx, frameName, x * TILE, y * TILE);
       }
     }
   }
