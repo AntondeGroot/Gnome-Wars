@@ -5,6 +5,8 @@ const ATLAS_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
 
 export interface SpriteAtlas {
   frames: Record<string, AtlasFrame>;
+  /** Pieces drawn from several frames, keyed by name (e.g. "pond"); the value describes them. */
+  multi_tile: Record<string, string>;
 }
 
 /** The backyard sprite sheet: one image holding every sprite, plus where each one sits in it. */
