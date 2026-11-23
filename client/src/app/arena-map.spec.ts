@@ -3,6 +3,12 @@ import { ArenaMap, BACKYARD } from './arena-map';
 import { autotileFrame, isAutotile } from './autotile';
 import { SpriteAtlas } from './sprite-atlas';
 
+/**
+ * The part of the atlas these tests read. The whole JSON isn't a SpriteAtlas to TypeScript: its
+ * animations hold an "_about" notes entry and [name, ticks] pairs it reads as plain arrays.
+ */
+type AtlasFrames = Pick<SpriteAtlas, 'frames' | 'multi_tile'>;
+
 /** Counts characters, not string units, so a character that is secretly two (like ⬛️) counts as two tiles. */
 function tileCount(row: string): number {
   return [...row].length;
@@ -60,7 +66,7 @@ describe('the backyard map', () => {
   });
 
   it('only names frames or multi-tile pieces that exist in the backyard atlas', () => {
-    const atlas: SpriteAtlas = backyardAtlas;
+    const atlas: AtlasFrames = backyardAtlas;
     // null in the legend means "no prop on this tile", so it names nothing.
     const namesInLegend = new Set(
       Object.values(BACKYARD.legend).filter((name): name is string => name !== null),
@@ -75,7 +81,7 @@ describe('the backyard map', () => {
 
   it('only asks for autotile pieces that exist in the backyard atlas', () => {
     // A shed has only corner frames, so a shed bigger than 2 × 2 asks for an edge like shed_b.
-    const atlas: SpriteAtlas = backyardAtlas;
+    const atlas: AtlasFrames = backyardAtlas;
     const autotileFrames = new Set(autotileFramesIn(BACKYARD));
 
     const missingFrames = [...autotileFrames].filter(
