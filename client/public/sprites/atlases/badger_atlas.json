@@ -1,0 +1,314 @@
+{
+ "tile": 16,
+ "frames": {
+  "badger_down_idle": {
+   "x": 2,
+   "y": 2,
+   "w": 18,
+   "h": 16,
+   "group": "badger_down"
+  },
+  "badger_down_walk_0": {
+   "x": 22,
+   "y": 2,
+   "w": 18,
+   "h": 16,
+   "group": "badger_down"
+  },
+  "badger_down_walk_1": {
+   "x": 42,
+   "y": 2,
+   "w": 18,
+   "h": 16,
+   "group": "badger_down"
+  },
+  "badger_down_walk_2": {
+   "x": 62,
+   "y": 2,
+   "w": 18,
+   "h": 16,
+   "group": "badger_down"
+  },
+  "badger_down_walk_3": {
+   "x": 82,
+   "y": 2,
+   "w": 18,
+   "h": 16,
+   "group": "badger_down"
+  },
+  "badger_up_idle": {
+   "x": 2,
+   "y": 20,
+   "w": 17,
+   "h": 16,
+   "group": "badger_up"
+  },
+  "badger_up_walk_0": {
+   "x": 21,
+   "y": 20,
+   "w": 17,
+   "h": 16,
+   "group": "badger_up"
+  },
+  "badger_up_walk_1": {
+   "x": 40,
+   "y": 20,
+   "w": 17,
+   "h": 16,
+   "group": "badger_up"
+  },
+  "badger_up_walk_2": {
+   "x": 59,
+   "y": 20,
+   "w": 17,
+   "h": 16,
+   "group": "badger_up"
+  },
+  "badger_up_walk_3": {
+   "x": 78,
+   "y": 20,
+   "w": 17,
+   "h": 16,
+   "group": "badger_up"
+  },
+  "badger_right_idle": {
+   "x": 2,
+   "y": 38,
+   "w": 26,
+   "h": 16,
+   "group": "badger_right"
+  },
+  "badger_right_walk_0": {
+   "x": 30,
+   "y": 38,
+   "w": 26,
+   "h": 16,
+   "group": "badger_right"
+  },
+  "badger_right_walk_1": {
+   "x": 58,
+   "y": 38,
+   "w": 26,
+   "h": 16,
+   "group": "badger_right"
+  },
+  "badger_right_walk_2": {
+   "x": 86,
+   "y": 38,
+   "w": 26,
+   "h": 16,
+   "group": "badger_right"
+  },
+  "badger_right_walk_3": {
+   "x": 114,
+   "y": 38,
+   "w": 26,
+   "h": 16,
+   "group": "badger_right"
+  },
+  "badger_left_idle": {
+   "x": 2,
+   "y": 56,
+   "w": 26,
+   "h": 16,
+   "group": "badger_left"
+  },
+  "badger_left_walk_0": {
+   "x": 30,
+   "y": 56,
+   "w": 26,
+   "h": 16,
+   "group": "badger_left"
+  },
+  "badger_left_walk_1": {
+   "x": 58,
+   "y": 56,
+   "w": 26,
+   "h": 16,
+   "group": "badger_left"
+  },
+  "badger_left_walk_2": {
+   "x": 86,
+   "y": 56,
+   "w": 26,
+   "h": 16,
+   "group": "badger_left"
+  },
+  "badger_left_walk_3": {
+   "x": 114,
+   "y": 56,
+   "w": 26,
+   "h": 16,
+   "group": "badger_left"
+  },
+  "badger_shadow_side": {
+   "x": 2,
+   "y": 74,
+   "w": 16,
+   "h": 16,
+   "group": "shadows"
+  },
+  "badger_shadow_front": {
+   "x": 20,
+   "y": 74,
+   "w": 16,
+   "h": 16,
+   "group": "shadows"
+  },
+  "dug_0": {
+   "x": 2,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "dug_1": {
+   "x": 20,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "dug_edge_top": {
+   "x": 38,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "dug_edge_left": {
+   "x": 56,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "dug_edge_bottom": {
+   "x": 74,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "dug_edge_right": {
+   "x": 92,
+   "y": 92,
+   "w": 16,
+   "h": 16,
+   "group": "dug_ground"
+  },
+  "warn_cracks_0": {
+   "x": 2,
+   "y": 110,
+   "w": 16,
+   "h": 16,
+   "group": "warning"
+  },
+  "warn_cracks_1": {
+   "x": 20,
+   "y": 110,
+   "w": 16,
+   "h": 16,
+   "group": "warning"
+  },
+  "warn_cracks_2": {
+   "x": 38,
+   "y": 110,
+   "w": 16,
+   "h": 16,
+   "group": "warning"
+  },
+  "clod_0": {
+   "x": 56,
+   "y": 110,
+   "w": 3,
+   "h": 2,
+   "group": "warning"
+  },
+  "clod_1": {
+   "x": 61,
+   "y": 110,
+   "w": 3,
+   "h": 2,
+   "group": "warning"
+  }
+ },
+ "groups": {
+  "badger_down": [
+   "badger_down_idle",
+   "badger_down_walk_0",
+   "badger_down_walk_1",
+   "badger_down_walk_2",
+   "badger_down_walk_3"
+  ],
+  "badger_up": [
+   "badger_up_idle",
+   "badger_up_walk_0",
+   "badger_up_walk_1",
+   "badger_up_walk_2",
+   "badger_up_walk_3"
+  ],
+  "badger_right": [
+   "badger_right_idle",
+   "badger_right_walk_0",
+   "badger_right_walk_1",
+   "badger_right_walk_2",
+   "badger_right_walk_3"
+  ],
+  "badger_left": [
+   "badger_left_idle",
+   "badger_left_walk_0",
+   "badger_left_walk_1",
+   "badger_left_walk_2",
+   "badger_left_walk_3"
+  ],
+  "shadows": [
+   "badger_shadow_side",
+   "badger_shadow_front"
+  ],
+  "dug_ground": [
+   "dug_0",
+   "dug_1",
+   "dug_edge_top",
+   "dug_edge_left",
+   "dug_edge_bottom",
+   "dug_edge_right"
+  ],
+  "warning": [
+   "warn_cracks_0",
+   "warn_cracks_1",
+   "warn_cracks_2",
+   "clod_0",
+   "clod_1"
+  ]
+ },
+ "drawing": {
+  "badger": "frames are 16 px high but wider than a tile (17-18 px front/back, 26 px from the side). Centre them on the tile: x = tileX*16 + 8 - w/2, y = tileY*16 - 1",
+  "shadow": "draw badger_shadow_side (moving left/right) or badger_shadow_front (up/down) at the tile position, under the badger",
+  "facing": "idle frame = the direction it last moved; the old file names badger_front_idle / badger_back_idle are badger_down_idle / badger_up_idle here",
+  "dug_ground": "a dug tile is dug_0 when (x + y) is odd, dug_1 when even. On top of it add dug_edge_top / _left / _bottom / _right for every side whose neighbour is NOT dug (sunken shade at the top and left, heaped crumbs at the bottom and right)",
+  "warning": "before a tile is dug, overlay warn_cracks on the next 3 tiles of the badger's path: warn_cracks_2 on the very next tile, _1 on the one after, _0 on the third",
+  "clods": "client-only dirt spray: each frame the badger moves, drop about 5 clods 8-16 px behind it (random spread a few px), alternating clod_0 / clod_1; they can fade after ~10 ticks"
+ },
+ "animations": {
+  "_about": "ticks at 30 per second; same format as backyard_atlas.json",
+  "badger_walk": {
+   "frames": [
+    "badger_{dir}_walk_0",
+    "badger_{dir}_walk_1",
+    "badger_{dir}_walk_2",
+    "badger_{dir}_walk_3"
+   ],
+   "advance": "by distance, like the gnomes: next frame every 8 px moved (half a tile), so the legs always match its speed; idle frame when it stops",
+   "dir": [
+    "down",
+    "up",
+    "left",
+    "right"
+   ]
+  },
+  "warn_cracks": {
+   "note": "not a timed loop: which crack frame shows depends on how many tiles away the badger is (see drawing.warning)"
+  }
+ }
+}
