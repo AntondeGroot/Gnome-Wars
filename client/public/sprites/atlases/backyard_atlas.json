@@ -1,598 +1,1167 @@
 {
  "tile": 16,
  "frames": {
-  "player1_idle": {
-   "x": 0,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "player1_step_l": {
-   "x": 16,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "player1_step_r": {
-   "x": 32,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "player2_idle": {
-   "x": 48,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "player2_step_l": {
-   "x": 64,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "player2_step_r": {
-   "x": 80,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "bomb_0": {
-   "x": 96,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "bomb_1": {
-   "x": 112,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "bomb_2": {
-   "x": 128,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "enemy_0": {
-   "x": 144,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "enemy_1": {
-   "x": 160,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
-  "enemy_2": {
-   "x": 176,
-   "y": 0,
-   "w": 16,
-   "h": 16
-  },
   "grass_0": {
    "x": 0,
-   "y": 16,
+   "y": 0,
    "w": 16,
    "h": 16
   },
   "grass_1": {
    "x": 16,
-   "y": 16,
+   "y": 0,
+   "w": 16,
+   "h": 16
+  },
+  "path": {
+   "x": 32,
+   "y": 0,
    "w": 16,
    "h": 16
   },
   "hedge": {
-   "x": 32,
+   "x": 0,
    "y": 16,
    "w": 16,
    "h": 16
   },
   "fence_h": {
-   "x": 48,
+   "x": 16,
    "y": 16,
    "w": 16,
    "h": 16
   },
   "fence_v": {
-   "x": 64,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "corner_stone": {
-   "x": 80,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "gate": {
-   "x": 96,
+   "x": 32,
    "y": 16,
    "w": 16,
    "h": 16
   },
   "fence_section": {
-   "x": 112,
+   "x": 48,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "corner_stone": {
+   "x": 64,
+   "y": 16,
+   "w": 16,
+   "h": 16
+  },
+  "gate": {
+   "x": 80,
    "y": 16,
    "w": 16,
    "h": 16
   },
   "flower_bed_a": {
-   "x": 128,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "flower_bed_b": {
-   "x": 144,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "veg_cabbage": {
-   "x": 160,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "veg_carrot": {
-   "x": 176,
-   "y": 16,
-   "w": 16,
-   "h": 16
-  },
-  "veg_pumpkin": {
    "x": 0,
    "y": 32,
    "w": 16,
    "h": 16
   },
-  "birdbath_0": {
+  "flower_bed_b": {
    "x": 16,
    "y": 32,
    "w": 16,
    "h": 16
   },
-  "birdbath_1": {
+  "veg_cabbage": {
    "x": 32,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "veg_carrot": {
+   "x": 48,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "veg_pumpkin": {
+   "x": 64,
    "y": 32,
    "w": 16,
    "h": 16
   },
   "flower_pot": {
-   "x": 48,
+   "x": 80,
    "y": 32,
    "w": 16,
    "h": 16
   },
   "sandcastle": {
-   "x": 64,
+   "x": 96,
    "y": 32,
    "w": 16,
    "h": 16
   },
   "toy_bucket": {
-   "x": 80,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "path": {
-   "x": 96,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_tl": {
    "x": 112,
    "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_t": {
-   "x": 128,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_tr": {
-   "x": 144,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_l": {
-   "x": 160,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_c": {
-   "x": 176,
-   "y": 32,
-   "w": 16,
-   "h": 16
-  },
-  "pond_r": {
-   "x": 0,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_bl": {
-   "x": 16,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_b": {
-   "x": 32,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_br": {
-   "x": 48,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_tl_f1": {
-   "x": 64,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_t_f1": {
-   "x": 80,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_tr_f1": {
-   "x": 96,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_l_f1": {
-   "x": 112,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_c_f1": {
-   "x": 128,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_r_f1": {
-   "x": 144,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_bl_f1": {
-   "x": 160,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_b_f1": {
-   "x": 176,
-   "y": 48,
-   "w": 16,
-   "h": 16
-  },
-  "pond_br_f1": {
-   "x": 0,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_tl": {
-   "x": 16,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_t": {
-   "x": 32,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_tr": {
-   "x": 48,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_l": {
-   "x": 64,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_c": {
-   "x": 80,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_r": {
-   "x": 96,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_bl": {
-   "x": 112,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_b": {
-   "x": 128,
-   "y": 64,
-   "w": 16,
-   "h": 16
-  },
-  "sand_br": {
-   "x": 144,
-   "y": 64,
    "w": 16,
    "h": 16
   },
   "shed_tl": {
-   "x": 160,
-   "y": 64,
+   "x": 128,
+   "y": 32,
    "w": 16,
    "h": 16
   },
   "shed_tr": {
-   "x": 176,
-   "y": 64,
+   "x": 144,
+   "y": 32,
    "w": 16,
    "h": 16
   },
   "shed_bl": {
-   "x": 0,
-   "y": 80,
+   "x": 160,
+   "y": 32,
    "w": 16,
    "h": 16
   },
   "shed_br": {
+   "x": 176,
+   "y": 32,
+   "w": 16,
+   "h": 16
+  },
+  "sand_tl": {
+   "x": 0,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_t": {
+   "x": 16,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_tr": {
+   "x": 32,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_l": {
+   "x": 48,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_c": {
+   "x": 64,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_r": {
+   "x": 80,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_bl": {
+   "x": 96,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_b": {
+   "x": 112,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "sand_br": {
+   "x": 128,
+   "y": 48,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tl": {
+   "x": 0,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_t": {
+   "x": 16,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tr": {
+   "x": 32,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_l": {
+   "x": 48,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_c": {
+   "x": 64,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_r": {
+   "x": 80,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_bl": {
+   "x": 96,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_b": {
+   "x": 112,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_br": {
+   "x": 128,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_1x1": {
+   "x": 144,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tl_f1": {
+   "x": 0,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_t_f1": {
    "x": 16,
    "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tr_f1": {
+   "x": 32,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_l_f1": {
+   "x": 48,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_c_f1": {
+   "x": 64,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_r_f1": {
+   "x": 80,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_bl_f1": {
+   "x": 96,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_b_f1": {
+   "x": 112,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_br_f1": {
+   "x": 128,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_1x1_f1": {
+   "x": 144,
+   "y": 80,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tl_f2": {
+   "x": 0,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_t_f2": {
+   "x": 16,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tr_f2": {
+   "x": 32,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_l_f2": {
+   "x": 48,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_c_f2": {
+   "x": 64,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_r_f2": {
+   "x": 80,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_bl_f2": {
+   "x": 96,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_b_f2": {
+   "x": 112,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_br_f2": {
+   "x": 128,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_1x1_f2": {
+   "x": 144,
+   "y": 96,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tl_f3": {
+   "x": 0,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_t_f3": {
+   "x": 16,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_tr_f3": {
+   "x": 32,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_l_f3": {
+   "x": 48,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_c_f3": {
+   "x": 64,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_r_f3": {
+   "x": 80,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_bl_f3": {
+   "x": 96,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_b_f3": {
+   "x": 112,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_br_f3": {
+   "x": 128,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "pond_1x1_f3": {
+   "x": 144,
+   "y": 112,
+   "w": 16,
+   "h": 16
+  },
+  "lily_pad": {
+   "x": 0,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "lily_pad_f1": {
+   "x": 16,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "frog_idle": {
+   "x": 32,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "frog_blink": {
+   "x": 48,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "frog_croak_1": {
+   "x": 64,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "frog_croak_2": {
+   "x": 80,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "frog_croak_3": {
+   "x": 96,
+   "y": 128,
+   "w": 16,
+   "h": 16
+  },
+  "birdbath": {
+   "x": 0,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "birdbath_f1": {
+   "x": 16,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bird_perch_left": {
+   "x": 32,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bird_perch_right": {
+   "x": 48,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bird_hop": {
+   "x": 64,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bird_dip_1": {
+   "x": 80,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bird_dip_2": {
+   "x": 96,
+   "y": 144,
+   "w": 16,
+   "h": 16
+  },
+  "bomb_0": {
+   "x": 0,
+   "y": 160,
+   "w": 16,
+   "h": 16
+  },
+  "bomb_1": {
+   "x": 16,
+   "y": 160,
+   "w": 16,
+   "h": 16
+  },
+  "bomb_2": {
+   "x": 32,
+   "y": 160,
    "w": 16,
    "h": 16
   },
   "pu_range": {
-   "x": 32,
-   "y": 80,
+   "x": 48,
+   "y": 160,
    "w": 16,
    "h": 16
   },
   "pu_bomb": {
-   "x": 48,
-   "y": 80,
+   "x": 64,
+   "y": 160,
    "w": 16,
    "h": 16
   },
   "pu_speed": {
+   "x": 80,
+   "y": 160,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_0": {
+   "x": 0,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_1": {
+   "x": 16,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_2": {
+   "x": 32,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_open_1": {
+   "x": 48,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_open_2": {
    "x": 64,
-   "y": 80,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_flap_1": {
+   "x": 80,
+   "y": 176,
+   "w": 16,
+   "h": 16
+  },
+  "enemy_flap_2": {
+   "x": 96,
+   "y": 176,
    "w": 16,
    "h": 16
   },
   "blast_center_0": {
-   "x": 80,
-   "y": 80,
+   "x": 0,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_arm_r_0": {
-   "x": 96,
-   "y": 80,
+   "x": 16,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_arm_l_0": {
-   "x": 112,
-   "y": 80,
+   "x": 32,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_arm_u_0": {
-   "x": 128,
-   "y": 80,
+   "x": 48,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_arm_d_0": {
-   "x": 144,
-   "y": 80,
+   "x": 64,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_end_r_0": {
-   "x": 160,
-   "y": 80,
+   "x": 80,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_end_l_0": {
-   "x": 176,
-   "y": 80,
+   "x": 96,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_end_u_0": {
-   "x": 0,
-   "y": 96,
+   "x": 112,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_end_d_0": {
-   "x": 16,
-   "y": 96,
+   "x": 128,
+   "y": 192,
    "w": 16,
    "h": 16
   },
   "blast_center_1": {
-   "x": 32,
-   "y": 96,
+   "x": 0,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_arm_r_1": {
-   "x": 48,
-   "y": 96,
+   "x": 16,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_arm_l_1": {
-   "x": 64,
-   "y": 96,
+   "x": 32,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_arm_u_1": {
-   "x": 80,
-   "y": 96,
+   "x": 48,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_arm_d_1": {
-   "x": 96,
-   "y": 96,
+   "x": 64,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_end_r_1": {
-   "x": 112,
-   "y": 96,
+   "x": 80,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_end_l_1": {
-   "x": 128,
-   "y": 96,
+   "x": 96,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_end_u_1": {
-   "x": 144,
-   "y": 96,
+   "x": 112,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_end_d_1": {
-   "x": 160,
-   "y": 96,
+   "x": 128,
+   "y": 208,
    "w": 16,
    "h": 16
   },
   "blast_center_2": {
-   "x": 176,
-   "y": 96,
+   "x": 0,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_arm_r_2": {
-   "x": 0,
-   "y": 112,
+   "x": 16,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_arm_l_2": {
-   "x": 16,
-   "y": 112,
+   "x": 32,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_arm_u_2": {
-   "x": 32,
-   "y": 112,
+   "x": 48,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_arm_d_2": {
-   "x": 48,
-   "y": 112,
+   "x": 64,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_end_r_2": {
-   "x": 64,
-   "y": 112,
+   "x": 80,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_end_l_2": {
-   "x": 80,
-   "y": 112,
+   "x": 96,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_end_u_2": {
-   "x": 96,
-   "y": 112,
+   "x": 112,
+   "y": 224,
    "w": 16,
    "h": 16
   },
   "blast_end_d_2": {
-   "x": 112,
-   "y": 112,
-   "w": 16,
-   "h": 16
-  },
-  "player1_back_idle": {
    "x": 128,
-   "y": 112,
-   "w": 16,
-   "h": 16
-  },
-  "player1_back_step_l": {
-   "x": 144,
-   "y": 112,
-   "w": 16,
-   "h": 16
-  },
-  "player1_back_step_r": {
-   "x": 160,
-   "y": 112,
-   "w": 16,
-   "h": 16
-  },
-  "player2_back_idle": {
-   "x": 176,
-   "y": 112,
-   "w": 16,
-   "h": 16
-  },
-  "player2_back_step_l": {
-   "x": 0,
-   "y": 128,
-   "w": 16,
-   "h": 16
-  },
-  "player2_back_step_r": {
-   "x": 16,
-   "y": 128,
+   "y": 224,
    "w": 16,
    "h": 16
   }
  },
+ "groups": {
+  "ground": [
+   "grass_0",
+   "grass_1",
+   "path"
+  ],
+  "borders": [
+   "hedge",
+   "fence_h",
+   "fence_v",
+   "fence_section",
+   "corner_stone",
+   "gate"
+  ],
+  "beds_props_shed": [
+   "flower_bed_a",
+   "flower_bed_b",
+   "veg_cabbage",
+   "veg_carrot",
+   "veg_pumpkin",
+   "flower_pot",
+   "sandcastle",
+   "toy_bucket",
+   "shed_tl",
+   "shed_tr",
+   "shed_bl",
+   "shed_br"
+  ],
+  "sandbox": [
+   "sand_tl",
+   "sand_t",
+   "sand_tr",
+   "sand_l",
+   "sand_c",
+   "sand_r",
+   "sand_bl",
+   "sand_b",
+   "sand_br"
+  ],
+  "water_pond_frame0": [
+   "pond_tl",
+   "pond_t",
+   "pond_tr",
+   "pond_l",
+   "pond_c",
+   "pond_r",
+   "pond_bl",
+   "pond_b",
+   "pond_br",
+   "pond_1x1"
+  ],
+  "water_pond_frame1": [
+   "pond_tl_f1",
+   "pond_t_f1",
+   "pond_tr_f1",
+   "pond_l_f1",
+   "pond_c_f1",
+   "pond_r_f1",
+   "pond_bl_f1",
+   "pond_b_f1",
+   "pond_br_f1",
+   "pond_1x1_f1"
+  ],
+  "water_pond_frame2": [
+   "pond_tl_f2",
+   "pond_t_f2",
+   "pond_tr_f2",
+   "pond_l_f2",
+   "pond_c_f2",
+   "pond_r_f2",
+   "pond_bl_f2",
+   "pond_b_f2",
+   "pond_br_f2",
+   "pond_1x1_f2"
+  ],
+  "water_pond_frame3": [
+   "pond_tl_f3",
+   "pond_t_f3",
+   "pond_tr_f3",
+   "pond_l_f3",
+   "pond_c_f3",
+   "pond_r_f3",
+   "pond_bl_f3",
+   "pond_b_f3",
+   "pond_br_f3",
+   "pond_1x1_f3"
+  ],
+  "water_lily_frog": [
+   "lily_pad",
+   "lily_pad_f1",
+   "frog_idle",
+   "frog_blink",
+   "frog_croak_1",
+   "frog_croak_2",
+   "frog_croak_3"
+  ],
+  "water_birdbath_bird": [
+   "birdbath",
+   "birdbath_f1",
+   "bird_perch_left",
+   "bird_perch_right",
+   "bird_hop",
+   "bird_dip_1",
+   "bird_dip_2"
+  ],
+  "combat_items": [
+   "bomb_0",
+   "bomb_1",
+   "bomb_2",
+   "pu_range",
+   "pu_bomb",
+   "pu_speed"
+  ],
+  "combat_enemy_ladybug": [
+   "enemy_0",
+   "enemy_1",
+   "enemy_2",
+   "enemy_open_1",
+   "enemy_open_2",
+   "enemy_flap_1",
+   "enemy_flap_2"
+  ],
+  "combat_blast_frame0": [
+   "blast_center_0",
+   "blast_arm_r_0",
+   "blast_arm_l_0",
+   "blast_arm_u_0",
+   "blast_arm_d_0",
+   "blast_end_r_0",
+   "blast_end_l_0",
+   "blast_end_u_0",
+   "blast_end_d_0"
+  ],
+  "combat_blast_frame1": [
+   "blast_center_1",
+   "blast_arm_r_1",
+   "blast_arm_l_1",
+   "blast_arm_u_1",
+   "blast_arm_d_1",
+   "blast_end_r_1",
+   "blast_end_l_1",
+   "blast_end_u_1",
+   "blast_end_d_1"
+  ],
+  "combat_blast_frame2": [
+   "blast_center_2",
+   "blast_arm_r_2",
+   "blast_arm_l_2",
+   "blast_arm_u_2",
+   "blast_arm_d_2",
+   "blast_end_r_2",
+   "blast_end_l_2",
+   "blast_end_u_2",
+   "blast_end_d_2"
+  ]
+ },
+ "note": "gnomes are in sprites/gnomes/gnome_skins_atlas, animated from movement, not from this file",
  "multi_tile": {
   "shed": "2x2: shed_tl shed_tr / shed_bl shed_br",
-  "pond": "9-slice pond_tl..pond_br (+ _f1 animation frame), any size >= 2x2",
+  "pond": "9-slice pond_tl..pond_br (+ _f1.._f3 glint frames), any size >= 2x2; plain water, place lily_pad and frog sprites on top",
   "sandbox": "9-slice sand_tl..sand_br, any size >= 2x2, walkable"
+ },
+ "animations": {
+  "_about": {
+   "ticks_per_second": 30,
+   "tile_display_px": 48,
+   "frame_entry": "a frame name (lasts ticks_per_frame) or [name, ticks]",
+   "events": "event animations play once, at a random moment every_ticks [min, max] after the last one, then return to the animation in \"then\"; pick the random gap with the match seed so every client agrees (or treat them as client-only decoration)"
+  },
+  "pond_glint": {
+   "applies_to": [
+    "pond_tl",
+    "pond_t",
+    "pond_tr",
+    "pond_l",
+    "pond_c",
+    "pond_r",
+    "pond_bl",
+    "pond_b",
+    "pond_br",
+    "pond_1x1"
+   ],
+   "frames": [
+    "{piece}",
+    "{piece}_f1",
+    "{piece}_f2",
+    "{piece}_f3"
+   ],
+   "ticks_per_frame": 18,
+   "loop": true,
+   "phase": "start each tile ((tile_x + 2 * tile_y) % 4) frames late (x 18 ticks); every tile then shows a different glint layout from all 8 of its neighbours, so a big pond never looks like a grid"
+  },
+  "lily_pad_bob": {
+   "frames": [
+    "lily_pad",
+    "lily_pad_f1"
+   ],
+   "ticks_per_frame": 24,
+   "loop": true,
+   "phase": "start each pad ((tile_x + tile_y) % 2) * 24 ticks late",
+   "note": "lily_pad_f1 sits 1 px lower; a frog on the pad moves down 1 px with it"
+  },
+  "enemy_walk": {
+   "frames": [
+    "enemy_0",
+    "enemy_1"
+   ],
+   "ticks_per_frame": 6,
+   "loop": true,
+   "note": "tripod leg gait; enemy_2 is the same pose as enemy_0"
+  },
+  "enemy_flap": {
+   "event": true,
+   "frames": [
+    [
+     "enemy_open_1",
+     3
+    ],
+    [
+     "enemy_open_2",
+     3
+    ],
+    [
+     "enemy_flap_1",
+     2
+    ],
+    [
+     "enemy_flap_2",
+     2
+    ],
+    [
+     "enemy_flap_1",
+     2
+    ],
+    [
+     "enemy_flap_2",
+     2
+    ],
+    [
+     "enemy_flap_1",
+     2
+    ],
+    [
+     "enemy_flap_2",
+     2
+    ],
+    [
+     "enemy_flap_1",
+     2
+    ],
+    [
+     "enemy_flap_2",
+     2
+    ],
+    [
+     "enemy_open_2",
+     3
+    ],
+    [
+     "enemy_open_1",
+     3
+    ]
+   ],
+   "every_ticks": [
+    240,
+    600
+   ],
+   "then": "enemy_walk",
+   "note": "shell halves part, lift, the wings flap 4 times (~7 flaps a second), then fold away; about 1 second in total, every 8-20 seconds. Cosmetic: play it when the ladybug stops or turns, it does not change movement. The lifted frames are drawn 1 px higher."
+  },
+  "frog_idle": {
+   "frames": [
+    "frog_idle"
+   ],
+   "loop": true,
+   "events": [
+    "frog_blink",
+    "frog_croak"
+   ],
+   "draw_offset_px": [
+    0,
+    0
+   ]
+  },
+  "frog_blink": {
+   "frames": [
+    [
+     "frog_blink",
+     4
+    ]
+   ],
+   "event": {
+    "every_ticks": [
+     90,
+     210
+    ]
+   },
+   "then": "frog_idle"
+  },
+  "frog_croak": {
+   "frames": [
+    [
+     "frog_croak_1",
+     3
+    ],
+    [
+     "frog_croak_2",
+     3
+    ],
+    [
+     "frog_croak_3",
+     9
+    ],
+    [
+     "frog_croak_2",
+     3
+    ],
+    [
+     "frog_croak_1",
+     3
+    ],
+    [
+     "frog_croak_2",
+     3
+    ],
+    [
+     "frog_croak_3",
+     9
+    ],
+    [
+     "frog_croak_2",
+     3
+    ],
+    [
+     "frog_croak_1",
+     3
+    ]
+   ],
+   "event": {
+    "every_ticks": [
+     240,
+     450
+    ]
+   },
+   "then": "frog_idle"
+  },
+  "birdbath_glint": {
+   "frames": [
+    "birdbath",
+    "birdbath_f1"
+   ],
+   "ticks_per_frame": 20,
+   "loop": true
+  },
+  "bird_perch": {
+   "frames": [
+    "bird_perch_left"
+   ],
+   "loop": true,
+   "events": [
+    "bird_dip",
+    "bird_hop"
+   ],
+   "draw_offset_px": [
+    0,
+    -8
+   ],
+   "note": "all bird frames are drawn at the bird bath tile, 8 px higher, after the bath itself; when the bird is on the right rim use bird_perch_right"
+  },
+  "bird_dip": {
+   "frames": [
+    [
+     "bird_dip_1",
+     4
+    ],
+    [
+     "bird_dip_2",
+     10
+    ],
+    [
+     "bird_dip_1",
+     4
+    ]
+   ],
+   "event": {
+    "every_ticks": [
+     120,
+     270
+    ]
+   },
+   "then": "bird_perch",
+   "flip_x_on_right_rim": true,
+   "draw_offset_px": [
+    0,
+    -8
+   ]
+  },
+  "bird_hop": {
+   "frames": [
+    [
+     "bird_hop",
+     8
+    ]
+   ],
+   "event": {
+    "every_ticks": [
+     300,
+     540
+    ]
+   },
+   "then": "bird_perch",
+   "draw_offset_px": [
+    0,
+    -8
+   ],
+   "note": "left rim to right rim: bird_hop as drawn, then switch to bird_perch_right; right to left: bird_hop mirrored (flip the whole 16 px frame), then bird_perch_left"
+  }
  }
 }

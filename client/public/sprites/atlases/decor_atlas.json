@@ -1,0 +1,389 @@
+{
+ "tile": 16,
+ "frames": {
+  "apple_tree": {
+   "x": 2,
+   "y": 2,
+   "w": 48,
+   "h": 56,
+   "pivot": [
+    24,
+    56
+   ],
+   "group": "large"
+  },
+  "greenhouse": {
+   "x": 52,
+   "y": 2,
+   "w": 48,
+   "h": 40,
+   "pivot": [
+    24,
+    40
+   ],
+   "group": "large"
+  },
+  "washing_line": {
+   "x": 102,
+   "y": 2,
+   "w": 64,
+   "h": 28,
+   "pivot": [
+    32,
+    28
+   ],
+   "group": "large"
+  },
+  "washing_line_f1": {
+   "x": 2,
+   "y": 60,
+   "w": 64,
+   "h": 28,
+   "pivot": [
+    32,
+    28
+   ],
+   "group": "large"
+  },
+  "washing_line_f2": {
+   "x": 68,
+   "y": 60,
+   "w": 64,
+   "h": 28,
+   "pivot": [
+    32,
+    28
+   ],
+   "group": "large"
+  },
+  "washing_line_f3": {
+   "x": 2,
+   "y": 90,
+   "w": 64,
+   "h": 28,
+   "pivot": [
+    32,
+    28
+   ],
+   "group": "large"
+  },
+  "bench": {
+   "x": 2,
+   "y": 120,
+   "w": 32,
+   "h": 18,
+   "pivot": [
+    16,
+    18
+   ],
+   "group": "medium"
+  },
+  "wheelbarrow": {
+   "x": 36,
+   "y": 120,
+   "w": 24,
+   "h": 16,
+   "pivot": [
+    12,
+    16
+   ],
+   "group": "medium"
+  },
+  "compost_bin": {
+   "x": 2,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "rain_barrel": {
+   "x": 20,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "rocks": {
+   "x": 38,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "mushrooms": {
+   "x": 56,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "apples": {
+   "x": 74,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_0": {
+   "x": 92,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_1": {
+   "x": 110,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_2": {
+   "x": 128,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_3": {
+   "x": 146,
+   "y": 140,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_4": {
+   "x": 2,
+   "y": 158,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "flower_clump_5": {
+   "x": 20,
+   "y": 158,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "small"
+  },
+  "dark_grass_0": {
+   "x": 2,
+   "y": 176,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "ground"
+  },
+  "dark_grass_1": {
+   "x": 20,
+   "y": 176,
+   "w": 16,
+   "h": 16,
+   "pivot": [
+    8,
+    16
+   ],
+   "group": "ground"
+  }
+ },
+ "animations": {
+  "_about": "ticks at 30 per second, same format as backyard_atlas.json",
+  "washing_line_wind": {
+   "frames": [
+    "washing_line",
+    "washing_line_f1",
+    "washing_line_f2",
+    "washing_line_f3"
+   ],
+   "ticks_per_frame": 8,
+   "loop": true,
+   "note": "each item swings with its own phase, the bottom moves up to 2 px; the posts, line and pegs never move"
+  }
+ },
+ "groups": {
+  "large": [
+   "apple_tree",
+   "greenhouse",
+   "washing_line",
+   "washing_line_f1",
+   "washing_line_f2",
+   "washing_line_f3"
+  ],
+  "medium": [
+   "bench",
+   "wheelbarrow"
+  ],
+  "small": [
+   "compost_bin",
+   "rain_barrel",
+   "rocks",
+   "mushrooms",
+   "apples",
+   "flower_clump_0",
+   "flower_clump_1",
+   "flower_clump_2",
+   "flower_clump_3",
+   "flower_clump_4",
+   "flower_clump_5"
+  ],
+  "ground": [
+   "dark_grass_0",
+   "dark_grass_1"
+  ]
+ },
+ "notes": {
+  "sizes": "sprites are not all 16x16: use w/h from each frame; there is a 2 px transparent gap between frames",
+  "pivot": "pivot = bottom-centre of the sprite in its own pixels; draw decor sorted by (y + h) so things lower on screen overlap things behind them",
+  "flip": "apple_tree is also used mirrored (flip_x) on the right side",
+  "ground": "dark_grass_0/1 fill everything outside the arena (about 1 in 4 tiles dark_grass_1); the hedge and path tiles of the top/bottom border come from backyard_atlas (hedge, path) with flower_clump_* mixed in",
+  "pc_only": "all of this is optional decoration for wide screens; skip it on mobile"
+ },
+ "scene": {
+  "size_tiles": [
+   29,
+   16
+  ],
+  "arena_offset_tiles": [
+   6,
+   2
+  ],
+  "border_rows": {
+   "top": 1,
+   "bottom": 15,
+   "every_3rd_tile": "flower_clump_*",
+   "other_tiles": "hedge",
+   "gate_column": 14,
+   "gate_tiles": "path"
+  },
+  "layout": [
+   {
+    "sprite": "apple_tree",
+    "x": 0,
+    "y": 36
+   },
+   {
+    "sprite": "apples",
+    "x": 48,
+    "y": 86
+   },
+   {
+    "sprite": "washing_line",
+    "x": 16,
+    "y": 118
+   },
+   {
+    "sprite": "bench",
+    "x": 16,
+    "y": 164
+   },
+   {
+    "sprite": "flower_clump_3",
+    "x": 64,
+    "y": 160
+   },
+   {
+    "sprite": "compost_bin",
+    "x": 0,
+    "y": 208
+   },
+   {
+    "sprite": "compost_bin",
+    "x": 16,
+    "y": 208
+   },
+   {
+    "sprite": "wheelbarrow",
+    "x": 48,
+    "y": 208
+   },
+   {
+    "sprite": "rocks",
+    "x": 68,
+    "y": 64
+   },
+   {
+    "sprite": "mushrooms",
+    "x": 64,
+    "y": 192
+   },
+   {
+    "sprite": "greenhouse",
+    "x": 400,
+    "y": 38
+   },
+   {
+    "sprite": "rain_barrel",
+    "x": 384,
+    "y": 56
+   },
+   {
+    "sprite": "flower_clump_3",
+    "x": 372,
+    "y": 176
+   },
+   {
+    "sprite": "rocks",
+    "x": 446,
+    "y": 180
+   },
+   {
+    "sprite": "apple_tree",
+    "x": 400,
+    "y": 168,
+    "flip_x": true
+   },
+   {
+    "sprite": "flower_clump_0",
+    "x": 370,
+    "y": 96
+   }
+  ]
+ }
+}
