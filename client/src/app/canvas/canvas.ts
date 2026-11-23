@@ -46,24 +46,55 @@ export class Canvas {
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
 
     const sheet = await SpriteSheet.load();
-    this.requestFrame(ctx, sheet);
+    const staticLayer = this.drawStaticLayer(sheet, ctx.canvas.width, ctx.canvas.height);
+    if (staticLayer === null) {
+      return;
+    }
+    this.requestFrame(ctx, staticLayer);
+  }
+
+  /**
+   * Draws everything that doesn't move (ground and props) once, onto a canvas that is never shown.
+   * Each frame then copies it in a single drawImage instead of drawing every tile again.
+   * Returns null when the browser can't give a 2D context, like the main canvas in start().
+   */
+  private drawStaticLayer(
+    sheet: SpriteSheet,
+    width: number,
+    height: number,
+  ): HTMLCanvasElement | null {
+    const staticLayer = document.createElement('canvas');
+    staticLayer.width = width;
+    staticLayer.height = height;
+    const ctx = staticLayer.getContext('2d');
+    if (ctx == null) {
+      return null;
+    }
+    ctx.imageSmoothingEnabled = false;
+
+    this.drawGround(ctx, sheet, BACKYARD);
+    this.drawProps(ctx, sheet, BACKYARD);
+    return staticLayer;
   }
 
   /**
    * Asks the browser to call drawFrame just before the next screen refresh. The arrow function
-   * keeps `this` and passes ctx and sheet along; requestAnimationFrame itself only passes the time.
+   * keeps `this` and passes the values along; requestAnimationFrame itself only passes the time.
    */
-  private requestFrame(ctx: CanvasRenderingContext2D, sheet: SpriteSheet): void {
-    this.frameId = requestAnimationFrame((time) => this.drawFrame(ctx, sheet, time));
+  private requestFrame(ctx: CanvasRenderingContext2D, staticLayer: HTMLCanvasElement): void {
+    this.frameId = requestAnimationFrame((time) => this.drawFrame(ctx, staticLayer, time));
   }
 
   /** Runs about 60 times per second: redraws the whole picture, then books the next frame. */
-  private drawFrame(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, time: number): void {
-    this.drawGround(ctx, sheet, BACKYARD);
-    this.drawProps(ctx, sheet, BACKYARD);
+  private drawFrame(
+    ctx: CanvasRenderingContext2D,
+    staticLayer: HTMLCanvasElement,
+    time: number,
+  ): void {
+    ctx.drawImage(staticLayer, 0, 0);
     this.countFrame(time);
     this.drawFps(ctx);
-    this.requestFrame(ctx, sheet);
+    this.requestFrame(ctx, staticLayer);
   }
 
   private drawGround(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
