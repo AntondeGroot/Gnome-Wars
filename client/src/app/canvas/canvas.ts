@@ -7,25 +7,29 @@ import {
   viewChild,
 } from '@angular/core';
 import { SpriteSheet } from '../sprite-atlas';
-import { ArenaMap, BACKYARD } from '../arena-map';
-import { autotileFrame, isAutotile } from '../autotile';
+import { ArenaMap, BACKYARD, PlacedProp, propsIn } from '../arena-map';
+import { AnimatedTile, animatedTileFrame, splitAnimated } from '../animated-tiles';
+import { Bird, BIRD_BATH } from '../bird';
+import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
 const TICKS_PER_SECOND = 30;
 
-// Temporary, until the first gnome (D1): a sprite that walks along one grass row, 1 unit per tick,
-// to show the game runs at the same speed on every screen.
-const TEST_SPRITE_FRAME = 'player1_idle';
-const TEST_SPRITE_ROW = 5;
+// Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
+const LADYBUG_TILE = { x: 11, y: 7 };
 
 /** What every frame draws with, set up once in start(). */
 interface ArenaView {
   ctx: CanvasRenderingContext2D;
   sheet: SpriteSheet;
-  /** Ground and props, drawn once; see drawStaticLayer. */
+  /** Ground and the props that never change, drawn once; see drawStaticLayer. */
   staticLayer: HTMLCanvasElement;
+  /** Props drawn again every frame on top of the static layer, like the glinting pond. */
+  animatedTiles: AnimatedTile[];
+  birds: Bird[];
+  ladybug: Ladybug;
 }
 
 @Component({
@@ -46,8 +50,8 @@ export class Canvas {
   private fps = 0;
 
   private readonly ticks = new FixedTicks(1000 / TICKS_PER_SECOND);
-  // The game state: for now only the test sprite's position, in units (1 unit = 1 game pixel).
-  private testSpriteX = 0;
+  // Ticks since the game started; animations pick their frame from it.
+  private tickCount = 0;
 
   constructor() {
     // The constructor runs before the template exists, so wait for the first render to start.
@@ -65,20 +69,33 @@ export class Canvas {
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
 
     const sheet = await SpriteSheet.load();
-    const staticLayer = this.drawStaticLayer(sheet, ctx.canvas.width, ctx.canvas.height);
+    const props = propsIn(BACKYARD);
+    const { stillProps, animatedTiles } = splitAnimated(props, sheet.animations);
+    const staticLayer = this.drawStaticLayer(
+      sheet,
+      stillProps,
+      ctx.canvas.width,
+      ctx.canvas.height,
+    );
     if (staticLayer === null) {
       return;
     }
-    this.requestFrame({ ctx, sheet, staticLayer });
+    const birds = props
+      .filter((prop) => prop.frame === BIRD_BATH)
+      .map((prop) => new Bird(prop.x, prop.y, sheet.animations));
+    const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, sheet.animations);
+    this.requestFrame({ ctx, sheet, staticLayer, animatedTiles, birds, ladybug });
   }
 
   /**
-   * Draws everything that doesn't move (ground and props) once, onto a canvas that is never shown.
+   * Draws everything that doesn't change (ground and still props) once, onto a canvas that is
+   * never shown.
    * Each frame then copies it in a single drawImage instead of drawing every tile again.
    * Returns null when the browser can't give a 2D context, like the main canvas in start().
    */
   private drawStaticLayer(
     sheet: SpriteSheet,
+    stillProps: PlacedProp[],
     width: number,
     height: number,
   ): HTMLCanvasElement | null {
@@ -92,7 +109,9 @@ export class Canvas {
     ctx.imageSmoothingEnabled = false;
 
     this.drawGround(ctx, sheet, BACKYARD);
-    this.drawProps(ctx, sheet, BACKYARD);
+    for (const prop of stillProps) {
+      sheet.drawFrame(ctx, prop.frame, prop.x * TILE, prop.y * TILE);
+    }
     return staticLayer;
   }
 
@@ -111,38 +130,55 @@ export class Canvas {
   private drawFrame(view: ArenaView, time: number): void {
     const ticksDue = this.ticks.ticksDue(time);
     for (let i = 0; i < ticksDue; i++) {
-      this.tick(view.ctx.canvas.width);
+      this.tick(view);
     }
 
     view.ctx.drawImage(view.staticLayer, 0, 0);
-    view.sheet.drawFrame(view.ctx, TEST_SPRITE_FRAME, this.testSpriteX, TEST_SPRITE_ROW * TILE);
+    this.drawAnimatedTiles(view);
+    this.drawBirds(view);
+    this.drawLadybug(view);
     this.countFrame(time);
     this.drawFps(view.ctx);
     this.requestFrame(view);
   }
 
-  /** One step of the game, 30 times per second. For now: the test sprite walks right and wraps around. */
-  private tick(arenaWidth: number): void {
-    this.testSpriteX = (this.testSpriteX + 1) % arenaWidth;
+  /** One step of the game, 30 times per second. For now only the birds and the ladybug move. */
+  private tick(view: ArenaView): void {
+    this.tickCount++;
+    for (const bird of view.birds) {
+      bird.update(this.tickCount);
+    }
+    view.ladybug.update(this.tickCount);
+  }
+
+  private drawAnimatedTiles({ ctx, sheet, animatedTiles }: ArenaView): void {
+    for (const tile of animatedTiles) {
+      sheet.drawFrame(ctx, animatedTileFrame(tile, this.tickCount), tile.x * TILE, tile.y * TILE);
+    }
+  }
+
+  private drawLadybug({ ctx, sheet, ladybug }: ArenaView): void {
+    const { name, offsetY } = ladybug.frameAt(this.tickCount);
+    sheet.drawFrame(ctx, name, ladybug.x * TILE, ladybug.y * TILE + offsetY);
+  }
+
+  private drawBirds({ ctx, sheet, birds }: ArenaView): void {
+    for (const bird of birds) {
+      const { name, flipX, offset } = bird.frameAt(this.tickCount);
+      const x = bird.x * TILE + offset[0];
+      const y = bird.y * TILE + offset[1];
+      if (flipX) {
+        sheet.drawFrameMirrored(ctx, name, x, y);
+      } else {
+        sheet.drawFrame(ctx, name, x, y);
+      }
+    }
   }
 
   private drawGround(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
     for (const [y, row] of map.grid.entries()) {
       for (const x of [...row].keys()) {
         sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
-      }
-    }
-  }
-
-  // The map's rows and letters are checked by arena-map.spec.ts, so drawing can trust them.
-  private drawProps(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
-    for (const [y, row] of map.grid.entries()) {
-      for (const [x, letter] of [...row].entries()) {
-        const name = map.legend[letter];
-        if (name === null) continue;
-
-        const frameName = isAutotile(name) ? autotileFrame(name, map.grid, x, y) : name;
-        sheet.drawFrame(ctx, frameName, x * TILE, y * TILE);
       }
     }
   }
