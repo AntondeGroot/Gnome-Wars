@@ -92,7 +92,17 @@
   "beard_shade": "beard mixed 13% towards #2a2a2a",
   "tunic_shade": "tunic mixed 23% towards black"
  },
- "atlas_frames": {
+ "drawing": {
+  "shadow": "one shadow frame for every skin and direction. Draw it first, at the gnome's tile position, then the gnome frame 1 px higher (y - 1). The shadow does not bob or move with the walk frames, which keeps the gnome looking grounded.",
+  "palette_swap": "the shadow has no key colours, so leave it out of the palette swap"
+ },
+ "frames": {
+  "shadow": {
+   "x": 0,
+   "y": 64,
+   "w": 16,
+   "h": 16
+  },
   "template/down_idle": {
    "x": 0,
    "y": 0,

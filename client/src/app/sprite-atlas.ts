@@ -1,9 +1,6 @@
 import { Animation } from './animation';
 import { AtlasFrame } from './atlas-frame';
 
-const ATLAS_JSON = 'sprites/atlases/backyard_atlas.json';
-const ATLAS_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
-
 export interface SpriteAtlas {
   frames: Record<string, AtlasFrame>;
   /** Pieces drawn from several frames, keyed by name (e.g. "pond"); the value describes them. */
@@ -12,15 +9,35 @@ export interface SpriteAtlas {
   animations: Record<string, Animation>;
 }
 
-/** The backyard sprite sheet: one image holding every sprite, plus where each one sits in it. */
+/**
+ * An atlas file as it is written. The atlases don't all use the same layout: the backyard and gnomes keeps its
+ * frames under "frames", only the backyard has multi-tile
+ * pieces and animations.
+ */
+interface AtlasFile {
+  frames?: Record<string, AtlasFrame>;
+  multi_tile?: Record<string, string>;
+  animations?: Record<string, Animation>;
+}
+
+/** Turns any atlas file into a SpriteAtlas, with empty entries for what that file doesn't have. */
+function toSpriteAtlas(file: AtlasFile): SpriteAtlas {
+  return {
+    frames: file.frames ?? {},
+    multi_tile: file.multi_tile ?? {},
+    animations: file.animations ?? {},
+  };
+}
+
+/** A sprite sheet: one image holding many sprites, plus where each one sits in it. */
 export class SpriteSheet {
   /** Loads the atlas data and image. A constructor can't await, so loading happens here. */
-  static async load(): Promise<SpriteSheet> {
-    const response = await fetch(ATLAS_JSON);
-    const atlas: SpriteAtlas = await response.json();
+  static async load(imagePath: string, jsonPath: string): Promise<SpriteSheet> {
+    const response = await fetch(jsonPath);
+    const atlas = toSpriteAtlas(await response.json());
 
     const image = new Image();
-    image.src = ATLAS_IMAGE;
+    image.src = imagePath;
     await image.decode();
 
     return new SpriteSheet(image, atlas);

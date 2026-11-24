@@ -12,6 +12,7 @@ import { AnimatedTile, animatedTileFrame, splitAnimated } from '../animated-tile
 import { Bird, BIRD_BATH } from '../bird';
 import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
+import { Gnome } from '../gnome/gnome';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
@@ -19,17 +20,26 @@ const TICKS_PER_SECOND = 30;
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
+const GNOME_START_TILE = {x: 5, y: 5};
+
+const BACKYARD_JSON = 'sprites/atlases/backyard_atlas.json';
+const BACKYARD_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
+const GNOME_JSON = 'sprites/atlases/gnome_atlas.json';
+const GNOME_IMAGE = 'sprites/atlases/gnome_atlas_1x.png';
 
 /** What every frame draws with, set up once in start(). */
 interface ArenaView {
   ctx: CanvasRenderingContext2D;
-  sheet: SpriteSheet;
+  backyardSheet: SpriteSheet;
+  gnomeSheet: SpriteSheet;
+
   /** Ground and the props that never change, drawn once; see drawStaticLayer. */
   staticLayer: HTMLCanvasElement;
   /** Props drawn again every frame on top of the static layer, like the glinting pond. */
   animatedTiles: AnimatedTile[];
   birds: Bird[];
   ladybug: Ladybug;
+  gnome: Gnome;
 }
 
 @Component({
@@ -68,11 +78,15 @@ export class Canvas {
     }
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
 
-    const sheet = await SpriteSheet.load();
+    // Both downloads start at once; await waits until both are in.
+    const [backyardSheet, gnomeSheet] = await Promise.all([
+      SpriteSheet.load(BACKYARD_IMAGE, BACKYARD_JSON),
+      SpriteSheet.load(GNOME_IMAGE, GNOME_JSON),
+    ]);
     const props = propsIn(BACKYARD);
-    const { stillProps, animatedTiles } = splitAnimated(props, sheet.animations);
+    const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
     const staticLayer = this.drawStaticLayer(
-      sheet,
+      backyardSheet,
       stillProps,
       ctx.canvas.width,
       ctx.canvas.height,
@@ -82,9 +96,20 @@ export class Canvas {
     }
     const birds = props
       .filter((prop) => prop.frame === BIRD_BATH)
-      .map((prop) => new Bird(prop.x, prop.y, sheet.animations));
-    const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, sheet.animations);
-    this.requestFrame({ ctx, sheet, staticLayer, animatedTiles, birds, ladybug });
+      .map((prop) => new Bird(prop.x, prop.y, backyardSheet.animations));
+    const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations);
+    // The gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
+    const gnome = new Gnome(GNOME_START_TILE.x * TILE, GNOME_START_TILE.y * TILE);
+    this.requestFrame({
+      ctx,
+      backyardSheet,
+      gnomeSheet,
+      staticLayer,
+      animatedTiles,
+      birds,
+      ladybug,
+      gnome,
+    });
   }
 
   /**
@@ -137,6 +162,7 @@ export class Canvas {
     this.drawAnimatedTiles(view);
     this.drawBirds(view);
     this.drawLadybug(view);
+    this.drawGnome(view);
     this.countFrame(time);
     this.drawFps(view.ctx);
     this.requestFrame(view);
@@ -151,26 +177,37 @@ export class Canvas {
     view.ladybug.update(this.tickCount);
   }
 
-  private drawAnimatedTiles({ ctx, sheet, animatedTiles }: ArenaView): void {
+  private drawAnimatedTiles({ ctx, backyardSheet, animatedTiles }: ArenaView): void {
     for (const tile of animatedTiles) {
-      sheet.drawFrame(ctx, animatedTileFrame(tile, this.tickCount), tile.x * TILE, tile.y * TILE);
+      backyardSheet.drawFrame(
+        ctx,
+        animatedTileFrame(tile, this.tickCount),
+        tile.x * TILE,
+        tile.y * TILE,
+      );
     }
   }
 
-  private drawLadybug({ ctx, sheet, ladybug }: ArenaView): void {
+  private drawLadybug({ ctx, backyardSheet, ladybug }: ArenaView): void {
     const { name, offsetY } = ladybug.frameAt(this.tickCount);
-    sheet.drawFrame(ctx, name, ladybug.x * TILE, ladybug.y * TILE + offsetY);
+    backyardSheet.drawFrame(ctx, name, ladybug.x * TILE, ladybug.y * TILE + offsetY);
   }
 
-  private drawBirds({ ctx, sheet, birds }: ArenaView): void {
+  private drawGnome({ ctx, gnomeSheet, gnome }: ArenaView): void {
+    // As the atlas says: the shadow at the gnome's position, the gnome 1 px higher so it stands on it.
+    gnomeSheet.drawFrame(ctx, 'shadow', gnome.x, gnome.y);
+    gnomeSheet.drawFrame(ctx, gnome.frameName, gnome.x, gnome.y - 1);
+  }
+
+  private drawBirds({ ctx, backyardSheet, birds }: ArenaView): void {
     for (const bird of birds) {
       const { name, flipX, offset } = bird.frameAt(this.tickCount);
       const x = bird.x * TILE + offset[0];
       const y = bird.y * TILE + offset[1];
       if (flipX) {
-        sheet.drawFrameMirrored(ctx, name, x, y);
+        backyardSheet.drawFrameMirrored(ctx, name, x, y);
       } else {
-        sheet.drawFrame(ctx, name, x, y);
+        backyardSheet.drawFrame(ctx, name, x, y);
       }
     }
   }

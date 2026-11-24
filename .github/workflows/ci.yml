@@ -30,6 +30,15 @@ jobs:
         run: npm ci
         working-directory: client
 
+      # The generator downloads its jar from Maven Central into node_modules, which npm ci has just
+      # wiped. Central rate-limits GitHub's shared runners (HTTP 429), so keep the jar between runs.
+      # After npm ci, or it would delete the restored jar again.
+      - name: Cache OpenAPI generator jar
+        uses: actions/cache@v6
+        with:
+          path: client/node_modules/@openapitools/openapi-generator-cli/versions
+          key: openapi-generator-jar-${{ hashFiles('client/openapitools.json') }}
+
       # openapi-generator is lenient and turns a malformed spec into silently wrong code, so lint the
       # spec before anything is generated from it.
       - name: Lint OpenAPI spec
