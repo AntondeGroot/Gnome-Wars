@@ -1,7 +1,7 @@
 canvas {
-  /* Draw at the game's real size (the width/height attributes) and let CSS blow it up 3×. */
-  width: calc(272px * 3);
-  height: calc(208px * 3);
+  /* Its size is set in fitToWindow: the game pixels shown, and 3 CSS pixels for each. */
+  /* A block, as an inline canvas leaves a gap below it that would make the page scroll. */
+  display: block;
   /* Scale up by repeating pixels instead of blurring them. */
   image-rendering: pixelated;
 }

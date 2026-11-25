@@ -7,12 +7,15 @@ import {
   viewChild,
 } from '@angular/core';
 import { animatedTileFrame } from '../animated-tiles';
-import { ArenaView, loadArenaView, TILE } from '../arena-view';
+import { ARENA_SIZE, ArenaView, loadArenaView, TILE } from '../arena-view';
+import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
 import { Keyboard } from '../keyboard';
 
 const TICKS_PER_SECOND = 30;
+// CSS pixels per game pixel: a tile is 48 CSS pixels, above the 44 minimum for older players.
+const SCALE = 3;
 
 @Component({
   imports: [],
@@ -24,6 +27,7 @@ const TICKS_PER_SECOND = 30;
     '(window:keydown)': 'keyboard.keyDown($event)',
     '(window:keyup)': 'keyboard.keyUp($event)',
     '(window:blur)': 'keyboard.forgetHeldKeys()',
+    '(window:resize)': 'fitToWindow()',
   },
 })
 export class Canvas {
@@ -53,13 +57,36 @@ export class Canvas {
     if (ctx == null) {
       return;
     }
-    ctx.imageSmoothingEnabled = false; // keep pixels crisp
+    this.fitToWindow();
 
     const view = await loadArenaView(ctx);
     if (view === null) {
       return;
     }
     this.requestFrame(view);
+  }
+
+  /**
+   * Sizes the canvas to the part of the arena that fits the window at SCALE: all of it on a big
+   * screen, the part around the player's gnome on a phone (see drawWorld).
+   */
+  protected fitToWindow(): void {
+    const canvas = this.canvasRef().nativeElement;
+    // The page's viewport, not innerWidth/innerHeight: a phone browser zooms out to fit a canvas
+    // wider than the screen, and innerWidth then reports that zoomed-out width, so the canvas would
+    // never shrink back and its sides would be cut off.
+    const { clientWidth, clientHeight } = document.documentElement;
+    const screen = { width: Math.floor(clientWidth / SCALE), height: Math.floor(clientHeight / SCALE) };
+    const { width, height } = viewSize(screen, ARENA_SIZE);
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = `${width * SCALE}px`;
+    canvas.style.height = `${height * SCALE}px`;
+    // Setting the size resets the context's settings, so this has to follow every resize.
+    const ctx = canvas.getContext('2d');
+    if (ctx !== null) {
+      ctx.imageSmoothingEnabled = false; // keep pixels crisp
+    }
   }
 
   /**
@@ -80,14 +107,28 @@ export class Canvas {
       this.tick(view);
     }
 
-    view.ctx.drawImage(view.staticLayer, 0, 0);
+    this.drawWorld(view);
+    this.frameRate.countFrame(time);
+    this.frameRate.draw(view.ctx);
+    this.requestFrame(view);
+  }
+
+  /** The arena as the camera sees it: moved so the part around the player's gnome is on screen. */
+  private drawWorld(view: ArenaView): void {
+    const { ctx, player } = view;
+    const camera = cameraPosition(
+      { x: player.x + TILE / 2, y: player.y + TILE / 2 },
+      { width: ctx.canvas.width, height: ctx.canvas.height },
+      ARENA_SIZE,
+    );
+    ctx.save();
+    ctx.translate(-camera.x, -camera.y);
+    ctx.drawImage(view.staticLayer, 0, 0);
     this.drawAnimatedTiles(view);
     this.drawBirds(view);
     this.drawLadybug(view);
     this.drawGnomes(view);
-    this.frameRate.countFrame(time);
-    this.frameRate.draw(view.ctx);
-    this.requestFrame(view);
+    ctx.restore();
   }
 
   /** One step of the game, 30 times per second. For now only the birds, the ladybug and the player move. */
