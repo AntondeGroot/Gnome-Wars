@@ -6,55 +6,13 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
-import { SpriteSheet } from '../sprite-atlas';
-import { ArenaMap, BACKYARD, PlacedProp, propsIn } from '../arena-map';
-import { AnimatedTile, animatedTileFrame, splitAnimated } from '../animated-tiles';
-import { Bird, BIRD_BATH } from '../bird';
-import { Ladybug } from '../ladybug';
+import { animatedTileFrame } from '../animated-tiles';
+import { ArenaView, loadArenaView, TILE } from '../arena-view';
 import { FixedTicks } from '../fixed-ticks';
-import { Gnome } from '../gnome/gnome';
-import { Keyboard } from '../keyboard';
 import { FrameRate } from '../frame-rate';
-import { Walls } from '../walls';
-import { GnomeSprites } from '../gnome/gnome-sprites';
+import { Keyboard } from '../keyboard';
 
-const TILE = 16;
 const TICKS_PER_SECOND = 30;
-
-// Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
-const LADYBUG_TILE = { x: 11, y: 7 };
-// The gnome the keys steer.
-const PLAYER = { tile: { x: 5, y: 5 }, skin: 'red' };
-// Temporary, until there are more players: one gnome standing still in every other hat colour.
-const BYSTANDERS = [
-  { tile: { x: 1, y: 1 }, skin: 'purple' },
-  { tile: { x: 15, y: 1 }, skin: 'blue' },
-  { tile: { x: 1, y: 11 }, skin: 'green' },
-  { tile: { x: 15, y: 11 }, skin: 'yellow' },
-  { tile: { x: 9, y: 5 }, skin: 'orange' },
-];
-
-const BACKYARD_JSON = 'sprites/atlases/backyard_atlas.json';
-const BACKYARD_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
-const GNOME_JSON = 'sprites/atlases/gnome_atlas.json';
-const GNOME_IMAGE = 'sprites/atlases/gnome_atlas_1x.png';
-
-/** What every frame draws with, set up once in start(). */
-interface ArenaView {
-  ctx: CanvasRenderingContext2D;
-  backyardSheet: SpriteSheet;
-  gnomeSprites: GnomeSprites;
-
-  /** Ground and the props that never change, drawn once; see drawStaticLayer. */
-  staticLayer: HTMLCanvasElement;
-  /** Props drawn again every frame on top of the static layer, like the glinting pond. */
-  animatedTiles: AnimatedTile[];
-  birds: Bird[];
-  ladybug: Ladybug;
-  /** The gnome the keys steer; also the first of `gnomes`. */
-  player: Gnome;
-  gnomes: Gnome[];
-}
 
 @Component({
   imports: [],
@@ -97,74 +55,11 @@ export class Canvas {
     }
     ctx.imageSmoothingEnabled = false; // keep pixels crisp
 
-    // Both downloads start at once; await waits until both are in.
-    const [backyardSheet, gnomeSheet] = await Promise.all([
-      SpriteSheet.load(BACKYARD_IMAGE, BACKYARD_JSON),
-      SpriteSheet.load(GNOME_IMAGE, GNOME_JSON),
-    ]);
-    const props = propsIn(BACKYARD);
-    const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
-    const staticLayer = this.drawStaticLayer(
-      backyardSheet,
-      stillProps,
-      ctx.canvas.width,
-      ctx.canvas.height,
-    );
-    if (staticLayer === null) {
+    const view = await loadArenaView(ctx);
+    if (view === null) {
       return;
     }
-    const birds = props
-      .filter((prop) => prop.frame === BIRD_BATH)
-      .map((prop) => new Bird(prop.x, prop.y, backyardSheet.animations));
-    const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations);
-    const gnomeSprites = GnomeSprites.build(gnomeSheet);
-    if (gnomeSprites === null) {
-      return;
-    }
-    const walls = Walls.of(BACKYARD);
-    // A gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
-    const [player, ...bystanders] = [PLAYER, ...BYSTANDERS].map(
-      ({ tile, skin }) => new Gnome(tile.x * TILE, tile.y * TILE, walls, skin),
-    );
-    this.requestFrame({
-      ctx,
-      backyardSheet,
-      gnomeSprites,
-      staticLayer,
-      animatedTiles,
-      birds,
-      ladybug,
-      player,
-      gnomes: [player, ...bystanders],
-    });
-  }
-
-  /**
-   * Draws everything that doesn't change (ground and still props) once, onto a canvas that is
-   * never shown.
-   * Each frame then copies it in a single drawImage instead of drawing every tile again.
-   * Returns null when the browser can't give a 2D context, like the main canvas in start().
-   */
-  private drawStaticLayer(
-    sheet: SpriteSheet,
-    stillProps: PlacedProp[],
-    width: number,
-    height: number,
-  ): HTMLCanvasElement | null {
-    const staticLayer = document.createElement('canvas');
-    staticLayer.width = width;
-    staticLayer.height = height;
-    const ctx = staticLayer.getContext('2d');
-    if (ctx == null) {
-      return null;
-    }
-    ctx.imageSmoothingEnabled = false;
-
-    this.drawGround(ctx, sheet, BACKYARD);
-    for (const prop of stillProps) {
-      sheet.drawFrame(ctx, prop.frame, prop.x * TILE, prop.y * TILE);
-    }
-    return staticLayer;
+    this.requestFrame(view);
   }
 
   /**
@@ -241,14 +136,6 @@ export class Canvas {
         backyardSheet.drawFrameMirrored(ctx, name, x, y);
       } else {
         backyardSheet.drawFrame(ctx, name, x, y);
-      }
-    }
-  }
-
-  private drawGround(ctx: CanvasRenderingContext2D, sheet: SpriteSheet, map: ArenaMap): void {
-    for (const [y, row] of map.grid.entries()) {
-      for (const x of [...row].keys()) {
-        sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
       }
     }
   }
