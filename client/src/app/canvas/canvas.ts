@@ -13,17 +13,13 @@ import { Bird, BIRD_BATH } from '../bird';
 import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
-import { HeldKeys } from '../held-keys';
-import {directionFrom, STEERING_KEYS} from '../keyboard-direction';
+import { Keyboard } from '../keyboard';
 import { Walls } from '../walls';
 import { GnomeSprites } from '../gnome/gnome-sprites';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
 const TICKS_PER_SECOND = 30;
-
-// The keys the game uses, by event.code. Their browser default (scrolling the page) is blocked.
-const GAME_KEYS = STEERING_KEYS;
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
@@ -66,9 +62,10 @@ interface ArenaView {
   styleUrl: './canvas.css',
   templateUrl: './canvas.html',
   host: {
-    '(window:keydown)': 'onKeyDown($event)',
-    '(window:keyup)': 'onKeyUp($event)',
-    '(window:blur)': 'onBlur()',
+    // On window, as the canvas only gets key events while it has focus.
+    '(window:keydown)': 'keyboard.keyDown($event)',
+    '(window:keyup)': 'keyboard.keyUp($event)',
+    '(window:blur)': 'keyboard.forgetHeldKeys()',
   },
 })
 export class Canvas {
@@ -86,7 +83,7 @@ export class Canvas {
   // Ticks since the game started; animations pick their frame from it.
   private tickCount = 0;
 
-  private readonly heldKeys = new HeldKeys();
+  protected readonly keyboard = new Keyboard();
 
   constructor() {
     // The constructor runs before the template exists, so wait for the first render to start.
@@ -208,7 +205,7 @@ export class Canvas {
       bird.update(this.tickCount);
     }
     view.ladybug.update(this.tickCount);
-    const direction = directionFrom(this.heldKeys);
+    const direction = this.keyboard.direction();
     if (direction === null) {
       view.player.stop();
     } else {
@@ -277,23 +274,5 @@ export class Canvas {
     ctx.font = '8px monospace';
     ctx.textBaseline = 'top';
     ctx.fillText(`${this.fps} fps`, 4, 3);
-  }
-
-  // event.code names the physical key ('KeyD'), the same with or without Shift and on any keyboard
-  // layout; event.key would give 'd' on press and 'D' on a release with Shift held, so D would stick.
-  protected onKeyDown(event: KeyboardEvent): void {
-    if (GAME_KEYS.has(event.code)) {
-      event.preventDefault();
-    }
-    this.heldKeys.press(event.code);
-  }
-
-  protected onKeyUp(event: KeyboardEvent): void {
-    this.heldKeys.release(event.code);
-  }
-
-  /** A key released while another window has focus never sends keyup here, so forget them all. */
-  protected onBlur(): void {
-    this.heldKeys.clear();
   }
 }
