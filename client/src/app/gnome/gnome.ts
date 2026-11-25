@@ -18,6 +18,24 @@ export class Gnome {
     return this._y;
   }
 
+  move(direction: Direction): void {
+    this.facing = direction;
+    switch (direction) {
+      case "up":
+        this._y--;
+        break;
+      case "down":
+        this._y++;
+        break;
+      case "left":
+        this._x--;
+        break;
+      case "right":
+        this._x++;
+        break;
+    }
+  }
+
   get frameName(): string {
     return `${this.skin}/${this.facing}_${this.state}`;
   }
