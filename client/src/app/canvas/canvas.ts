@@ -14,7 +14,7 @@ import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
 import { HeldKeys } from '../held-keys';
-import { STEERING_KEYS } from '../keyboard-direction';
+import {directionFrom, STEERING_KEYS} from '../keyboard-direction';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
@@ -180,13 +180,17 @@ export class Canvas {
     this.requestFrame(view);
   }
 
-  /** One step of the game, 30 times per second. For now only the birds and the ladybug move. */
+  /** One step of the game, 30 times per second. For now only the birds, the ladybug and one gnome move. */
   private tick(view: ArenaView): void {
     this.tickCount++;
     for (const bird of view.birds) {
       bird.update(this.tickCount);
     }
     view.ladybug.update(this.tickCount);
+    const direction =  directionFrom(this.heldKeys);
+    if(direction !== null){
+      view.gnome.move(direction);
+    }
   }
 
   private drawAnimatedTiles({ ctx, backyardSheet, animatedTiles }: ArenaView): void {
