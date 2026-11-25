@@ -7,6 +7,8 @@ import { autotileFrame, isAutotile } from './autotile';
 export interface ArenaMap {
   grid: string[];
   legend: Record<string, string | null>;
+  /** The letters a gnome can walk on; every other letter is solid. */
+  walkable: string[];
 }
 
 export const BACKYARD: ArenaMap = backyard;

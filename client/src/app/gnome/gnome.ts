@@ -1,4 +1,6 @@
 import { Direction } from '../direction';
+import { Walls } from '../walls';
+import { stepToward } from './step';
 
 /** The atlas draws four walk frames per direction: down_walk_0 to down_walk_3. */
 const WALK_FRAMES = 4;
@@ -17,6 +19,7 @@ export class Gnome {
   constructor(
     private _x: number,
     private _y: number,
+    private readonly walls: Walls,
   ) {}
 
   get x(): number {
@@ -27,23 +30,20 @@ export class Gnome {
     return this._y;
   }
 
+  /**
+   * One unit towards `direction`, or a nudge round a corner; see stepToward. Against a wall it only
+   * turns that way and stands idle.
+   */
   move(direction: Direction): void {
     this.facing = direction;
-    this.ticksWalking++;
-    switch (direction) {
-      case 'up':
-        this._y--;
-        break;
-      case 'down':
-        this._y++;
-        break;
-      case 'left':
-        this._x--;
-        break;
-      case 'right':
-        this._x++;
-        break;
+    const next = stepToward({ x: this._x, y: this._y }, direction, this.walls);
+    if (next === null) {
+      this.stop();
+      return;
     }
+    this._x = next.x;
+    this._y = next.y;
+    this.ticksWalking++;
   }
 
   /** A tick without moving: the gnome stands idle, still facing the way it last moved. */
