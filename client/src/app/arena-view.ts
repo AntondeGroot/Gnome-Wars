@@ -2,6 +2,7 @@ import { AnimatedTile, splitAnimated } from './animated-tiles';
 import { Animation } from './animation';
 import { ArenaMap, BACKYARD, PlacedProp, propsIn } from './arena-map';
 import { Bird, BIRD_BATH } from './bird';
+import { Size } from './camera';
 import { Gnome } from './gnome/gnome';
 import { GnomeSprites } from './gnome/gnome-sprites';
 import { Ladybug } from './ladybug';
@@ -10,6 +11,12 @@ import { Walls } from './walls';
 
 /** A tile is 16 game pixels wide and high. */
 export const TILE = 16;
+
+/** The whole backyard in game pixels: 17 × 13 tiles. Counts characters, as one tile can be ░. */
+export const ARENA_SIZE: Size = {
+  width: [...BACKYARD.grid[0]].length * TILE,
+  height: BACKYARD.grid.length * TILE,
+};
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
@@ -58,7 +65,7 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
   ]);
   const props = propsIn(BACKYARD);
   const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
-  const staticLayer = drawStaticLayer(backyardSheet, stillProps, ctx.canvas.width, ctx.canvas.height);
+  const staticLayer = drawStaticLayer(backyardSheet, stillProps);
   const gnomeSprites = GnomeSprites.build(gnomeSheet);
   if (staticLayer === null || gnomeSprites === null) {
     return null;
@@ -99,15 +106,11 @@ function birdsOn(props: PlacedProp[], animations: Record<string, Animation>): Bi
  * Each frame then copies it in a single drawImage instead of drawing every tile again.
  * Returns null when the browser can't give a 2D context.
  */
-function drawStaticLayer(
-  sheet: SpriteSheet,
-  stillProps: PlacedProp[],
-  width: number,
-  height: number,
-): HTMLCanvasElement | null {
+function drawStaticLayer(sheet: SpriteSheet, stillProps: PlacedProp[]): HTMLCanvasElement | null {
   const staticLayer = document.createElement('canvas');
-  staticLayer.width = width;
-  staticLayer.height = height;
+  // The whole arena, also when the screen only shows part of it.
+  staticLayer.width = ARENA_SIZE.width;
+  staticLayer.height = ARENA_SIZE.height;
   const ctx = staticLayer.getContext('2d');
   if (ctx == null) {
     return null;
