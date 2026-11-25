@@ -65,6 +65,15 @@ describe('the backyard map', () => {
     expect(lettersWithoutEntry).toEqual([]);
   });
 
+  it('only lists walkable letters that the legend knows', () => {
+    // A typo here, like a plain 'S' typed as another letter, would leave the start tiles solid.
+    const unknownWalkable = BACKYARD.walkable.filter(
+      (letter) => !Object.hasOwn(BACKYARD.legend, letter),
+    );
+
+    expect(unknownWalkable).toEqual([]);
+  });
+
   it('only names frames or multi-tile pieces that exist in the backyard atlas', () => {
     const atlas: AtlasFrames = backyardAtlas;
     // null in the legend means "no prop on this tile", so it names nothing.

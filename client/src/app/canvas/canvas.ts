@@ -15,6 +15,7 @@ import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
 import { HeldKeys } from '../held-keys';
 import {directionFrom, STEERING_KEYS} from '../keyboard-direction';
+import { Walls } from '../walls';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
@@ -111,7 +112,7 @@ export class Canvas {
       .map((prop) => new Bird(prop.x, prop.y, backyardSheet.animations));
     const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations);
     // The gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
-    const gnome = new Gnome(GNOME_START_TILE.x * TILE, GNOME_START_TILE.y * TILE);
+    const gnome = new Gnome(GNOME_START_TILE.x * TILE, GNOME_START_TILE.y * TILE, Walls.of(BACKYARD));
     this.requestFrame({
       ctx,
       backyardSheet,
