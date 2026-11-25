@@ -14,11 +14,11 @@ import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
 import { Keyboard } from '../keyboard';
+import { FrameRate } from '../frame-rate';
 import { Walls } from '../walls';
 import { GnomeSprites } from '../gnome/gnome-sprites';
 
 const TILE = 16;
-const FPS_INTERVAL_MS = 1000;
 const TICKS_PER_SECOND = 30;
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
@@ -74,10 +74,7 @@ export class Canvas {
   // The latest booked frame, so the loop can be stopped.
   private frameId = 0;
 
-  // Frame-rate counter: frames counted since the last update, shown once per second.
-  private framesCounted = 0;
-  private lastFpsUpdate = 0;
-  private fps = 0;
+  private readonly frameRate = new FrameRate();
 
   private readonly ticks = new FixedTicks(1000 / TICKS_PER_SECOND);
   // Ticks since the game started; animations pick their frame from it.
@@ -193,8 +190,8 @@ export class Canvas {
     this.drawBirds(view);
     this.drawLadybug(view);
     this.drawGnomes(view);
-    this.countFrame(time);
-    this.drawFps(view.ctx);
+    this.frameRate.countFrame(time);
+    this.frameRate.draw(view.ctx);
     this.requestFrame(view);
   }
 
@@ -254,25 +251,5 @@ export class Canvas {
         sheet.drawFrame(ctx, 'grass_0', x * TILE, y * TILE);
       }
     }
-  }
-
-  /** Counts this frame; once a second the count becomes the shown frame rate. */
-  private countFrame(time: number): void {
-    this.framesCounted++;
-    if (time - this.lastFpsUpdate >= FPS_INTERVAL_MS) {
-      this.fps = this.framesCounted;
-      this.framesCounted = 0;
-      this.lastFpsUpdate = time;
-    }
-  }
-
-  /** The frame rate in the top-left corner, white on a dark box so it reads on any tile. */
-  private drawFps(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillRect(2, 2, 34, 10);
-    ctx.fillStyle = 'white';
-    ctx.font = '8px monospace';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`${this.fps} fps`, 4, 3);
   }
 }
