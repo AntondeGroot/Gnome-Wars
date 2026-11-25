@@ -187,8 +187,10 @@ export class Canvas {
       bird.update(this.tickCount);
     }
     view.ladybug.update(this.tickCount);
-    const direction =  directionFrom(this.heldKeys);
-    if(direction !== null){
+    const direction = directionFrom(this.heldKeys);
+    if (direction === null) {
+      view.gnome.stop();
+    } else {
       view.gnome.move(direction);
     }
   }
