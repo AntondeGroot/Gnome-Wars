@@ -14,22 +14,14 @@ import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
 import { HeldKeys } from '../held-keys';
+import { STEERING_KEYS } from '../keyboard-direction';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
 const TICKS_PER_SECOND = 30;
 
 // The keys the game uses, by event.code. Their browser default (scrolling the page) is blocked.
-const GAME_KEYS = new Set([
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'KeyW',
-  'KeyA',
-  'KeyS',
-  'KeyD',
-]);
+const GAME_KEYS = STEERING_KEYS;
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
