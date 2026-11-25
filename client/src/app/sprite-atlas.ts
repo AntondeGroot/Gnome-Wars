@@ -44,12 +44,18 @@ export class SpriteSheet {
   }
 
   constructor(
-    private readonly image: HTMLImageElement,
+    // An image loaded from a file, or a canvas drawn at load time, like the recoloured gnome skins.
+    private readonly image: CanvasImageSource,
     private readonly atlas: SpriteAtlas,
   ) {}
 
   get animations(): Record<string, Animation> {
     return this.atlas.animations;
+  }
+
+  /** The frames whose names start with `prefix`, such as every "template/" frame. */
+  framesStartingWith(prefix: string): [name: string, frame: AtlasFrame][] {
+    return Object.entries(this.atlas.frames).filter(([name]) => name.startsWith(prefix));
   }
 
   /** Copies the frame called `name` out of the sheet onto the canvas, top-left corner at (x, y). */

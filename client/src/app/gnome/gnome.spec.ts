@@ -73,6 +73,12 @@ describe('Gnome', () => {
     expect(gnome.frameName).toBe('red/up_idle');
   });
 
+  it('names its frames after its skin, so the skin sheet draws it in its own colours', () => {
+    const gnome = new Gnome(32, 48, OPEN_LAWN, 'blue');
+
+    expect(gnome.frameName).toBe('blue/down_idle');
+  });
+
   it('keeps its stride when it turns without stopping', () => {
     const gnome = new Gnome(32, 48, OPEN_LAWN);
     for (let tick = 1; tick <= 4; tick++) {

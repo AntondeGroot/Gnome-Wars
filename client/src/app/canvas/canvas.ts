@@ -16,6 +16,7 @@ import { Gnome } from '../gnome/gnome';
 import { HeldKeys } from '../held-keys';
 import {directionFrom, STEERING_KEYS} from '../keyboard-direction';
 import { Walls } from '../walls';
+import { GnomeSprites } from '../gnome/gnome-sprites';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
@@ -26,7 +27,16 @@ const GAME_KEYS = STEERING_KEYS;
 
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
-const GNOME_START_TILE = { x: 5, y: 5 };
+// The gnome the keys steer.
+const PLAYER = { tile: { x: 5, y: 5 }, skin: 'red' };
+// Temporary, until there are more players: one gnome standing still in every other hat colour.
+const BYSTANDERS = [
+  { tile: { x: 1, y: 1 }, skin: 'purple' },
+  { tile: { x: 15, y: 1 }, skin: 'blue' },
+  { tile: { x: 1, y: 11 }, skin: 'green' },
+  { tile: { x: 15, y: 11 }, skin: 'yellow' },
+  { tile: { x: 9, y: 5 }, skin: 'orange' },
+];
 
 const BACKYARD_JSON = 'sprites/atlases/backyard_atlas.json';
 const BACKYARD_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
@@ -37,7 +47,7 @@ const GNOME_IMAGE = 'sprites/atlases/gnome_atlas_1x.png';
 interface ArenaView {
   ctx: CanvasRenderingContext2D;
   backyardSheet: SpriteSheet;
-  gnomeSheet: SpriteSheet;
+  gnomeSprites: GnomeSprites;
 
   /** Ground and the props that never change, drawn once; see drawStaticLayer. */
   staticLayer: HTMLCanvasElement;
@@ -45,7 +55,9 @@ interface ArenaView {
   animatedTiles: AnimatedTile[];
   birds: Bird[];
   ladybug: Ladybug;
-  gnome: Gnome;
+  /** The gnome the keys steer; also the first of `gnomes`. */
+  player: Gnome;
+  gnomes: Gnome[];
 }
 
 @Component({
@@ -111,17 +123,25 @@ export class Canvas {
       .filter((prop) => prop.frame === BIRD_BATH)
       .map((prop) => new Bird(prop.x, prop.y, backyardSheet.animations));
     const ladybug = new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations);
-    // The gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
-    const gnome = new Gnome(GNOME_START_TILE.x * TILE, GNOME_START_TILE.y * TILE, Walls.of(BACKYARD));
+    const gnomeSprites = GnomeSprites.build(gnomeSheet);
+    if (gnomeSprites === null) {
+      return;
+    }
+    const walls = Walls.of(BACKYARD);
+    // A gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
+    const [player, ...bystanders] = [PLAYER, ...BYSTANDERS].map(
+      ({ tile, skin }) => new Gnome(tile.x * TILE, tile.y * TILE, walls, skin),
+    );
     this.requestFrame({
       ctx,
       backyardSheet,
-      gnomeSheet,
+      gnomeSprites,
       staticLayer,
       animatedTiles,
       birds,
       ladybug,
-      gnome,
+      player,
+      gnomes: [player, ...bystanders],
     });
   }
 
@@ -175,13 +195,13 @@ export class Canvas {
     this.drawAnimatedTiles(view);
     this.drawBirds(view);
     this.drawLadybug(view);
-    this.drawGnome(view);
+    this.drawGnomes(view);
     this.countFrame(time);
     this.drawFps(view.ctx);
     this.requestFrame(view);
   }
 
-  /** One step of the game, 30 times per second. For now only the birds, the ladybug and one gnome move. */
+  /** One step of the game, 30 times per second. For now only the birds, the ladybug and the player move. */
   private tick(view: ArenaView): void {
     this.tickCount++;
     for (const bird of view.birds) {
@@ -190,9 +210,9 @@ export class Canvas {
     view.ladybug.update(this.tickCount);
     const direction = directionFrom(this.heldKeys);
     if (direction === null) {
-      view.gnome.stop();
+      view.player.stop();
     } else {
-      view.gnome.move(direction);
+      view.player.move(direction);
     }
   }
 
@@ -212,10 +232,10 @@ export class Canvas {
     backyardSheet.drawFrame(ctx, name, ladybug.x * TILE, ladybug.y * TILE + offsetY);
   }
 
-  private drawGnome({ ctx, gnomeSheet, gnome }: ArenaView): void {
-    // As the atlas says: the shadow at the gnome's position, the gnome 1 px higher so it stands on it.
-    gnomeSheet.drawFrame(ctx, 'shadow', gnome.x, gnome.y);
-    gnomeSheet.drawFrame(ctx, gnome.frameName, gnome.x, gnome.y - 1);
+  private drawGnomes({ ctx, gnomeSprites, gnomes }: ArenaView): void {
+    for (const gnome of gnomes) {
+      gnomeSprites.draw(ctx, gnome);
+    }
   }
 
   private drawBirds({ ctx, backyardSheet, birds }: ArenaView): void {

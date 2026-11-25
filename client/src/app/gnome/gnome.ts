@@ -12,7 +12,6 @@ const TICKS_PER_WALK_FRAME = 4;
 
 export class Gnome {
   private facing: Direction = 'down';
-  private skin = 'red';
   /** Ticks moved in a row; 0 while standing still. Picks the walk frame. */
   private ticksWalking = 0;
 
@@ -20,6 +19,8 @@ export class Gnome {
     private _x: number,
     private _y: number,
     private readonly walls: Walls,
+    /** The name of its skin in the skin sheet, such as "blue"; it starts every frame name. */
+    private readonly skin = 'red',
   ) {}
 
   get x(): number {
