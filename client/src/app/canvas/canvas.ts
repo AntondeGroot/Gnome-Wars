@@ -13,14 +13,27 @@ import { Bird, BIRD_BATH } from '../bird';
 import { Ladybug } from '../ladybug';
 import { FixedTicks } from '../fixed-ticks';
 import { Gnome } from '../gnome/gnome';
+import { HeldKeys } from '../held-keys';
 
 const TILE = 16;
 const FPS_INTERVAL_MS = 1000;
 const TICKS_PER_SECOND = 30;
 
+// The keys the game uses, by event.code. Their browser default (scrolling the page) is blocked.
+const GAME_KEYS = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'KeyW',
+  'KeyA',
+  'KeyS',
+  'KeyD',
+]);
+
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
-const GNOME_START_TILE = {x: 5, y: 5};
+const GNOME_START_TILE = { x: 5, y: 5 };
 
 const BACKYARD_JSON = 'sprites/atlases/backyard_atlas.json';
 const BACKYARD_IMAGE = 'sprites/atlases/backyard_atlas_1x.png';
@@ -47,6 +60,11 @@ interface ArenaView {
   selector: 'app-canvas',
   styleUrl: './canvas.css',
   templateUrl: './canvas.html',
+  host: {
+    '(window:keydown)': 'onKeyDown($event)',
+    '(window:keyup)': 'onKeyUp($event)',
+    '(window:blur)': 'onBlur()',
+  },
 })
 export class Canvas {
   // The <canvas #canvas> from the template. Only filled in once the template is on the page.
@@ -62,6 +80,8 @@ export class Canvas {
   private readonly ticks = new FixedTicks(1000 / TICKS_PER_SECOND);
   // Ticks since the game started; animations pick their frame from it.
   private tickCount = 0;
+
+  private readonly heldKeys = new HeldKeys();
 
   constructor() {
     // The constructor runs before the template exists, so wait for the first render to start.
@@ -238,5 +258,23 @@ export class Canvas {
     ctx.font = '8px monospace';
     ctx.textBaseline = 'top';
     ctx.fillText(`${this.fps} fps`, 4, 3);
+  }
+
+  // event.code names the physical key ('KeyD'), the same with or without Shift and on any keyboard
+  // layout; event.key would give 'd' on press and 'D' on a release with Shift held, so D would stick.
+  protected onKeyDown(event: KeyboardEvent): void {
+    if (GAME_KEYS.has(event.code)) {
+      event.preventDefault();
+    }
+    this.heldKeys.press(event.code);
+  }
+
+  protected onKeyUp(event: KeyboardEvent): void {
+    this.heldKeys.release(event.code);
+  }
+
+  /** A key released while another window has focus never sends keyup here, so forget them all. */
+  protected onBlur(): void {
+    this.heldKeys.clear();
   }
 }
