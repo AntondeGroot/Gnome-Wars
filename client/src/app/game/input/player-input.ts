@@ -28,8 +28,8 @@ export class PlayerInput {
     return this.keyboard.direction() ?? this.touch.direction;
   }
 
-  /** Whether the plant button is held. Nothing plants pods yet (step E1). */
+  /** Whether a plant key or the plant button is held. Nothing plants pods yet (step E1). */
   podHeld(): boolean {
-    return this.touch.podHeld;
+    return this.keyboard.podHeld() || this.touch.podHeld;
   }
 }

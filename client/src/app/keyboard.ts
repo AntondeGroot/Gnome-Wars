@@ -2,8 +2,11 @@ import { Direction } from './direction';
 import { HeldKeys } from './held-keys';
 import { directionFrom, STEERING_KEYS } from './keyboard-direction';
 
+// The keys that plant a seed pod, by event.code.
+const PLANT_KEYS = ['Space'];
+
 // The keys the game uses, by event.code. Their browser default (scrolling the page) is blocked.
-const GAME_KEYS = STEERING_KEYS;
+const GAME_KEYS = new Set([...STEERING_KEYS, ...PLANT_KEYS]);
 
 /**
  * The keyboard as the game sees it: key events only record which keys are held, and the tick asks
@@ -34,5 +37,10 @@ export class Keyboard {
   /** The way the held keys steer, or null when none of them steers. */
   direction(): Direction | null {
     return directionFrom(this.heldKeys);
+  }
+
+  /** Whether a key that plants a pod is held. */
+  podHeld(): boolean {
+    return PLANT_KEYS.some((key) => this.heldKeys.isHeld(key));
   }
 }
