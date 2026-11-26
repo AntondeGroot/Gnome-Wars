@@ -21,7 +21,7 @@ function walkOneTileRight(gnome: Gnome): void {
 
 describe('PodsOnLawn', () => {
   it('removes a pod when its fuse runs out, so its gnome may plant there again', () => {
-    const pods = new PodsOnLawn();
+    const pods = new PodsOnLawn(OPEN_LAWN);
     const gnome = new Gnome(32, 48, OPEN_LAWN);
 
     pods.update(gnome, true, PLANTED_AT);
@@ -32,8 +32,23 @@ describe('PodsOnLawn', () => {
     expect(pods.all).toEqual([{ tile: { x: 2, y: 3 }, owner: gnome, plantedAt: BURNT_OUT_AT }]);
   });
 
+  it("bursts a pod whose fuse ran out, as far as its gnome's blast range", () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    const gnome = new Gnome(32, 48, OPEN_LAWN);
+    gnome.stats.addBlastRange();
+
+    pods.update(gnome, true, PLANTED_AT);
+    pods.update(gnome, false, BURNT_OUT_AT);
+
+    expect(pods.all).toEqual([]);
+    expect(pods.allBlasts).toHaveLength(1);
+    const [blast] = pods.allBlasts;
+    expect(blast.startedAt).toBe(BURNT_OUT_AT);
+    expect(blast.cells).toContainEqual({ tile: { x: 2, y: 1 }, part: 'end', direction: 'up' });
+  });
+
   it('plants once while the plant key is held; a second pod needs a new press', () => {
-    const pods = new PodsOnLawn();
+    const pods = new PodsOnLawn(OPEN_LAWN);
     const gnome = new Gnome(32, 48, OPEN_LAWN);
     gnome.stats.addPod();
 

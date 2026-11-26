@@ -72,7 +72,8 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
   if (staticLayer === null || gnomeSprites === null) {
     return null;
   }
-  const [player, ...bystanders] = placeGnomes();
+  const walls = Walls.of(BACKYARD);
+  const [player, ...bystanders] = placeGnomes(walls);
   return {
     ctx,
     backyardSheet,
@@ -83,13 +84,12 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     ladybug: new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations),
     player,
     gnomes: [player, ...bystanders],
-    pods: new PodsOnLawn(),
+    pods: new PodsOnLawn(Walls.forBlasts(BACKYARD)),
   };
 }
 
 /** The player first, then the bystanders. */
-function placeGnomes(): Gnome[] {
-  const walls = Walls.of(BACKYARD);
+function placeGnomes(walls: Walls): Gnome[] {
   // A gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
   return [PLAYER, ...BYSTANDERS].map(
     ({ tile, skin }) => new Gnome(tile.x * TILE, tile.y * TILE, walls, skin),

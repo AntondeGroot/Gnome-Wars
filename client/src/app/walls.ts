@@ -15,8 +15,18 @@ export class Walls {
 
   /** The walls of a map: every tile whose letter isn't in its walkable list. */
   static of(map: ArenaMap): Walls {
-    const walkable = new Set(map.walkable);
-    return new Walls(map.grid.map((row) => [...row].map((letter) => !walkable.has(letter))));
+    return Walls.allExcept(map.grid, map.walkable);
+  }
+
+  /** What stops a blast: the same walls, except that blasts also cross the map's blastsCross tiles. */
+  static forBlasts(map: ArenaMap): Walls {
+    return Walls.allExcept(map.grid, [...map.walkable, ...(map.blastsCross ?? [])]);
+  }
+
+  /** Every tile is solid except those whose letter is in `openLetters`. */
+  private static allExcept(grid: string[], openLetters: string[]): Walls {
+    const open = new Set(openLetters);
+    return new Walls(grid.map((row) => [...row].map((letter) => !open.has(letter))));
   }
 
   /** Whether a one-tile box at `position` overlaps a solid tile. Outside the arena counts as solid. */
