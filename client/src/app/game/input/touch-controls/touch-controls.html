@@ -1,0 +1,29 @@
+<div
+  #controls
+  class="controls"
+  [hidden]="!visible()"
+  [class.left-handed]="settings.handedness() === 'left'"
+>
+  <button #plant type="button" class="plant" aria-label="Plant seed pod">
+    <img src="sprites/combat/seed_pod/bomb_2.png" alt="" width="48" height="48" />
+    <span class="label">Plant</span>
+  </button>
+
+  <button #stick type="button" class="stick" aria-label="Thumbstick">
+    <!-- A 140 × 140 stick with its centre at (0, 0); "up" is negative y, as on screen. -->
+    <svg viewBox="-70 -70 140 140" aria-hidden="true">
+      <circle class="base" r="68" />
+      <path class="quarter" data-for="up" d="M -43.84 -43.84 A 62 62 0 0 1 43.84 -43.84" />
+      <path class="quarter" data-for="right" d="M 43.84 -43.84 A 62 62 0 0 1 43.84 43.84" />
+      <path class="quarter" data-for="down" d="M 43.84 43.84 A 62 62 0 0 1 -43.84 43.84" />
+      <path class="quarter" data-for="left" d="M -43.84 43.84 A 62 62 0 0 1 -43.84 -43.84" />
+      <polygon class="notch" data-for="up" points="0,-67 -6,-57 6,-57" />
+      <polygon class="notch" data-for="right" points="67,0 57,-6 57,6" />
+      <polygon class="notch" data-for="down" points="0,67 -6,57 6,57" />
+      <polygon class="notch" data-for="left" points="-67,0 -57,-6 -57,6" />
+      <!-- The dead zone: 0.33 × the 70 radius. -->
+      <circle class="dead-zone" r="23.1" />
+    </svg>
+    <span #knob class="knob"></span>
+  </button>
+</div>
