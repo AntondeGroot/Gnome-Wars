@@ -1,0 +1,149 @@
+:host {
+  --cream: #fff6dc;
+  --lit: #ffd447;
+  --plant-red: #c0453a;
+  --outline: #1f2a1d;
+  --side-gap: 16px;
+  --stick-bottom: 28px;
+  --stick-size: 140px;
+  --plant-size: 104px;
+
+  /* Over the whole page, but only the buttons catch touches; the rest falls through. */
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.controls {
+  position: absolute;
+  inset: 0;
+  /* No scrolling, zooming, text selection or callouts while a thumb is on the controls. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.controls[hidden] {
+  display: none;
+}
+
+button {
+  position: absolute;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  font: inherit;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Right-handed (default): the stick bottom-right, the plant button bottom-left. */
+.stick {
+  right: var(--side-gap);
+  bottom: var(--stick-bottom);
+  width: var(--stick-size);
+  height: var(--stick-size);
+  background: none;
+}
+
+.plant {
+  left: var(--side-gap);
+  /* Centred on the same height as the stick. */
+  bottom: calc(var(--stick-bottom) + (var(--stick-size) - var(--plant-size)) / 2);
+  width: var(--plant-size);
+  height: var(--plant-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--plant-red);
+  border: 3px solid var(--cream);
+  color: var(--cream);
+  box-shadow: 0 3px 0 var(--outline);
+}
+
+.plant.held {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--outline);
+  filter: brightness(1.1);
+}
+
+.plant img {
+  image-rendering: pixelated;
+}
+
+.plant .label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Left-handed: the same controls, mirrored. */
+.left-handed .stick {
+  right: auto;
+  left: var(--side-gap);
+}
+
+.left-handed .plant {
+  left: auto;
+  right: var(--side-gap);
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.base {
+  fill: rgb(31 42 29 / 45%);
+  stroke: rgb(255 246 220 / 60%);
+  stroke-width: 2;
+}
+
+.quarter {
+  fill: none;
+  stroke: rgb(255 246 220 / 25%);
+  stroke-width: 8;
+}
+
+.notch {
+  fill: rgb(255 246 220 / 70%);
+}
+
+.dead-zone {
+  fill: none;
+  stroke: rgb(255 246 220 / 50%);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+
+.stick[data-direction='up'] .quarter[data-for='up'],
+.stick[data-direction='down'] .quarter[data-for='down'],
+.stick[data-direction='left'] .quarter[data-for='left'],
+.stick[data-direction='right'] .quarter[data-for='right'] {
+  stroke: var(--lit);
+}
+
+.stick[data-direction='up'] .notch[data-for='up'],
+.stick[data-direction='down'] .notch[data-for='down'],
+.stick[data-direction='left'] .notch[data-for='left'],
+.stick[data-direction='right'] .notch[data-for='right'] {
+  fill: var(--lit);
+}
+
+.knob {
+  position: absolute;
+  top: calc(50% - 26px);
+  left: calc(50% - 26px);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2px solid var(--outline);
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: transform 60ms ease-out;
+}

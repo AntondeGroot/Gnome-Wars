@@ -11,7 +11,7 @@ import { ARENA_SIZE, ArenaView, loadArenaView, TILE } from '../arena-view';
 import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
-import { Keyboard } from '../keyboard';
+import { PlayerInput } from '../game/input/player-input';
 
 const TICKS_PER_SECOND = 30;
 // CSS pixels per game pixel: a tile is 48 CSS pixels, above the 44 minimum for older players.
@@ -24,9 +24,9 @@ const SCALE = 3;
   templateUrl: './canvas.html',
   host: {
     // On window, as the canvas only gets key events while it has focus.
-    '(window:keydown)': 'keyboard.keyDown($event)',
-    '(window:keyup)': 'keyboard.keyUp($event)',
-    '(window:blur)': 'keyboard.forgetHeldKeys()',
+    '(window:keydown)': 'playerInput.keyboard.keyDown($event)',
+    '(window:keyup)': 'playerInput.keyboard.keyUp($event)',
+    '(window:blur)': 'playerInput.keyboard.forgetHeldKeys()',
     '(window:resize)': 'fitToWindow()',
   },
 })
@@ -42,7 +42,7 @@ export class Canvas {
   // Ticks since the game started; animations pick their frame from it.
   private tickCount = 0;
 
-  protected readonly keyboard = new Keyboard();
+  protected readonly playerInput = inject(PlayerInput);
 
   constructor() {
     // The constructor runs before the template exists, so wait for the first render to start.
@@ -138,7 +138,7 @@ export class Canvas {
       bird.update(this.tickCount);
     }
     view.ladybug.update(this.tickCount);
-    const direction = this.keyboard.direction();
+    const direction = this.playerInput.direction();
     if (direction === null) {
       view.player.stop();
     } else {
