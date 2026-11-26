@@ -1,4 +1,5 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
+import { Direction } from '../direction';
 import { Gnome } from '../gnome/gnome';
 import { TILE_UNITS, Walls } from '../walls';
 import { PodsOnLawn } from './pods-on-lawn';
@@ -6,6 +7,15 @@ import { PodsOnLawn } from './pods-on-lawn';
 /** An 8 × 8 tile lawn without walls, so a gnome can stand anywhere near its middle. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(8).fill('........'),
+  legend: {},
+  walkable: ['.'],
+});
+/**
+ * A 5 × 3 lawn with a wall at (3, 2): a gnome walking down over columns 2 and 3 runs into it, and
+ * would be nudged left into column 2, where the pod lies.
+ */
+const CORNER_LAWN = Walls.of({
+  grid: ['.....', '.....', '...#.'],
   legend: {},
   walkable: ['.'],
 });
@@ -19,7 +29,63 @@ function walkOneTileRight(gnome: Gnome): void {
   }
 }
 
+/**
+ * Walks `units` units, one per tick as in the game: each move meets the pods in the way, then the
+ * pods update. Ticks count on from just after PLANTED_AT, well before any fuse runs out.
+ */
+function walkAmongPods(gnome: Gnome, pods: PodsOnLawn, direction: Direction, units: number): void {
+  for (let unit = 1; unit <= units; unit++) {
+    gnome.move(direction, pods.obstaclesFor(gnome));
+    pods.update(gnome, false, PLANTED_AT + unit);
+  }
+}
+
 describe('PodsOnLawn', () => {
+  it('stops a gnome walking back onto its pod once it has stepped off', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    const gnome = new Gnome(32, 48, OPEN_LAWN);
+    pods.update(gnome, true, PLANTED_AT);
+
+    walkAmongPods(gnome, pods, 'right', TILE_UNITS);
+    walkAmongPods(gnome, pods, 'left', 1);
+
+    expect(gnome.x).toBe(32 + TILE_UNITS);
+  });
+
+  it('lets a gnome step back onto its pod while it is still partly on it', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    const gnome = new Gnome(32, 48, OPEN_LAWN);
+    pods.update(gnome, true, PLANTED_AT);
+
+    walkAmongPods(gnome, pods, 'right', TILE_UNITS - 1);
+    walkAmongPods(gnome, pods, 'left', TILE_UNITS - 1);
+
+    expect(gnome.x).toBe(32);
+  });
+
+  it('stops another gnome walking onto a pod, even while its planter still stands on it', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    const planter = new Gnome(32, 48, OPEN_LAWN);
+    const neighbour = new Gnome(64, 48, OPEN_LAWN);
+    pods.update(planter, true, PLANTED_AT);
+
+    walkAmongPods(neighbour, pods, 'left', TILE_UNITS + 1);
+
+    expect(neighbour.x).toBe(32 + TILE_UNITS);
+  });
+
+  it('does not nudge a gnome round a corner onto a pod', () => {
+    const pods = new PodsOnLawn(CORNER_LAWN);
+    const planter = new Gnome(32, 32, CORNER_LAWN);
+    pods.update(planter, true, PLANTED_AT);
+    // Mostly over column 2, partly over the wall in column 3 below it.
+    const walker = new Gnome(36, 16, CORNER_LAWN);
+
+    walkAmongPods(walker, pods, 'down', 1);
+
+    expect({ x: walker.x, y: walker.y }).toEqual({ x: 36, y: 16 });
+  });
+
   it('removes a pod when its fuse runs out, so its gnome may plant there again', () => {
     const pods = new PodsOnLawn(OPEN_LAWN);
     const gnome = new Gnome(32, 48, OPEN_LAWN);

@@ -144,7 +144,7 @@ export class Canvas {
     if (direction === null) {
       view.player.stop();
     } else {
-      view.player.move(direction);
+      view.player.move(direction, view.pods.obstaclesFor(view.player));
     }
     view.pods.update(view.player, this.playerInput.podHeld(), this.tickCount);
   }

@@ -1,5 +1,5 @@
 import { Direction } from '../direction';
-import { Walls } from '../walls';
+import { Obstacles, Position, Walls } from '../walls';
 import { GnomeStats } from './gnome-stats';
 import { stepToward } from './step';
 
@@ -10,6 +10,8 @@ const WALK_FRAMES = 4;
  * tile, so the feet keep pace with the ground.
  */
 const TICKS_PER_WALK_FRAME = 4;
+/** Nothing in the way besides the walls. */
+const NO_OBSTACLES: Obstacles = { blocks: () => false };
 
 export class Gnome {
   /** How many pods it may have out, how far they blast and how fast it walks. */
@@ -35,12 +37,13 @@ export class Gnome {
   }
 
   /**
-   * One unit towards `direction`, or a nudge round a corner; see stepToward. Against a wall it only
-   * turns that way and stands idle.
+   * One unit towards `direction`, or a nudge round a corner; see stepToward. Against a wall, or one
+   * of the `obstacles` such as pods, it only turns that way and stands idle.
    */
-  move(direction: Direction): void {
+  move(direction: Direction, obstacles: Obstacles = NO_OBSTACLES): void {
     this.facing = direction;
-    const next = stepToward({ x: this._x, y: this._y }, direction, this.walls);
+    const inTheWay = { blocks: (at: Position) => this.walls.blocks(at) || obstacles.blocks(at) };
+    const next = stepToward({ x: this._x, y: this._y }, direction, inTheWay);
     if (next === null) {
       this.stop();
       return;

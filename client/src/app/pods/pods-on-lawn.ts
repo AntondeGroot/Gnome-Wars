@@ -1,5 +1,5 @@
 import { Gnome } from '../gnome/gnome';
-import { Walls } from '../walls';
+import { Obstacles, Position, TILE_UNITS, Walls } from '../walls';
 import { Blast, burst, hasFaded } from './blast';
 import { hasBurntOut } from './fuse';
 import { plantPod } from './plant-pod';
@@ -10,6 +10,8 @@ export class PodsOnLawn {
   /** In the order they were planted. */
   private pods: Pod[] = [];
   private blasts: Blast[] = [];
+  /** Pods whose planter hasn't fully stepped off yet: it may still walk off, nobody may walk on. */
+  private readonly plantersStillOn = new Set<Pod>();
   private plantHeldLastTick = false;
 
   /** @param blastWalls what stops a blast, see Walls.forBlasts */
@@ -23,20 +25,43 @@ export class PodsOnLawn {
     return this.blasts;
   }
 
+  /** The pods in `gnome`'s way: all of them, except one it planted and hasn't stepped off yet. */
+  obstaclesFor(gnome: Gnome): Obstacles {
+    return {
+      blocks: (position) =>
+        this.pods.some((pod) => overlapsTile(position, pod.tile) && !this.isStillOn(gnome, pod)),
+    };
+  }
+
   /**
-   * One tick of the pods: faded blasts go, pods whose fuse ran out burst, then `planter` plants one
-   * if the plant key just went down. Bursting first lets a gnome plant again on that same tick.
+   * One tick of the pods, after the gnomes moved: planters who stepped off their pod can no longer
+   * walk back on, faded blasts go, pods whose fuse ran out burst, then `planter` plants one if the
+   * plant key just went down. Bursting first lets a gnome plant again on that same tick.
    */
   update(planter: Gnome, plantHeld: boolean, tick: number): void {
+    this.forgetPlantersWhoLeft();
     this.blasts = this.blasts.filter((blast) => !hasFaded(blast, tick));
     this.burstPodsOutOfFuse(tick);
     this.plantOnPress(planter, plantHeld, tick);
+  }
+
+  private isStillOn(gnome: Gnome, pod: Pod): boolean {
+    return pod.owner === gnome && this.plantersStillOn.has(pod);
+  }
+
+  private forgetPlantersWhoLeft(): void {
+    for (const pod of this.plantersStillOn) {
+      if (!overlapsTile(pod.owner, pod.tile)) {
+        this.plantersStillOn.delete(pod);
+      }
+    }
   }
 
   private burstPodsOutOfFuse(tick: number): void {
     const bursting = this.pods.filter((pod) => hasBurntOut(pod, tick));
     this.pods = this.pods.filter((pod) => !hasBurntOut(pod, tick));
     this.blasts.push(...bursting.map((pod) => burst(pod, this.blastWalls, tick)));
+    bursting.forEach((pod) => this.plantersStillOn.delete(pod));
   }
 
   /** Plants on the tick the plant key goes down; holding it plants no more. */
@@ -49,6 +74,14 @@ export class PodsOnLawn {
     const pod = plantPod(planter, this.pods, tick);
     if (pod !== null) {
       this.pods.push(pod);
+      this.plantersStillOn.add(pod);
     }
   }
+}
+
+/** Whether a one-tile box at `position`, in units, overlaps `tile`. */
+function overlapsTile(position: Position, tile: Position): boolean {
+  const apartX = Math.abs(position.x - tile.x * TILE_UNITS);
+  const apartY = Math.abs(position.y - tile.y * TILE_UNITS);
+  return apartX < TILE_UNITS && apartY < TILE_UNITS;
 }
