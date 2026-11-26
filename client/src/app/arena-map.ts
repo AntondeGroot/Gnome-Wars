@@ -9,6 +9,8 @@ export interface ArenaMap {
   legend: Record<string, string | null>;
   /** The letters a gnome can walk on; every other letter is solid. */
   walkable: string[];
+  /** Letters a blast crosses although gnomes can't walk on them, such as the pond. None if left out. */
+  blastsCross?: string[];
 }
 
 export const BACKYARD: ArenaMap = backyard;

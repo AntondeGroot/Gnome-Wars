@@ -28,6 +28,7 @@
     "≈" : "pond",
     "⌂" : "shed"
   },
-  "walkable": [".", "S", "░"]
+  "walkable": [".", "S", "░"],
+  "blastsCross": ["≈"]
 
 }

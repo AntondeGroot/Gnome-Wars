@@ -10,7 +10,7 @@ export function fuseFrame(pod: Pod, tick: number): string {
   return FUSE_FRAMES[Math.min(frame, FUSE_FRAMES.length - 1)];
 }
 
-/** Whether the fuse has run out. The pod then disappears; in step E2 it bursts instead. */
+/** Whether the fuse has run out, so the pod bursts. */
 export function hasBurntOut(pod: Pod, tick: number): boolean {
   return ageOf(pod, tick) >= POD_RULES.fuseTicks;
 }
