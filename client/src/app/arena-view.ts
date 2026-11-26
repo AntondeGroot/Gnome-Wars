@@ -6,6 +6,7 @@ import { Size } from './camera';
 import { Gnome } from './gnome/gnome';
 import { GnomeSprites } from './gnome/gnome-sprites';
 import { Ladybug } from './ladybug';
+import { Pod } from './pods/pod';
 import { SpriteSheet } from './sprite-atlas';
 import { Walls } from './walls';
 
@@ -51,6 +52,8 @@ export interface ArenaView {
   /** The gnome the keys steer; also the first of `gnomes`. */
   player: Gnome;
   gnomes: Gnome[];
+  /** The pods lying on the lawn, in the order they were planted. */
+  pods: Pod[];
 }
 
 /**
@@ -81,6 +84,7 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     ladybug: new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations),
     player,
     gnomes: [player, ...bystanders],
+    pods: [],
   };
 }
 

@@ -28,7 +28,7 @@ export class PlayerInput {
     return this.keyboard.direction() ?? this.touch.direction;
   }
 
-  /** Whether a plant key or the plant button is held. Nothing plants pods yet (step E1). */
+  /** Whether a plant key or the plant button is held. */
   podHeld(): boolean {
     return this.keyboard.podHeld() || this.touch.podHeld;
   }
