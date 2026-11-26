@@ -12,6 +12,7 @@ import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
 import { PlayerInput } from '../game/input/player-input';
+import { fuseFrame } from '../pods/fuse';
 
 const TICKS_PER_SECOND = 30;
 // CSS pixels per game pixel: a tile is 48 CSS pixels, above the 44 minimum for older players.
@@ -125,6 +126,7 @@ export class Canvas {
     ctx.translate(-camera.x, -camera.y);
     ctx.drawImage(view.staticLayer, 0, 0);
     this.drawAnimatedTiles(view);
+    this.drawPods(view);
     this.drawBirds(view);
     this.drawLadybug(view);
     this.drawGnomes(view);
@@ -155,6 +157,13 @@ export class Canvas {
         tile.x * TILE,
         tile.y * TILE,
       );
+    }
+  }
+
+  /** On the ground, under everything that walks or flies, so a gnome stands in front of its pod. */
+  private drawPods({ ctx, backyardSheet, pods }: ArenaView): void {
+    for (const pod of pods.all) {
+      backyardSheet.drawFrame(ctx, fuseFrame(pod, this.tickCount), pod.tile.x * TILE, pod.tile.y * TILE);
     }
   }
 
