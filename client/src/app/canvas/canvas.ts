@@ -12,7 +12,6 @@ import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
 import { PlayerInput } from '../game/input/player-input';
-import { plantPod } from '../pods/plant-pod';
 
 const TICKS_PER_SECOND = 30;
 // CSS pixels per game pixel: a tile is 48 CSS pixels, above the 44 minimum for older players.
@@ -42,7 +41,6 @@ export class Canvas {
   private readonly ticks = new FixedTicks(1000 / TICKS_PER_SECOND);
   // Ticks since the game started; animations pick their frame from it.
   private tickCount = 0;
-  private podHeldLastTick = false;
 
   protected readonly playerInput = inject(PlayerInput);
 
@@ -146,21 +144,7 @@ export class Canvas {
     } else {
       view.player.move(direction);
     }
-    this.plantOnPress(view);
-  }
-
-  /** Plants a pod under the player on the tick the plant key goes down; holding it plants no more. */
-  private plantOnPress(view: ArenaView): void {
-    const podHeld = this.playerInput.podHeld();
-    const pressed = podHeld && !this.podHeldLastTick;
-    this.podHeldLastTick = podHeld;
-    if (!pressed) {
-      return;
-    }
-    const pod = plantPod(view.player, view.pods, this.tickCount);
-    if (pod !== null) {
-      view.pods.push(pod);
-    }
+    view.pods.update(view.player, this.playerInput.podHeld(), this.tickCount);
   }
 
   private drawAnimatedTiles({ ctx, backyardSheet, animatedTiles }: ArenaView): void {
