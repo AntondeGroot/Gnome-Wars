@@ -1,0 +1,14 @@
+{
+  "podLimit": {
+    "min": 1,
+    "max": 4
+  },
+  "blastRange": {
+    "min": 1,
+    "max": 10
+  },
+  "unitsPerSecond": {
+    "min": 30,
+    "max": 60
+  }
+}
