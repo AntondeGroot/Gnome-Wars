@@ -11,4 +11,14 @@ describe('Walls', () => {
     expect(walls.blocks({ x: -16, y: 0 })).toBe(true);
     expect(walls.blocks({ x: 0, y: 16 })).toBe(true);
   });
+
+  it('lets blasts cross the pond, which gnomes cannot walk on, but not the bird bath', () => {
+    // One row: grass, pond, bird bath. Blasts cross the pond only.
+    const map = { grid: ['.≈b'], legend: {}, walkable: ['.'], blastsCross: ['≈'] };
+
+    const blockedForBlasts = [0, 16, 32].map((x) => Walls.forBlasts(map).blocks({ x, y: 0 }));
+    const blockedForGnomes = [0, 16, 32].map((x) => Walls.of(map).blocks({ x, y: 0 }));
+    expect(blockedForBlasts).toEqual([false, false, true]);
+    expect(blockedForGnomes).toEqual([false, true, true]);
+  });
 });

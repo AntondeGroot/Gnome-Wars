@@ -9,8 +9,14 @@ export interface Position {
   y: number;
 }
 
+/** Anything that can stand in a gnome's way, such as walls or pods. */
+export interface Obstacles {
+  /** Whether a one-tile box at `position` would run into it. */
+  blocks(position: Position): boolean;
+}
+
 /** Which tiles of the arena block walking. */
-export class Walls {
+export class Walls implements Obstacles {
   private constructor(private readonly solidRows: boolean[][]) {}
 
   /** The walls of a map: every tile whose letter isn't in its walkable list. */
@@ -18,7 +24,7 @@ export class Walls {
     return Walls.allExcept(map.grid, map.walkable);
   }
 
-  /** What stops a blast: the same walls, except that blasts also cross the map's blastsCross tiles. */
+  /** What stops a blast: the same walls, except that blasts cross the map's blastsCross tiles. */
   static forBlasts(map: ArenaMap): Walls {
     return Walls.allExcept(map.grid, [...map.walkable, ...(map.blastsCross ?? [])]);
   }

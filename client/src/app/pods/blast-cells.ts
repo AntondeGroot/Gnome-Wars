@@ -21,8 +21,8 @@ const TILE_STEPS: Record<Direction, Position> = {
 const DIRECTIONS = Object.keys(TILE_STEPS) as Direction[];
 
 /**
- * The tiles a blast from `centre` covers: the centre, then an arm in each direction of up to `range`
- * tiles. An arm stops before the first wall, and its last tile is its leafy end.
+ * The tiles a blast from `centre` covers: the centre, then an arm in each direction of up to
+ * `range` tiles. An arm stops before the first wall, and its last tile is its leafy end.
  */
 export function blastCells(centre: Position, range: number, walls: Walls): BlastCell[] {
   const arms = DIRECTIONS.flatMap((direction) => armCells(centre, direction, range, walls));
