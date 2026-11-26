@@ -1,5 +1,6 @@
 import { Direction } from '../direction';
 import { Walls } from '../walls';
+import { GnomeStats } from './gnome-stats';
 import { stepToward } from './step';
 
 /** The atlas draws four walk frames per direction: down_walk_0 to down_walk_3. */
@@ -11,6 +12,8 @@ const WALK_FRAMES = 4;
 const TICKS_PER_WALK_FRAME = 4;
 
 export class Gnome {
+  /** How many pods it may have out, how far they blast and how fast it walks. */
+  readonly stats = new GnomeStats();
   private facing: Direction = 'down';
   /** Ticks moved in a row; 0 while standing still. Picks the walk frame. */
   private ticksWalking = 0;
