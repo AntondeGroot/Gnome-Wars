@@ -1,4 +1,3 @@
-import { Breakables } from '../breakables';
 import { Direction } from '../direction';
 import { Position, TILE_UNITS, Walls } from '../walls';
 
@@ -21,18 +20,26 @@ const TILE_STEPS: Record<Direction, Position> = {
 };
 const DIRECTIONS = Object.keys(TILE_STEPS) as Direction[];
 
+/** Tiles that hold something, such as a breakable or a pod. */
+export interface TileSet {
+  has(tile: Position): boolean;
+}
+
 /** What a blast meets on its way. */
 export interface BlastSurroundings {
   /** Stop an arm before them. */
   readonly walls: Walls;
-  /** Stop an arm on them: the vine reaches the first one in each direction, and no further. */
-  readonly breakables: Pick<Breakables, 'has'>;
+  /**
+   * Stop an arm on them: breakables and other pods. The vine reaches the first one in each
+   * direction, and no further.
+   */
+  readonly stopsOn: TileSet;
 }
 
 /**
  * The tiles a blast from `centre` covers: the centre, then an arm in each direction of up to
- * `range` tiles. An arm stops before the first wall, or on the first breakable, and its last tile
- * is its leafy end.
+ * `range` tiles. An arm stops before the first wall, or on the first breakable or pod; its last
+ * tile is its leafy end.
  */
 export function blastCells(
   centre: Position,
@@ -57,19 +64,19 @@ function armCells(
   }));
 }
 
-/** How many tiles an arm grows: up to `range`, stopping before a wall or on a breakable. */
+/** How many tiles an arm grows: up to `range`, stopping before a wall or on a breakable or pod. */
 function reachOf(
   centre: Position,
   direction: Direction,
   range: number,
-  { walls, breakables }: BlastSurroundings,
+  { walls, stopsOn }: BlastSurroundings,
 ): number {
   for (let reach = 1; reach <= range; reach++) {
     const tile = tilesAway(centre, direction, reach);
     if (isWall(tile, walls)) {
       return reach - 1;
     }
-    if (breakables.has(tile)) {
+    if (stopsOn.has(tile)) {
       return reach;
     }
   }
