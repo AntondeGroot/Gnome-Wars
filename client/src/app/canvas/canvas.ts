@@ -12,8 +12,8 @@ import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
 import { PlayerInput } from '../game/input/player-input';
-import { hitGnomesInBlasts } from '../pods/knock-outs';
 import { drawPods } from '../pods/pod-sprites';
+import { drawPowerUps } from '../power-ups/power-up-sprites';
 
 const TICKS_PER_SECOND = 30;
 // CSS pixels per game pixel: a tile is 48 CSS pixels, above the 44 minimum for older players.
@@ -117,7 +117,8 @@ export class Canvas {
 
   /** The arena as the camera sees it: moved so the part around the player's gnome is on screen. */
   private drawWorld(view: ArenaView): void {
-    const { ctx, player } = view;
+    const { ctx } = view;
+    const { player } = view.match;
     const camera = cameraPosition(
       { x: player.x + TILE / 2, y: player.y + TILE / 2 },
       { width: ctx.canvas.width, height: ctx.canvas.height },
@@ -128,28 +129,23 @@ export class Canvas {
     ctx.drawImage(view.staticLayer, 0, 0);
     this.drawBreakables(view);
     this.drawAnimatedTiles(view);
-    drawPods(ctx, view.backyardSheet, view.pods, this.tickCount);
+    drawPowerUps(ctx, view.backyardSheet, view.match.powerUps);
+    drawPods(ctx, view.backyardSheet, view.match.pods, this.tickCount);
     this.drawBirds(view);
     this.drawLadybug(view);
     this.drawGnomes(view);
     ctx.restore();
   }
 
-  /** One step of the game, 30 times per second: the critters, the player, the pods and hits. */
+  /** One step of the game, 30 times per second: the critters, then the match's rules. */
   private tick(view: ArenaView): void {
     this.tickCount++;
     for (const bird of view.birds) {
       bird.update(this.tickCount);
     }
     view.ladybug.update(this.tickCount);
-    const direction = this.playerInput.direction();
-    if (direction === null) {
-      view.player.stop();
-    } else {
-      view.player.move(direction, view.pods.obstaclesFor(view.player));
-    }
-    view.pods.update(view.player, this.playerInput.podHeld(), this.tickCount);
-    hitGnomesInBlasts(view.gnomes, view.pods.allBlasts, this.tickCount);
+    const input = this.playerInput;
+    view.match.tick(input.direction(), input.podHeld(), this.tickCount);
   }
 
   private drawAnimatedTiles({ ctx, backyardSheet, animatedTiles }: ArenaView): void {
@@ -163,8 +159,8 @@ export class Canvas {
     }
   }
 
-  private drawBreakables({ ctx, backyardSheet, breakables }: ArenaView): void {
-    for (const { frame, tile } of breakables.all) {
+  private drawBreakables({ ctx, backyardSheet, match }: ArenaView): void {
+    for (const { frame, tile } of match.breakables.all) {
       backyardSheet.drawFrame(ctx, frame, tile.x * TILE, tile.y * TILE);
     }
   }
@@ -174,8 +170,8 @@ export class Canvas {
     backyardSheet.drawFrame(ctx, name, ladybug.x * TILE, ladybug.y * TILE + offsetY);
   }
 
-  private drawGnomes({ ctx, gnomeSprites, gnomes }: ArenaView): void {
-    for (const gnome of gnomes) {
+  private drawGnomes({ ctx, gnomeSprites, match }: ArenaView): void {
+    for (const gnome of match.gnomes) {
       gnomeSprites.draw(ctx, gnome, this.tickCount);
     }
   }

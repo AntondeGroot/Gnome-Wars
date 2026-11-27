@@ -15,6 +15,8 @@ export class PodsOnLawn {
   /** Pods whose planter hasn't fully stepped off yet: it may still walk off, nobody may walk on. */
   private readonly plantersStillOn = new Set<Pod>();
   private plantHeldLastTick = false;
+  private destroyed: Position[] = [];
+  private burstNow: Blast[] = [];
 
   /**
    * @param blastWalls what stops a blast, see Walls.forBlasts
@@ -33,6 +35,16 @@ export class PodsOnLawn {
     return this.blasts;
   }
 
+  /** The blasts that burst during the latest update, chained ones included. */
+  get burstThisTick(): readonly Blast[] {
+    return this.burstNow;
+  }
+
+  /** The tiles whose breakable a blast destroyed during the latest update. */
+  get destroyedThisTick(): readonly Position[] {
+    return this.destroyed;
+  }
+
   /** The pods in `gnome`'s way: all of them, except one it planted and hasn't stepped off yet. */
   obstaclesFor(gnome: Gnome): Obstacles {
     return {
@@ -48,6 +60,8 @@ export class PodsOnLawn {
    */
   update(planter: Gnome, plantHeld: boolean, tick: number): void {
     this.forgetPlantersWhoLeft();
+    this.destroyed = [];
+    this.burstNow = [];
     this.blasts = this.blasts.filter((blast) => !hasFaded(blast, tick));
     this.burstPodsOutOfFuse(tick);
     this.plantOnPress(planter, plantHeld, tick);
@@ -79,6 +93,7 @@ export class PodsOnLawn {
     // Only after every blast of this tick is worked out, so none reaches past another's breakable.
     newBlasts.forEach((blast) => this.destroyBreakablesUnder(blast));
     this.blasts.push(...newBlasts);
+    this.burstNow = newBlasts;
   }
 
   /** What blast arms stop on this tick: breakables, and the pods as they lay when it started. */
@@ -97,7 +112,9 @@ export class PodsOnLawn {
 
   private destroyBreakablesUnder(blast: Blast): void {
     for (const cell of blast.cells) {
-      this.breakables.destroy(cell.tile);
+      if (this.breakables.destroy(cell.tile)) {
+        this.destroyed.push(cell.tile);
+      }
     }
   }
 
