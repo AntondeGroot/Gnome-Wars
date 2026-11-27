@@ -16,6 +16,11 @@ export interface ArenaMap {
    * until then; see Breakables. Optional.
    */
   breakable?: string[];
+  /**
+   * Letters that slow gnomes down, with the share of their speed they keep there, out of 100:
+   * 50 on sand. Letters not in it are walked at full speed. Optional.
+   */
+  speedPercentOn?: Record<string, number>;
   /** Breakables scattered at match start, by the match's seeded random; see scatterBreakables. */
   scatter?: Scatter;
 }

@@ -1,4 +1,5 @@
 import { Direction } from '../direction';
+import { FULL_SPEED_PERCENT } from '../terrain';
 import { anyOf, Obstacles } from '../walls';
 import { GnomeStats } from './gnome-stats';
 import { Lives } from './lives';
@@ -23,7 +24,7 @@ export class Gnome {
   private facing: Direction = 'down';
   /** Units moved in a row; 0 while standing still. Picks the walk frame. */
   private unitsWalked = 0;
-  /** Speed left over from earlier ticks, in units × ticks per second; see unitsThisTick. */
+  /** Speed left over from earlier ticks, in units × ticks per second × 100; see unitsThisTick. */
   private speedLeft = 0;
 
   constructor(
@@ -46,15 +47,20 @@ export class Gnome {
   /**
    * One tick of walking towards `direction`: as many units as its speed gives this tick, each one a
    * step or a nudge round a corner; see stepToward. Against a wall, or one of the `obstacles` such
-   * as pods, it stops there, turned that way. Out, it stays put.
+   * as pods, it stops there, turned that way. Out, it stays put. On slow ground it keeps only
+   * `speedPercent` of its speed.
    */
-  move(direction: Direction, obstacles: Obstacles = NO_OBSTACLES): void {
+  move(
+    direction: Direction,
+    obstacles: Obstacles = NO_OBSTACLES,
+    speedPercent = FULL_SPEED_PERCENT,
+  ): void {
     if (this.lives.isOut) {
       return;
     }
     this.facing = direction;
     const inTheWay = anyOf(this.walls, obstacles);
-    const units = this.unitsThisTick();
+    const units = this.unitsThisTick(speedPercent);
     for (let unit = 0; unit < units; unit++) {
       if (!this.stepOneUnit(direction, inTheWay)) {
         this.stop();
@@ -70,13 +76,15 @@ export class Gnome {
   }
 
   /**
-   * Whole units to walk this tick: unitsPerSecond / 30, with the rest kept for later ticks. At 40
-   * that is 1, 1, 2, 1, 1, 2, …: 40 units a second, all whole, so the server gets the same.
+   * Whole units to walk this tick: unitsPerSecond / 30, times speedPercent / 100, with the rest
+   * kept for later ticks. At 40 that is 1, 1, 2, 1, 1, 2, …: 40 units a second; on sand at 50% it
+   * is 0, 1, 1, 0, 1, 1, …. All whole numbers, so the server gets the same.
    */
-  private unitsThisTick(): number {
-    this.speedLeft += this.stats.unitsPerSecond;
-    const units = Math.floor(this.speedLeft / TICKS_PER_SECOND);
-    this.speedLeft -= units * TICKS_PER_SECOND;
+  private unitsThisTick(speedPercent: number): number {
+    this.speedLeft += this.stats.unitsPerSecond * speedPercent;
+    const perUnit = TICKS_PER_SECOND * FULL_SPEED_PERCENT;
+    const units = Math.floor(this.speedLeft / perUnit);
+    this.speedLeft -= units * perUnit;
     return units;
   }
 

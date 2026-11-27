@@ -33,6 +33,7 @@
   },
   "walkable": [".", "1", "2", "3", "4", "░"],
   "blastsCross": ["≈"],
+  "speedPercentOn": { "░": 50 },
   "scatter": {
     "percent": 50,
     "on": {
