@@ -1,6 +1,6 @@
 import { animatedTileFrame, splitAnimated } from './animated-tiles';
 import { Animation } from './animation';
-import { PlacedProp } from './arena-map';
+import { PlacedProp } from './arena-props';
 
 /**
  * Half of the 8 directions: right, below, and the two diagonals on the right. Checked from every

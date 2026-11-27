@@ -1,5 +1,4 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
-import { Direction } from '../game/rules/direction';
 import { Position, sameTile } from '../game/rules/walls';
 import { BlastCell, blastCells, BlastSurroundings } from '../game/rules/blast-cells';
 import { Pod } from '../game/rules/pod';
@@ -11,24 +10,10 @@ export interface Blast {
   readonly startedAt: number;
 }
 
-/** The atlas has three frames per vine piece, from full to faded. */
-const FADE_FRAMES = 3;
-/** The letter the atlas uses for each direction, as in blast_arm_r_0. */
-const DIRECTION_LETTERS: Record<Direction, string> = { up: 'u', down: 'd', left: 'l', right: 'r' };
-
 /** The blast of `pod` bursting on `tick`, as far as the blast range it was planted with. */
 export function burst(pod: Pod, surroundings: BlastSurroundings, tick: number): Blast {
   const cells = blastCells(pod.tile, pod.blastRange, surroundings);
   return { cells, startedAt: tick };
-}
-
-/** The frame for one cell of `blast` on `tick`: each fade frame shows for a third of the blast. */
-export function blastFrame(cell: BlastCell, blast: Blast, tick: number): string {
-  const age = tick - blast.startedAt;
-  const fade = Math.min(Math.floor((age * FADE_FRAMES) / POD_RULES.blastTicks), FADE_FRAMES - 1);
-  const piece =
-    cell.direction === undefined ? cell.part : `${cell.part}_${DIRECTION_LETTERS[cell.direction]}`;
-  return `blast_${piece}_${fade}`;
 }
 
 /** Whether the blast has faded away completely. */

@@ -1,6 +1,7 @@
 import { SpriteSheet } from '../sprite-atlas';
 import { nearestTile, TILE_UNITS } from '../game/rules/walls';
 import { Gnome } from './gnome';
+import { frameNameOf, isDrawnOn } from './gnome-frames';
 import { knockoutStep } from './knockout';
 import { HAT_COLOURS, Palette, paletteWithHat } from './palette';
 import { buildSkinSheet } from './skin-sheet';
@@ -37,12 +38,12 @@ export class GnomeSprites {
 
   /** Draws `gnome` as it looks on `tick`, blinking while protected; nothing once it is out. */
   draw(ctx: CanvasRenderingContext2D, gnome: Gnome, tick: number): void {
-    if (gnome.lives.isOut || !gnome.lives.isDrawnOn(tick)) {
+    if (gnome.lives.isOut || !isDrawnOn(gnome.lives, tick)) {
       return;
     }
     // As the atlas says: the shadow at the gnome's position, the gnome 1 px higher so it stands on it.
     this.gnomeSheet.drawFrame(ctx, 'shadow', gnome.x, gnome.y);
-    this.skinSheet.drawFrame(ctx, gnome.frameName, gnome.x, gnome.y - 1);
+    this.skinSheet.drawFrame(ctx, frameNameOf(gnome), gnome.x, gnome.y - 1);
   }
 
   /** On the gnome's tile, whatever way it faced; the frames hold their own shadow. */

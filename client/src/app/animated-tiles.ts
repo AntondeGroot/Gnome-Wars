@@ -1,5 +1,5 @@
 import { Animation, frameAt } from './animation';
-import { PlacedProp } from './arena-map';
+import { PlacedProp } from './arena-props';
 
 /** A prop that changes every few ticks, like the pond water, so it can't go in the static layer. */
 export interface AnimatedTile {

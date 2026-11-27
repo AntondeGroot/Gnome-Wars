@@ -5,13 +5,6 @@ import { GnomeStats } from '../game/rules/gnome-stats';
 import { Lives } from './lives';
 import { stepToward } from '../game/rules/step';
 
-/** The atlas draws four walk frames per direction: down_walk_0 to down_walk_3. */
-const WALK_FRAMES = 4;
-/**
- * Units walked per walk frame: a full cycle of 4 frames covers 16 units, one tile, so the feet keep
- * pace with the ground at any speed.
- */
-const UNITS_PER_WALK_FRAME = 4;
 /** The game's ticks per second; a gnome's speed is in units per second. */
 const TICKS_PER_SECOND = 30;
 /** Nothing in the way besides the walls. */
@@ -21,9 +14,8 @@ export class Gnome {
   /** How many pods it may have out, how far they blast and how fast it walks. */
   readonly stats = new GnomeStats();
   readonly lives = new Lives();
-  private facing: Direction = 'down';
-  /** Units moved in a row; 0 while standing still. Picks the walk frame. */
-  private unitsWalked = 0;
+  private _facing: Direction = 'down';
+  private _unitsWalked = 0;
   /** Speed left over from earlier ticks, in units × ticks per second × 100; see unitsThisTick. */
   private speedLeft = 0;
 
@@ -44,6 +36,16 @@ export class Gnome {
     return this._y;
   }
 
+  /** The way it last moved or turned; it stays that way while standing. */
+  get facing(): Direction {
+    return this._facing;
+  }
+
+  /** Units moved in a row; 0 while standing still. The drawing picks the walk frame from it. */
+  get unitsWalked(): number {
+    return this._unitsWalked;
+  }
+
   /**
    * One tick of walking towards `direction`: as many units as its speed gives this tick, each one a
    * step or a nudge round a corner; see stepToward. Against a wall, or one of the `obstacles` such
@@ -58,7 +60,7 @@ export class Gnome {
     if (this.lives.isOut) {
       return;
     }
-    this.facing = direction;
+    this._facing = direction;
     const inTheWay = anyOf(this.walls, obstacles);
     const units = this.unitsThisTick(speedPercent);
     for (let unit = 0; unit < units; unit++) {
@@ -71,7 +73,7 @@ export class Gnome {
 
   /** A tick without moving: the gnome stands idle, still facing the way it last moved. */
   stop(): void {
-    this.unitsWalked = 0;
+    this._unitsWalked = 0;
     this.speedLeft = 0;
   }
 
@@ -96,20 +98,7 @@ export class Gnome {
     }
     this._x = next.x;
     this._y = next.y;
-    this.unitsWalked++;
+    this._unitsWalked++;
     return true;
-  }
-
-  get frameName(): string {
-    return `${this.skin}/${this.facing}_${this.pose()}`;
-  }
-
-  /** "idle", or the walk frame: walk_0 from the first unit, then the next every 4 units walked. */
-  private pose(): string {
-    if (this.unitsWalked === 0) {
-      return 'idle';
-    }
-    const walkFrame = Math.floor((this.unitsWalked - 1) / UNITS_PER_WALK_FRAME) % WALK_FRAMES;
-    return `walk_${walkFrame}`;
   }
 }
