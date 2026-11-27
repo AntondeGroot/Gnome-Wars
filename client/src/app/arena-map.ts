@@ -16,6 +16,16 @@ export interface ArenaMap {
    * until then; see Breakables. Optional.
    */
   breakable?: string[];
+  /** Breakables scattered at match start, by the match's seeded random; see scatterBreakables. */
+  scatter?: Scatter;
+}
+
+/** Which breakables may be scattered where, and how many. */
+export interface Scatter {
+  /** The share of the allowed tiles that get one, out of 100. */
+  percent: number;
+  /** For each letter they may stand on, the frames of the breakables to pick from. */
+  on: Record<string, string[]>;
 }
 
 export const BACKYARD: ArenaMap = backyard;
@@ -28,15 +38,17 @@ export interface PlacedProp {
 }
 
 /**
- * Every prop in the map, row by row from the top, so taller props overlap the row behind.
+ * Every prop in the map that never changes, row by row from the top, so taller props overlap the
+ * row behind. Breakable letters are left out: Breakables draws those, as blasts destroy them.
  * The map's rows and letters are checked by arena-map.spec.ts, so this can trust them.
  */
 export function propsIn(map: ArenaMap): PlacedProp[] {
+  const breakable = new Set(map.breakable ?? []);
   const props: PlacedProp[] = [];
   for (const [y, row] of map.grid.entries()) {
     for (const [x, letter] of [...row].entries()) {
       const name = map.legend[letter];
-      if (name === null) continue;
+      if (name === null || breakable.has(letter)) continue;
 
       const frame = isAutotile(name) ? autotileFrame(name, map.grid, x, y) : name;
       props.push({ x, y, frame });

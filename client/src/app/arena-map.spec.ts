@@ -1,5 +1,5 @@
 import backyardAtlas from '../../public/sprites/atlases/backyard_atlas.json';
-import { ArenaMap, BACKYARD } from './arena-map';
+import { ArenaMap, BACKYARD, propsIn } from './arena-map';
 import { autotileFrame, isAutotile } from './autotile';
 import { SpriteAtlas } from './sprite-atlas';
 
@@ -66,7 +66,7 @@ describe('the backyard map', () => {
   });
 
   it('only lists walkable letters that the legend knows', () => {
-    // A typo here, like a plain 'S' typed as another letter, would leave the start tiles solid.
+    // A typo here, like a start tile '1' typed as another letter, would leave that tile solid.
     const unknownWalkable = BACKYARD.walkable.filter(
       (letter) => !Object.hasOwn(BACKYARD.legend, letter),
     );
@@ -115,5 +115,19 @@ describe('the backyard map', () => {
       .map(({ x, y, name }) => `${name} at row ${y + 1}, column ${x + 1}`);
 
     expect(tilesMissingANeighbour).toEqual([]);
+  });
+});
+
+describe('propsIn', () => {
+  it('leaves breakable letters out of the still props, as Breakables draws those', () => {
+    // One row: a hedge the map places by letter, then a flower bed that never changes.
+    const map: ArenaMap = {
+      grid: ['h■'],
+      legend: { h: 'hedge', '■': 'flower_bed_a' },
+      walkable: [],
+      breakable: ['h'],
+    };
+
+    expect(propsIn(map)).toEqual([{ x: 1, y: 0, frame: 'flower_bed_a' }]);
   });
 });
