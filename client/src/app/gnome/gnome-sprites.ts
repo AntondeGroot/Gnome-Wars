@@ -22,14 +22,22 @@ export class GnomeSprites {
     return skinSheet === null ? null : new GnomeSprites(gnomeSheet, skinSheet);
   }
 
-  /** Draws `gnome` as it looks on `tick`: blinking while protected, its knockout once out. */
-  draw(ctx: CanvasRenderingContext2D, gnome: Gnome, tick: number): void {
-    const outAt = gnome.lives.outAt;
-    if (outAt !== null) {
-      this.drawKnockout(ctx, gnome, tick - outAt);
-      return;
+  /**
+   * The knockouts of the gnomes that are out, on the ground: draw them before pods and living
+   * gnomes, so those go over the rubble.
+   */
+  drawKnockouts(ctx: CanvasRenderingContext2D, gnomes: readonly Gnome[], tick: number): void {
+    for (const gnome of gnomes) {
+      const outAt = gnome.lives.outAt;
+      if (outAt !== null) {
+        this.drawKnockout(ctx, gnome, tick - outAt);
+      }
     }
-    if (!gnome.lives.isDrawnOn(tick)) {
+  }
+
+  /** Draws `gnome` as it looks on `tick`, blinking while protected; nothing once it is out. */
+  draw(ctx: CanvasRenderingContext2D, gnome: Gnome, tick: number): void {
+    if (gnome.lives.isOut || !gnome.lives.isDrawnOn(tick)) {
       return;
     }
     // As the atlas says: the shadow at the gnome's position, the gnome 1 px higher so it stands on it.

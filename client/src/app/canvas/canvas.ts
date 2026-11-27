@@ -129,6 +129,7 @@ export class Canvas {
     ctx.drawImage(view.staticLayer, 0, 0);
     this.drawBreakables(view);
     this.drawAnimatedTiles(view);
+    view.gnomeSprites.drawKnockouts(ctx, view.match.gnomes, this.tickCount);
     drawPowerUps(ctx, view.backyardSheet, view.match.powerUps);
     drawPods(ctx, view.backyardSheet, view.match.pods, this.tickCount);
     this.drawBirds(view);
