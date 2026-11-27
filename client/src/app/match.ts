@@ -7,7 +7,8 @@ import { PodsOnLawn } from './pods/pods-on-lawn';
 import { PowerUps } from './power-ups/power-ups';
 import { scatterBreakables } from './scatter-breakables';
 import { RandomInts } from './seeded-random';
-import { anyOf, Position, TILE_UNITS, Walls } from './walls';
+import { Terrain } from './terrain';
+import { anyOf, nearestTile, Position, TILE_UNITS, Walls } from './walls';
 
 /** Where a gnome starts, and its skin. */
 export interface GnomeStart {
@@ -25,6 +26,7 @@ export class Match {
   readonly gnomes: Gnome[];
   readonly pods: PodsOnLawn;
   readonly powerUps: PowerUps;
+  private readonly terrain: Terrain;
 
   /**
    * @param random seeded at match start; decides everything random, such as where breakables are
@@ -44,6 +46,7 @@ export class Match {
     );
     this.pods = new PodsOnLawn(Walls.forBlasts(map), this.breakables);
     this.powerUps = new PowerUps(random);
+    this.terrain = Terrain.of(map);
   }
 
   /** The gnome the keys steer. */
@@ -60,7 +63,8 @@ export class Match {
     if (direction === null) {
       this.player.stop();
     } else {
-      this.player.move(direction, this.pods.obstaclesFor(this.player));
+      const speedPercent = this.terrain.speedPercentAt(nearestTile(this.player));
+      this.player.move(direction, this.pods.obstaclesFor(this.player), speedPercent);
     }
     this.pods.update(this.player, plantHeld, tick);
     this.powerUps.destroyUnder(this.pods.burstThisTick);
