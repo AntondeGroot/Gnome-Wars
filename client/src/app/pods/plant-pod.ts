@@ -12,7 +12,7 @@ export function plantPod(gnome: Gnome, pods: readonly Pod[], tick: number): Pod 
   if (gnome.lives.isOut || atLimit || isTaken(tile, pods)) {
     return null;
   }
-  return { tile, owner: gnome, plantedAt: tick };
+  return { tile, owner: gnome, plantedAt: tick, blastRange: gnome.stats.blastRange };
 }
 
 function podsOwnedBy(gnome: Gnome, pods: readonly Pod[]): number {

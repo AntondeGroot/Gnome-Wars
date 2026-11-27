@@ -42,6 +42,19 @@ function walkAmongPods(gnome: Gnome, pods: PodsOnLawn, direction: Direction, uni
 }
 
 describe('PodsOnLawn', () => {
+  it('bursts a pod as far as its gnome could blast when planting, not after a power-up', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    const gnome = new Gnome(32, 48, OPEN_LAWN);
+
+    pods.update(gnome, true, PLANTED_AT);
+    gnome.stats.addBlastRange();
+    pods.update(gnome, false, BURNT_OUT_AT);
+
+    // A range of 1, as when planted: the centre and one tile each way. A range of 2 would give 9.
+    const [blast] = pods.allBlasts;
+    expect(blast.cells).toHaveLength(5);
+  });
+
   it('bursts a pod that a blast reaches on that tick, long before its own fuse runs out', () => {
     const pods = new PodsOnLawn(OPEN_LAWN);
     // Side by side, on tiles (2, 3) and (3, 3): the first pod's blast reaches the second.
@@ -104,7 +117,9 @@ describe('PodsOnLawn', () => {
     pods.update(farOff, true, PLANTED_AT + 2);
     pods.update(first, false, BURNT_OUT_AT);
 
-    expect(pods.all).toEqual([{ tile: { x: 4, y: 3 }, owner: farOff, plantedAt: PLANTED_AT + 2 }]);
+    expect(pods.all).toEqual([
+      { tile: { x: 4, y: 3 }, owner: farOff, plantedAt: PLANTED_AT + 2, blastRange: 1 },
+    ]);
     expect(pods.allBlasts).toHaveLength(1);
   });
 
@@ -217,7 +232,9 @@ describe('PodsOnLawn', () => {
     expect(pods.all).toHaveLength(1);
 
     pods.update(gnome, true, BURNT_OUT_AT);
-    expect(pods.all).toEqual([{ tile: { x: 2, y: 3 }, owner: gnome, plantedAt: BURNT_OUT_AT }]);
+    expect(pods.all).toEqual([
+      { tile: { x: 2, y: 3 }, owner: gnome, plantedAt: BURNT_OUT_AT, blastRange: 1 },
+    ]);
   });
 
   it("bursts a pod whose fuse ran out, as far as its gnome's blast range", () => {
