@@ -18,6 +18,11 @@ export class Breakables implements Obstacles {
     }
   }
 
+  /** Exactly these breakables. */
+  static from(breakables: Breakable[]): Breakables {
+    return new Breakables(breakables);
+  }
+
   /** Every tile whose letter is in the map's breakable list. */
   static of(map: ArenaMap): Breakables {
     const breakable = new Set(map.breakable ?? []);

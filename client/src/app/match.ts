@@ -5,6 +5,7 @@ import { Gnome } from './gnome/gnome';
 import { hitGnomesInBlasts } from './pods/knock-outs';
 import { PodsOnLawn } from './pods/pods-on-lawn';
 import { PowerUps } from './power-ups/power-ups';
+import { scatterBreakables } from './scatter-breakables';
 import { RandomInts } from './seeded-random';
 import { anyOf, Position, TILE_UNITS, Walls } from './walls';
 
@@ -25,9 +26,17 @@ export class Match {
   readonly pods: PodsOnLawn;
   readonly powerUps: PowerUps;
 
-  /** @param random seeded at match start; decides everything random, such as power-up drops */
+  /**
+   * @param random seeded at match start; decides everything random, such as where breakables are
+   * scattered and which power-ups drop
+   */
   constructor(map: ArenaMap, starts: GnomeStart[], random: RandomInts) {
-    this.breakables = Breakables.of(map);
+    const scattered = scatterBreakables(
+      map,
+      random,
+      starts.map(({ tile }) => tile),
+    );
+    this.breakables = Breakables.from([...Breakables.of(map).all, ...scattered]);
     const walls = anyOf(Walls.of(map), this.breakables);
     // A gnome moves in units, not whole tiles, so it keeps its position in units.
     this.gnomes = starts.map(

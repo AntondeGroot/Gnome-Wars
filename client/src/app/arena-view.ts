@@ -63,7 +63,7 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     SpriteSheet.load(GNOME_IMAGE, GNOME_JSON),
   ]);
   const match = new Match(BACKYARD, [PLAYER, ...BYSTANDERS], new SeededRandom(newMatchSeed()));
-  const props = propsIn(BACKYARD).filter((prop) => !match.breakables.has(prop));
+  const props = propsIn(BACKYARD);
   const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
   const staticLayer = drawStaticLayer(backyardSheet, stillProps);
   const gnomeSprites = GnomeSprites.build(gnomeSheet);
