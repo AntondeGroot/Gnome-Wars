@@ -1,4 +1,4 @@
-import { Direction } from '../../../direction';
+import { Direction } from '../../rules/direction';
 import { pickDirection } from '../pick-direction';
 
 /** How far the knob sits from the centre, in CSS pixels, when the stick points somewhere. */

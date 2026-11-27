@@ -1,5 +1,5 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
-import { Pod } from './pod';
+import { Pod } from '../game/rules/pod';
 
 /** The pod's frames in the backyard atlas, green → yellow → pink as the fuse burns down. */
 const FUSE_FRAMES = ['bomb_0', 'bomb_1', 'bomb_2'];

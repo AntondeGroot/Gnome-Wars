@@ -1,6 +1,6 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
 import { Blast, blastFrame, hasFaded } from './blast';
-import { BlastCell } from './blast-cells';
+import { BlastCell } from '../game/rules/blast-cells';
 
 const STARTED_AT = 10;
 const THIRD_OF_BLAST = POD_RULES.blastTicks / 3;

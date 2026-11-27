@@ -1,4 +1,4 @@
-import { Walls } from '../walls';
+import { Walls } from './walls';
 import { stepToward } from './step';
 
 /** Walls from rows of tiles, where '#' is solid and '.' is open. */

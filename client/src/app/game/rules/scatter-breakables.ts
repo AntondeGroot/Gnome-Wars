@@ -1,4 +1,4 @@
-import { ArenaMap } from './arena-map';
+import { ArenaMap } from '../../arena-map';
 import { Breakable } from './breakables';
 import { RandomInts } from './seeded-random';
 import { Position } from './walls';

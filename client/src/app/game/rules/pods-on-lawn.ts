@@ -1,9 +1,9 @@
-import { Breakables } from '../breakables';
-import { Gnome } from '../gnome/gnome';
-import { Obstacles, Position, sameTile, TILE_UNITS, Walls } from '../walls';
-import { Blast, burst, covers, hasFaded } from './blast';
+import { Breakables } from './breakables';
+import { Gnome } from '../../gnome/gnome';
+import { Obstacles, Position, sameTile, TILE_UNITS, Walls } from './walls';
+import { Blast, burst, covers, hasFaded } from '../../pods/blast';
 import { TileSet } from './blast-cells';
-import { hasBurntOut } from './fuse';
+import { hasBurntOut } from '../../pods/fuse';
 import { plantPod } from './plant-pod';
 import { Pod } from './pod';
 

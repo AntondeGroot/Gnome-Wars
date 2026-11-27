@@ -1,5 +1,5 @@
-import { Gnome } from '../gnome/gnome';
-import { nearestTile, Position, sameTile } from '../walls';
+import { Gnome } from '../../gnome/gnome';
+import { nearestTile, Position, sameTile } from './walls';
 import { Pod } from './pod';
 
 /**

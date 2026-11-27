@@ -1,5 +1,5 @@
-import { Direction } from '../direction';
-import { Position, TILE_UNITS, Walls } from '../walls';
+import { Direction } from './direction';
+import { Position, TILE_UNITS, Walls } from './walls';
 
 /** Which piece of the vine a cell shows: the centre, a straight arm, or the leafy end of an arm. */
 export type BlastPart = 'center' | 'arm' | 'end';

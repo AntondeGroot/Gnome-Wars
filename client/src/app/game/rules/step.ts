@@ -1,5 +1,5 @@
-import { Direction } from '../direction';
-import { Obstacles, Position, TILE_UNITS } from '../walls';
+import { Direction } from './direction';
+import { Obstacles, Position, TILE_UNITS } from './walls';
 
 /** How one unit of movement changes x and y, per direction. */
 const ONE_UNIT: Record<Direction, Position> = {

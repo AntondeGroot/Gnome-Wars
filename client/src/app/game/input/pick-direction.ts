@@ -1,4 +1,4 @@
-import { Direction } from '../../direction';
+import { Direction } from '../rules/direction';
 
 /** Within this part of the stick's radius the gnome stands still. */
 export const DEAD_ZONE = 0.33;

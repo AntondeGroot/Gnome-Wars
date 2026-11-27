@@ -1,5 +1,5 @@
-import { Breakables } from '../breakables';
-import { Walls } from '../walls';
+import { Breakables } from './breakables';
+import { Walls } from './walls';
 import { blastCells } from './blast-cells';
 
 /**

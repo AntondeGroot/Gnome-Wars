@@ -1,8 +1,8 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
 import { Gnome } from '../gnome/gnome';
-import { Walls } from '../walls';
+import { Walls } from '../game/rules/walls';
 import { fuseFrame } from './fuse';
-import { Pod } from './pod';
+import { Pod } from '../game/rules/pod';
 
 /** An 8 × 8 tile lawn without walls; the gnome is only there to own the pod. */
 const OPEN_LAWN = Walls.of({

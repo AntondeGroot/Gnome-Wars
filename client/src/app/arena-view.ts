@@ -5,8 +5,8 @@ import { Bird, BIRD_BATH } from './bird';
 import { Size } from './camera';
 import { GnomeSprites } from './gnome/gnome-sprites';
 import { Ladybug } from './ladybug';
-import { GnomeStart, Match } from './match';
-import { SeededRandom } from './seeded-random';
+import { GnomeStart, Match } from './game/rules/match';
+import { SeededRandom } from './game/rules/seeded-random';
 import { SpriteSheet } from './sprite-atlas';
 
 /** A tile is 16 game pixels wide and high. */

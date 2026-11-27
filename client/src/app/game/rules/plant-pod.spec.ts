@@ -1,5 +1,5 @@
-import { Gnome } from '../gnome/gnome';
-import { Walls } from '../walls';
+import { Gnome } from '../../gnome/gnome';
+import { Walls } from './walls';
 import { plantPod } from './plant-pod';
 import { Pod } from './pod';
 

@@ -1,4 +1,4 @@
-import { ArenaMap } from './arena-map';
+import { ArenaMap } from '../../arena-map';
 import { Obstacles, Position, tilesUnder } from './walls';
 
 /** A hedge, pot or sandcastle still standing: its tile and the atlas frame it is drawn with. */
