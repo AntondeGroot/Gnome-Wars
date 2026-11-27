@@ -42,8 +42,9 @@ export class Breakables implements Obstacles {
     return this.standing.has(keyOf(tile));
   }
 
-  destroy(tile: Position): void {
-    this.standing.delete(keyOf(tile));
+  /** Destroys the breakable on `tile`; false when there was none. */
+  destroy(tile: Position): boolean {
+    return this.standing.delete(keyOf(tile));
   }
 
   blocks(position: Position): boolean {

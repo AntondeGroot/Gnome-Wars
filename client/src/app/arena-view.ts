@@ -2,14 +2,12 @@ import { AnimatedTile, splitAnimated } from './animated-tiles';
 import { Animation } from './animation';
 import { ArenaMap, BACKYARD, PlacedProp, propsIn } from './arena-map';
 import { Bird, BIRD_BATH } from './bird';
-import { Breakables } from './breakables';
 import { Size } from './camera';
-import { Gnome } from './gnome/gnome';
 import { GnomeSprites } from './gnome/gnome-sprites';
 import { Ladybug } from './ladybug';
-import { PodsOnLawn } from './pods/pods-on-lawn';
+import { GnomeStart, Match } from './match';
+import { SeededRandom } from './seeded-random';
 import { SpriteSheet } from './sprite-atlas';
-import { anyOf, Obstacles, Walls } from './walls';
 
 /** A tile is 16 game pixels wide and high. */
 export const TILE = 16;
@@ -23,9 +21,9 @@ export const ARENA_SIZE: Size = {
 // Temporary, until the enemies (E-steps): the grass tile where a ladybug stands and flaps.
 const LADYBUG_TILE = { x: 11, y: 7 };
 // The gnome the keys steer.
-const PLAYER = { tile: { x: 5, y: 5 }, skin: 'red' };
+const PLAYER: GnomeStart = { tile: { x: 5, y: 5 }, skin: 'red' };
 // Temporary, until there are more players: one gnome standing still in every other hat colour.
-const BYSTANDERS = [
+const BYSTANDERS: GnomeStart[] = [
   { tile: { x: 1, y: 1 }, skin: 'purple' },
   { tile: { x: 15, y: 1 }, skin: 'blue' },
   { tile: { x: 1, y: 11 }, skin: 'green' },
@@ -50,12 +48,8 @@ export interface ArenaView {
   animatedTiles: AnimatedTile[];
   birds: Bird[];
   ladybug: Ladybug;
-  /** The gnome the keys steer; also the first of `gnomes`. */
-  player: Gnome;
-  gnomes: Gnome[];
-  /** Drawn every frame, as blasts destroy them. */
-  breakables: Breakables;
-  pods: PodsOnLawn;
+  /** The rules: gnomes, breakables and pods. Breakables are drawn every frame, as blasts go. */
+  match: Match;
 }
 
 /**
@@ -68,15 +62,14 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     SpriteSheet.load(BACKYARD_IMAGE, BACKYARD_JSON),
     SpriteSheet.load(GNOME_IMAGE, GNOME_JSON),
   ]);
-  const breakables = Breakables.of(BACKYARD);
-  const props = propsIn(BACKYARD).filter((prop) => !breakables.has(prop));
+  const match = new Match(BACKYARD, [PLAYER, ...BYSTANDERS], new SeededRandom(newMatchSeed()));
+  const props = propsIn(BACKYARD).filter((prop) => !match.breakables.has(prop));
   const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
   const staticLayer = drawStaticLayer(backyardSheet, stillProps);
   const gnomeSprites = GnomeSprites.build(gnomeSheet);
   if (staticLayer === null || gnomeSprites === null) {
     return null;
   }
-  const [player, ...bystanders] = placeGnomes(anyOf(Walls.of(BACKYARD), breakables));
   return {
     ctx,
     backyardSheet,
@@ -85,19 +78,13 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     animatedTiles,
     birds: birdsOn(props, backyardSheet.animations),
     ladybug: new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations),
-    player,
-    gnomes: [player, ...bystanders],
-    breakables,
-    pods: new PodsOnLawn(Walls.forBlasts(BACKYARD), breakables),
+    match,
   };
 }
 
-/** The player first, then the bystanders. */
-function placeGnomes(walls: Obstacles): Gnome[] {
-  // A gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
-  return [PLAYER, ...BYSTANDERS].map(
-    ({ tile, skin }) => new Gnome(tile.x * TILE, tile.y * TILE, walls, skin),
-  );
+/** A fresh seed for each match; later the server picks it, so every player gets the same one. */
+function newMatchSeed(): number {
+  return Math.floor(Math.random() * 2 ** 32);
 }
 
 /** A bird on every bird bath. */

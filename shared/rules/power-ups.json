@@ -1,0 +1,4 @@
+{
+  "dropPercent": 30,
+  "kinds": ["range", "pod", "speed"]
+}
