@@ -1,7 +1,6 @@
 import { SpriteSheet } from '../sprite-atlas';
 import { TILE_UNITS } from '../game/rules/walls';
-import { blastFrame } from './blast';
-import { fuseFrame } from './fuse';
+import { blastFrame, fuseFrame } from './pod-frames';
 import { PodsOnLawn } from '../game/rules/pods-on-lawn';
 
 /**

@@ -1,6 +1,7 @@
 import { AnimatedTile, splitAnimated } from './animated-tiles';
 import { Animation } from './animation';
-import { ArenaMap, BACKYARD, PlacedProp, propsIn } from './arena-map';
+import { ArenaMap, BACKYARD } from './arena-map';
+import { PlacedProp, propsIn } from './arena-props';
 import { Bird, BIRD_BATH } from './bird';
 import { Size } from './camera';
 import { GnomeSprites } from './gnome/gnome-sprites';
