@@ -19,6 +19,7 @@ describe('fuse', () => {
       tile: { x: 2, y: 3 },
       owner: new Gnome(32, 48, OPEN_LAWN),
       plantedAt: PLANTED_AT,
+      blastRange: 1,
     };
     const frameAtAge = (age: number): string => fuseFrame(pod, PLANTED_AT + age);
 

@@ -16,9 +16,9 @@ const FADE_FRAMES = 3;
 /** The letter the atlas uses for each direction, as in blast_arm_r_0. */
 const DIRECTION_LETTERS: Record<Direction, string> = { up: 'u', down: 'd', left: 'l', right: 'r' };
 
-/** The blast of `pod` bursting on `tick`, as far as its owner's blast range reaches. */
+/** The blast of `pod` bursting on `tick`, as far as the blast range it was planted with. */
 export function burst(pod: Pod, surroundings: BlastSurroundings, tick: number): Blast {
-  const cells = blastCells(pod.tile, pod.owner.stats.blastRange, surroundings);
+  const cells = blastCells(pod.tile, pod.blastRange, surroundings);
   return { cells, startedAt: tick };
 }
 

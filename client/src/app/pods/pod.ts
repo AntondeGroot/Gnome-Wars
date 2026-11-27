@@ -9,4 +9,9 @@ export interface Pod {
   readonly owner: Gnome;
   /** The tick it was planted on; the fuse counts from here. */
   readonly plantedAt: number;
+  /**
+   * How far it bursts: its gnome's blast range when it was planted. A range power-up picked up
+   * later only makes the pods planted after it stronger.
+   */
+  readonly blastRange: number;
 }
