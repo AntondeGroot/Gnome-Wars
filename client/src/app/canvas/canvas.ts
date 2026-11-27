@@ -125,6 +125,7 @@ export class Canvas {
     ctx.save();
     ctx.translate(-camera.x, -camera.y);
     ctx.drawImage(view.staticLayer, 0, 0);
+    this.drawBreakables(view);
     this.drawAnimatedTiles(view);
     drawPods(ctx, view.backyardSheet, view.pods, this.tickCount);
     this.drawBirds(view);
@@ -157,6 +158,12 @@ export class Canvas {
         tile.x * TILE,
         tile.y * TILE,
       );
+    }
+  }
+
+  private drawBreakables({ ctx, backyardSheet, breakables }: ArenaView): void {
+    for (const { frame, tile } of breakables.all) {
+      backyardSheet.drawFrame(ctx, frame, tile.x * TILE, tile.y * TILE);
     }
   }
 

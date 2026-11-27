@@ -1,5 +1,5 @@
 import { Direction } from '../direction';
-import { Obstacles, Position, Walls } from '../walls';
+import { anyOf, Obstacles } from '../walls';
 import { GnomeStats } from './gnome-stats';
 import { stepToward } from './step';
 
@@ -23,7 +23,8 @@ export class Gnome {
   constructor(
     private _x: number,
     private _y: number,
-    private readonly walls: Walls,
+    /** What it can never walk through, such as walls. */
+    private readonly walls: Obstacles,
     /** The name of its skin in the skin sheet, such as "blue"; it starts every frame name. */
     private readonly skin = 'red',
   ) {}
@@ -42,8 +43,7 @@ export class Gnome {
    */
   move(direction: Direction, obstacles: Obstacles = NO_OBSTACLES): void {
     this.facing = direction;
-    const inTheWay = { blocks: (at: Position) => this.walls.blocks(at) || obstacles.blocks(at) };
-    const next = stepToward({ x: this._x, y: this._y }, direction, inTheWay);
+    const next = stepToward({ x: this._x, y: this._y }, direction, anyOf(this.walls, obstacles));
     if (next === null) {
       this.stop();
       return;

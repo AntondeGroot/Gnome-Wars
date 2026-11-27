@@ -1,3 +1,4 @@
+import { Breakables } from '../breakables';
 import { Walls } from '../walls';
 import { blastCells } from './blast-cells';
 
@@ -22,7 +23,7 @@ const OPEN_LAWN_CENTRE = { x: 3, y: 3 };
 
 describe('blastCells', () => {
   it('stops an arm before the first wall, so a wall next to the centre leaves no arm', () => {
-    const cells = blastCells(POD_TILE, 2, WALLED_LAWN);
+    const cells = blastCells(POD_TILE, 2, { walls: WALLED_LAWN, breakables: Breakables.none() });
 
     expect(cells.filter((cell) => cell.direction === 'up')).toEqual([
       { tile: { x: 2, y: 1 }, part: 'end', direction: 'up' },
@@ -31,7 +32,10 @@ describe('blastCells', () => {
   });
 
   it('grows an arm of range tiles in each direction, each ending in a leafy end', () => {
-    const cells = blastCells(OPEN_LAWN_CENTRE, 2, OPEN_LAWN);
+    const cells = blastCells(OPEN_LAWN_CENTRE, 2, {
+      walls: OPEN_LAWN,
+      breakables: Breakables.none(),
+    });
 
     expect(cells).toHaveLength(9);
     expect(cells).toEqual(

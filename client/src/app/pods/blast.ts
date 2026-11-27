@@ -1,7 +1,6 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
 import { Direction } from '../direction';
-import { Walls } from '../walls';
-import { BlastCell, blastCells } from './blast-cells';
+import { BlastCell, blastCells, BlastSurroundings } from './blast-cells';
 import { Pod } from './pod';
 
 /** A burst pod's vine cross, fading away over `blastTicks`. */
@@ -17,8 +16,9 @@ const FADE_FRAMES = 3;
 const DIRECTION_LETTERS: Record<Direction, string> = { up: 'u', down: 'd', left: 'l', right: 'r' };
 
 /** The blast of `pod` bursting on `tick`, as far as its owner's blast range reaches. */
-export function burst(pod: Pod, walls: Walls, tick: number): Blast {
-  return { cells: blastCells(pod.tile, pod.owner.stats.blastRange, walls), startedAt: tick };
+export function burst(pod: Pod, surroundings: BlastSurroundings, tick: number): Blast {
+  const cells = blastCells(pod.tile, pod.owner.stats.blastRange, surroundings);
+  return { cells, startedAt: tick };
 }
 
 /** The frame for one cell of `blast` on `tick`: each fade frame shows for a third of the blast. */
