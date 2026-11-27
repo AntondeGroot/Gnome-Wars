@@ -1,5 +1,6 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
 import { Direction } from '../direction';
+import { Position, sameTile } from '../walls';
 import { BlastCell, blastCells, BlastSurroundings } from './blast-cells';
 import { Pod } from './pod';
 
@@ -33,4 +34,9 @@ export function blastFrame(cell: BlastCell, blast: Blast, tick: number): string 
 /** Whether the blast has faded away completely. */
 export function hasFaded(blast: Blast, tick: number): boolean {
   return tick - blast.startedAt >= POD_RULES.blastTicks;
+}
+
+/** Whether the blast's vine lies on `tile`. */
+export function covers(blast: Blast, tile: Position): boolean {
+  return blast.cells.some((cell) => sameTile(cell.tile, tile));
 }

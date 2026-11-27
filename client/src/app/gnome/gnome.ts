@@ -1,6 +1,7 @@
 import { Direction } from '../direction';
 import { anyOf, Obstacles } from '../walls';
 import { GnomeStats } from './gnome-stats';
+import { Lives } from './lives';
 import { stepToward } from './step';
 
 /** The atlas draws four walk frames per direction: down_walk_0 to down_walk_3. */
@@ -16,6 +17,7 @@ const NO_OBSTACLES: Obstacles = { blocks: () => false };
 export class Gnome {
   /** How many pods it may have out, how far they blast and how fast it walks. */
   readonly stats = new GnomeStats();
+  readonly lives = new Lives();
   private facing: Direction = 'down';
   /** Ticks moved in a row; 0 while standing still. Picks the walk frame. */
   private ticksWalking = 0;
@@ -26,7 +28,7 @@ export class Gnome {
     /** What it can never walk through, such as walls. */
     private readonly walls: Obstacles,
     /** The name of its skin in the skin sheet, such as "blue"; it starts every frame name. */
-    private readonly skin = 'red',
+    readonly skin = 'red',
   ) {}
 
   get x(): number {
@@ -39,9 +41,12 @@ export class Gnome {
 
   /**
    * One unit towards `direction`, or a nudge round a corner; see stepToward. Against a wall, or one
-   * of the `obstacles` such as pods, it only turns that way and stands idle.
+   * of the `obstacles` such as pods, it only turns that way and stands idle. Out, it stays put.
    */
   move(direction: Direction, obstacles: Obstacles = NO_OBSTACLES): void {
+    if (this.lives.isOut) {
+      return;
+    }
     this.facing = direction;
     const next = stepToward({ x: this._x, y: this._y }, direction, anyOf(this.walls, obstacles));
     if (next === null) {

@@ -68,3 +68,12 @@ export function tilesUnder(position: Position): Position[] {
 export function anyOf(...obstacles: Obstacles[]): Obstacles {
   return { blocks: (position) => obstacles.some((obstacle) => obstacle.blocks(position)) };
 }
+
+/** The tile a one-tile box at `position` mostly covers: halfway between two, the next one. */
+export function nearestTile(position: Position): Position {
+  return { x: Math.round(position.x / TILE_UNITS), y: Math.round(position.y / TILE_UNITS) };
+}
+
+export function sameTile(a: Position, b: Position): boolean {
+  return a.x === b.x && a.y === b.y;
+}
