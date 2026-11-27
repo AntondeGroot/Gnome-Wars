@@ -2,13 +2,14 @@ import { AnimatedTile, splitAnimated } from './animated-tiles';
 import { Animation } from './animation';
 import { ArenaMap, BACKYARD, PlacedProp, propsIn } from './arena-map';
 import { Bird, BIRD_BATH } from './bird';
+import { Breakables } from './breakables';
 import { Size } from './camera';
 import { Gnome } from './gnome/gnome';
 import { GnomeSprites } from './gnome/gnome-sprites';
 import { Ladybug } from './ladybug';
 import { PodsOnLawn } from './pods/pods-on-lawn';
 import { SpriteSheet } from './sprite-atlas';
-import { Walls } from './walls';
+import { anyOf, Obstacles, Walls } from './walls';
 
 /** A tile is 16 game pixels wide and high. */
 export const TILE = 16;
@@ -43,7 +44,7 @@ export interface ArenaView {
   backyardSheet: SpriteSheet;
   gnomeSprites: GnomeSprites;
 
-  /** Ground and the props that never change, drawn once; see drawStaticLayer. */
+  /** Ground and the props that never change, drawn once; see drawStaticLayer. No breakables. */
   staticLayer: HTMLCanvasElement;
   /** Props drawn again every frame on top of the static layer, like the glinting pond. */
   animatedTiles: AnimatedTile[];
@@ -52,6 +53,8 @@ export interface ArenaView {
   /** The gnome the keys steer; also the first of `gnomes`. */
   player: Gnome;
   gnomes: Gnome[];
+  /** Drawn every frame, as blasts destroy them. */
+  breakables: Breakables;
   pods: PodsOnLawn;
 }
 
@@ -65,15 +68,15 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     SpriteSheet.load(BACKYARD_IMAGE, BACKYARD_JSON),
     SpriteSheet.load(GNOME_IMAGE, GNOME_JSON),
   ]);
-  const props = propsIn(BACKYARD);
+  const breakables = Breakables.of(BACKYARD);
+  const props = propsIn(BACKYARD).filter((prop) => !breakables.has(prop));
   const { stillProps, animatedTiles } = splitAnimated(props, backyardSheet.animations);
   const staticLayer = drawStaticLayer(backyardSheet, stillProps);
   const gnomeSprites = GnomeSprites.build(gnomeSheet);
   if (staticLayer === null || gnomeSprites === null) {
     return null;
   }
-  const walls = Walls.of(BACKYARD);
-  const [player, ...bystanders] = placeGnomes(walls);
+  const [player, ...bystanders] = placeGnomes(anyOf(Walls.of(BACKYARD), breakables));
   return {
     ctx,
     backyardSheet,
@@ -84,12 +87,13 @@ export async function loadArenaView(ctx: CanvasRenderingContext2D): Promise<Aren
     ladybug: new Ladybug(LADYBUG_TILE.x, LADYBUG_TILE.y, backyardSheet.animations),
     player,
     gnomes: [player, ...bystanders],
-    pods: new PodsOnLawn(Walls.forBlasts(BACKYARD)),
+    breakables,
+    pods: new PodsOnLawn(Walls.forBlasts(BACKYARD), breakables),
   };
 }
 
 /** The player first, then the bystanders. */
-function placeGnomes(walls: Walls): Gnome[] {
+function placeGnomes(walls: Obstacles): Gnome[] {
   // A gnome moves 1 unit per tick, so it keeps its position in units, not tiles.
   return [PLAYER, ...BYSTANDERS].map(
     ({ tile, skin }) => new Gnome(tile.x * TILE, tile.y * TILE, walls, skin),

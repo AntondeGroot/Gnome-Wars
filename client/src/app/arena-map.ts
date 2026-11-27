@@ -11,6 +11,11 @@ export interface ArenaMap {
   walkable: string[];
   /** Letters a blast crosses although gnomes can't walk on them, such as the pond. Optional. */
   blastsCross?: string[];
+  /**
+   * Letters of props a blast destroys, such as hedges and pots. They block walking and blasts
+   * until then; see Breakables. Optional.
+   */
+  breakable?: string[];
 }
 
 export const BACKYARD: ArenaMap = backyard;

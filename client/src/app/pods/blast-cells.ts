@@ -1,3 +1,4 @@
+import { Breakables } from '../breakables';
 import { Direction } from '../direction';
 import { Position, TILE_UNITS, Walls } from '../walls';
 
@@ -20,12 +21,25 @@ const TILE_STEPS: Record<Direction, Position> = {
 };
 const DIRECTIONS = Object.keys(TILE_STEPS) as Direction[];
 
+/** What a blast meets on its way. */
+export interface BlastSurroundings {
+  /** Stop an arm before them. */
+  readonly walls: Walls;
+  /** Stop an arm on them: the vine reaches the first one in each direction, and no further. */
+  readonly breakables: Pick<Breakables, 'has'>;
+}
+
 /**
  * The tiles a blast from `centre` covers: the centre, then an arm in each direction of up to
- * `range` tiles. An arm stops before the first wall, and its last tile is its leafy end.
+ * `range` tiles. An arm stops before the first wall, or on the first breakable, and its last tile
+ * is its leafy end.
  */
-export function blastCells(centre: Position, range: number, walls: Walls): BlastCell[] {
-  const arms = DIRECTIONS.flatMap((direction) => armCells(centre, direction, range, walls));
+export function blastCells(
+  centre: Position,
+  range: number,
+  surroundings: BlastSurroundings,
+): BlastCell[] {
+  const arms = DIRECTIONS.flatMap((direction) => armCells(centre, direction, range, surroundings));
   return [{ tile: centre, part: 'center' }, ...arms];
 }
 
@@ -33,9 +47,9 @@ function armCells(
   centre: Position,
   direction: Direction,
   range: number,
-  walls: Walls,
+  surroundings: BlastSurroundings,
 ): BlastCell[] {
-  const reach = reachOf(centre, direction, range, walls);
+  const reach = reachOf(centre, direction, range, surroundings);
   return Array.from({ length: reach }, (_, index) => ({
     tile: tilesAway(centre, direction, index + 1),
     part: index === reach - 1 ? 'end' : 'arm',
@@ -43,13 +57,23 @@ function armCells(
   }));
 }
 
-/** How many tiles an arm grows: up to `range`, stopping before the first wall. */
-function reachOf(centre: Position, direction: Direction, range: number, walls: Walls): number {
-  let reach = 0;
-  while (reach < range && !isWall(tilesAway(centre, direction, reach + 1), walls)) {
-    reach++;
+/** How many tiles an arm grows: up to `range`, stopping before a wall or on a breakable. */
+function reachOf(
+  centre: Position,
+  direction: Direction,
+  range: number,
+  { walls, breakables }: BlastSurroundings,
+): number {
+  for (let reach = 1; reach <= range; reach++) {
+    const tile = tilesAway(centre, direction, reach);
+    if (isWall(tile, walls)) {
+      return reach - 1;
+    }
+    if (breakables.has(tile)) {
+      return reach;
+    }
   }
-  return reach;
+  return range;
 }
 
 function tilesAway(from: Position, direction: Direction, tiles: number): Position {

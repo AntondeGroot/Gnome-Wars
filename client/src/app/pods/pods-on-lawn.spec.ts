@@ -1,4 +1,5 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
+import { Breakables } from '../breakables';
 import { Direction } from '../direction';
 import { Gnome } from '../gnome/gnome';
 import { TILE_UNITS, Walls } from '../walls';
@@ -41,6 +42,61 @@ function walkAmongPods(gnome: Gnome, pods: PodsOnLawn, direction: Direction, uni
 }
 
 describe('PodsOnLawn', () => {
+  it('destroys only the first breakable in a direction, even with range to spare', () => {
+    const hedgeRow = { grid: ['...hh'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
+    const breakables = Breakables.of(hedgeRow);
+    const pods = new PodsOnLawn(Walls.forBlasts(hedgeRow), breakables);
+    // On tile (1, 0), with a blast range of 3: enough to reach both hedges, at (3, 0) and (4, 0).
+    const gnome = new Gnome(16, 0, Walls.of(hedgeRow));
+    gnome.stats.addBlastRange();
+    gnome.stats.addBlastRange();
+
+    pods.update(gnome, true, PLANTED_AT);
+    pods.update(gnome, false, BURNT_OUT_AT);
+
+    expect(breakables.has({ x: 3, y: 0 })).toBe(false);
+    expect(breakables.has({ x: 4, y: 0 })).toBe(true);
+  });
+
+  it('destroys the first breakable in each of the four directions at once', () => {
+    // A hedge right next to the pod's tile, (2, 2), on every side.
+    const hedgeCross = {
+      grid: ['.....', '..h..', '.h.h.', '..h..', '.....'],
+      legend: { h: 'hedge' },
+      walkable: ['.'],
+      breakable: ['h'],
+    };
+    const breakables = Breakables.of(hedgeCross);
+    const pods = new PodsOnLawn(Walls.forBlasts(hedgeCross), breakables);
+    const gnome = new Gnome(32, 32, Walls.of(hedgeCross));
+
+    pods.update(gnome, true, PLANTED_AT);
+    pods.update(gnome, false, BURNT_OUT_AT);
+
+    expect(breakables.all).toEqual([]);
+  });
+
+  it('stops two pods bursting on one tick at the same first breakable in a line', () => {
+    const hedgeRow = { grid: ['..hh.'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
+    const breakables = Breakables.of(hedgeRow);
+    const pods = new PodsOnLawn(Walls.forBlasts(hedgeRow), breakables);
+    // Both with a range of 2. The first, on (0, 0), reaches the hedge at (2, 0). The second, on
+    // (1, 0), would reach the one at (3, 0) if the first blast cleared (2, 0) before its own was
+    // worked out.
+    const first = new Gnome(0, 0, Walls.of(hedgeRow));
+    const second = new Gnome(16, 0, Walls.of(hedgeRow));
+    first.stats.addBlastRange();
+    second.stats.addBlastRange();
+
+    pods.update(first, true, PLANTED_AT);
+    pods.update(second, false, PLANTED_AT);
+    pods.update(second, true, PLANTED_AT);
+    pods.update(first, false, BURNT_OUT_AT);
+
+    expect(breakables.has({ x: 2, y: 0 })).toBe(false);
+    expect(breakables.has({ x: 3, y: 0 })).toBe(true);
+  });
+
   it('stops a gnome walking back onto its pod once it has stepped off', () => {
     const pods = new PodsOnLawn(OPEN_LAWN);
     const gnome = new Gnome(32, 48, OPEN_LAWN);

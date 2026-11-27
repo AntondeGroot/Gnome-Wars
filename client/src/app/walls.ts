@@ -19,14 +19,18 @@ export interface Obstacles {
 export class Walls implements Obstacles {
   private constructor(private readonly solidRows: boolean[][]) {}
 
-  /** The walls of a map: every tile whose letter isn't in its walkable list. */
+  /**
+   * The walls of a map: every tile whose letter isn't walkable. Breakables aren't walls, as they
+   * can be destroyed; Breakables blocks those tiles while they stand.
+   */
   static of(map: ArenaMap): Walls {
-    return Walls.allExcept(map.grid, map.walkable);
+    return Walls.allExcept(map.grid, [...map.walkable, ...(map.breakable ?? [])]);
   }
 
   /** What stops a blast: the same walls, except that blasts cross the map's blastsCross tiles. */
   static forBlasts(map: ArenaMap): Walls {
-    return Walls.allExcept(map.grid, [...map.walkable, ...(map.blastsCross ?? [])]);
+    const open = [...map.walkable, ...(map.blastsCross ?? []), ...(map.breakable ?? [])];
+    return Walls.allExcept(map.grid, open);
   }
 
   /** Every tile is solid except those whose letter is in `openLetters`. */
@@ -37,21 +41,30 @@ export class Walls implements Obstacles {
 
   /** Whether a one-tile box at `position` overlaps a solid tile. Outside the arena counts as solid. */
   blocks(position: Position): boolean {
-    const firstColumn = Math.floor(position.x / TILE_UNITS);
-    const lastColumn = Math.floor((position.x + TILE_UNITS - 1) / TILE_UNITS);
-    const firstRow = Math.floor(position.y / TILE_UNITS);
-    const lastRow = Math.floor((position.y + TILE_UNITS - 1) / TILE_UNITS);
-    for (let row = firstRow; row <= lastRow; row++) {
-      for (let column = firstColumn; column <= lastColumn; column++) {
-        if (this.isSolid(column, row)) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return tilesUnder(position).some((tile) => this.isSolid(tile.x, tile.y));
   }
 
   private isSolid(column: number, row: number): boolean {
     return this.solidRows[row]?.[column] ?? true;
   }
+}
+
+/** The tiles a one-tile box at `position` overlaps: one to four, as it may sit between tiles. */
+export function tilesUnder(position: Position): Position[] {
+  const firstColumn = Math.floor(position.x / TILE_UNITS);
+  const lastColumn = Math.floor((position.x + TILE_UNITS - 1) / TILE_UNITS);
+  const firstRow = Math.floor(position.y / TILE_UNITS);
+  const lastRow = Math.floor((position.y + TILE_UNITS - 1) / TILE_UNITS);
+  const tiles: Position[] = [];
+  for (let y = firstRow; y <= lastRow; y++) {
+    for (let x = firstColumn; x <= lastColumn; x++) {
+      tiles.push({ x, y });
+    }
+  }
+  return tiles;
+}
+
+/** Obstacles that block wherever any of `obstacles` does. */
+export function anyOf(...obstacles: Obstacles[]): Obstacles {
+  return { blocks: (position) => obstacles.some((obstacle) => obstacle.blocks(position)) };
 }

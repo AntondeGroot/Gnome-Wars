@@ -1,3 +1,4 @@
+import { Breakables } from '../breakables';
 import { Gnome } from '../gnome/gnome';
 import { Obstacles, Position, TILE_UNITS, Walls } from '../walls';
 import { Blast, burst, hasFaded } from './blast';
@@ -14,8 +15,14 @@ export class PodsOnLawn {
   private readonly plantersStillOn = new Set<Pod>();
   private plantHeldLastTick = false;
 
-  /** @param blastWalls what stops a blast, see Walls.forBlasts */
-  constructor(private readonly blastWalls: Walls) {}
+  /**
+   * @param blastWalls what stops a blast, see Walls.forBlasts
+   * @param breakables what blasts destroy; none by default
+   */
+  constructor(
+    private readonly blastWalls: Walls,
+    private readonly breakables = Breakables.none(),
+  ) {}
 
   get all(): readonly Pod[] {
     return this.pods;
@@ -60,8 +67,18 @@ export class PodsOnLawn {
   private burstPodsOutOfFuse(tick: number): void {
     const bursting = this.pods.filter((pod) => hasBurntOut(pod, tick));
     this.pods = this.pods.filter((pod) => !hasBurntOut(pod, tick));
-    this.blasts.push(...bursting.map((pod) => burst(pod, this.blastWalls, tick)));
+    const surroundings = { walls: this.blastWalls, breakables: this.breakables };
+    const newBlasts = bursting.map((pod) => burst(pod, surroundings, tick));
+    // Only after every blast of this tick is worked out, so none reaches past another's breakable.
+    newBlasts.forEach((blast) => this.destroyBreakablesUnder(blast));
+    this.blasts.push(...newBlasts);
     bursting.forEach((pod) => this.plantersStillOn.delete(pod));
+  }
+
+  private destroyBreakablesUnder(blast: Blast): void {
+    for (const cell of blast.cells) {
+      this.breakables.destroy(cell.tile);
+    }
   }
 
   /** Plants on the tick the plant key goes down; holding it plants no more. */
