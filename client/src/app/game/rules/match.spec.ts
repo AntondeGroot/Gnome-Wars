@@ -1,4 +1,4 @@
-import POD_RULES from '../../../shared/rules/pods.json';
+import POD_RULES from '../../../../../shared/rules/pods.json';
 import { Match } from './match';
 import { RandomInts } from './seeded-random';
 

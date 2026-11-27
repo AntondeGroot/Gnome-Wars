@@ -1,6 +1,6 @@
-import { Gnome } from '../gnome/gnome';
-import { nearestTile } from '../walls';
-import { Blast, covers } from './blast';
+import { Gnome } from '../../gnome/gnome';
+import { nearestTile } from './walls';
+import { Blast, covers } from '../../pods/blast';
 
 /**
  * Hits every gnome standing in a blast: one whose centre is on a tile the vine covers. Its lives

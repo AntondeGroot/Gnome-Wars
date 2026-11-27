@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Direction } from '../../direction';
+import { Direction } from '../rules/direction';
 import { Keyboard } from '../../keyboard';
 
 /** What the touch controls hold right now; written by the controls, read by the tick. */

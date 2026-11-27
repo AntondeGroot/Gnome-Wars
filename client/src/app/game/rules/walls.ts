@@ -1,4 +1,4 @@
-import { ArenaMap } from './arena-map';
+import { ArenaMap } from '../../arena-map';
 
 /** A tile is 16 units wide and high; positions are in units. */
 export const TILE_UNITS = 16;

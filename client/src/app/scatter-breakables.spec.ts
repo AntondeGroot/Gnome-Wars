@@ -1,6 +1,6 @@
 import { ArenaMap, BACKYARD } from './arena-map';
-import { scatterBreakables } from './scatter-breakables';
-import { RandomInts, SeededRandom } from './seeded-random';
+import { scatterBreakables } from './game/rules/scatter-breakables';
+import { RandomInts, SeededRandom } from './game/rules/seeded-random';
 
 /** "Random" numbers that are always 0: every allowed tile gets a breakable, the first it allows. */
 const ALWAYS_ZERO: RandomInts = { nextInt: () => 0 };

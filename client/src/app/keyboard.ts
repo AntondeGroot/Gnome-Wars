@@ -1,4 +1,4 @@
-import { Direction } from './direction';
+import { Direction } from './game/rules/direction';
 import { HeldKeys } from './held-keys';
 import { directionFrom, STEERING_KEYS } from './keyboard-direction';
 

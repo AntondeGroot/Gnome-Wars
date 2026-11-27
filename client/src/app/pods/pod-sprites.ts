@@ -1,8 +1,8 @@
 import { SpriteSheet } from '../sprite-atlas';
-import { TILE_UNITS } from '../walls';
+import { TILE_UNITS } from '../game/rules/walls';
 import { blastFrame } from './blast';
 import { fuseFrame } from './fuse';
-import { PodsOnLawn } from './pods-on-lawn';
+import { PodsOnLawn } from '../game/rules/pods-on-lawn';
 
 /**
  * Draws the pods and their blasts on the ground, under everything that walks or flies, so a gnome

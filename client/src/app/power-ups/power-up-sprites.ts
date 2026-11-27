@@ -1,6 +1,6 @@
 import { SpriteSheet } from '../sprite-atlas';
-import { TILE_UNITS } from '../walls';
-import { PowerUpKind, PowerUps } from './power-ups';
+import { TILE_UNITS } from '../game/rules/walls';
+import { PowerUpKind, PowerUps } from '../game/rules/power-ups';
 
 /** The backyard atlas frame for each kind. */
 const FRAMES: Record<PowerUpKind, string> = {

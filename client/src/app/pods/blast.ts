@@ -1,8 +1,8 @@
 import POD_RULES from '../../../../shared/rules/pods.json';
-import { Direction } from '../direction';
-import { Position, sameTile } from '../walls';
-import { BlastCell, blastCells, BlastSurroundings } from './blast-cells';
-import { Pod } from './pod';
+import { Direction } from '../game/rules/direction';
+import { Position, sameTile } from '../game/rules/walls';
+import { BlastCell, blastCells, BlastSurroundings } from '../game/rules/blast-cells';
+import { Pod } from '../game/rules/pod';
 
 /** A burst pod's vine cross, fading away over `blastTicks`. */
 export interface Blast {

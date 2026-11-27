@@ -1,8 +1,8 @@
-import LIVES_RULES from '../../../../shared/rules/lives.json';
-import POD_RULES from '../../../../shared/rules/pods.json';
-import { Gnome } from '../gnome/gnome';
-import { Walls } from '../walls';
-import { Blast } from './blast';
+import LIVES_RULES from '../../../../../shared/rules/lives.json';
+import POD_RULES from '../../../../../shared/rules/pods.json';
+import { Gnome } from '../../gnome/gnome';
+import { Walls } from './walls';
+import { Blast } from '../../pods/blast';
 import { hitGnomesInBlasts } from './knock-outs';
 import { plantPod } from './plant-pod';
 

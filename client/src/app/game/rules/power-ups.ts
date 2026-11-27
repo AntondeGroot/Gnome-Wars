@@ -1,9 +1,9 @@
-import POWER_UP_RULES from '../../../../shared/rules/power-ups.json';
-import { Gnome } from '../gnome/gnome';
-import { Blast, covers } from '../pods/blast';
-import { GnomeStats } from '../gnome/gnome-stats';
-import { RandomInts } from '../seeded-random';
-import { nearestTile, Position, sameTile } from '../walls';
+import POWER_UP_RULES from '../../../../../shared/rules/power-ups.json';
+import { Gnome } from '../../gnome/gnome';
+import { Blast, covers } from '../../pods/blast';
+import { GnomeStats } from './gnome-stats';
+import { RandomInts } from './seeded-random';
+import { nearestTile, Position, sameTile } from './walls';
 
 /** What a power-up gives: a longer blast, one more pod, or a faster walk. */
 export type PowerUpKind = 'range' | 'pod' | 'speed';

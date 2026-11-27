@@ -1,4 +1,4 @@
-import { Position } from './walls';
+import { Position } from './game/rules/walls';
 
 /** A width and height in game pixels. */
 export interface Size {

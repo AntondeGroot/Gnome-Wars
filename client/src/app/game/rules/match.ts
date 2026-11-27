@@ -1,10 +1,10 @@
-import { ArenaMap } from './arena-map';
+import { ArenaMap } from '../../arena-map';
 import { Breakables } from './breakables';
 import { Direction } from './direction';
-import { Gnome } from './gnome/gnome';
-import { hitGnomesInBlasts } from './pods/knock-outs';
-import { PodsOnLawn } from './pods/pods-on-lawn';
-import { PowerUps } from './power-ups/power-ups';
+import { Gnome } from '../../gnome/gnome';
+import { hitGnomesInBlasts } from './knock-outs';
+import { PodsOnLawn } from './pods-on-lawn';
+import { PowerUps } from './power-ups';
 import { scatterBreakables } from './scatter-breakables';
 import { RandomInts } from './seeded-random';
 import { Terrain } from './terrain';

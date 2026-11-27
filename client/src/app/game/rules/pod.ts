@@ -1,5 +1,5 @@
-import { Gnome } from '../gnome/gnome';
-import { Position } from '../walls';
+import { Gnome } from '../../gnome/gnome';
+import { Position } from './walls';
 
 /** A seed pod lying on the lawn, waiting for its fuse to run out. */
 export interface Pod {

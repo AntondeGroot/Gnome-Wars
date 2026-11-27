@@ -1,4 +1,4 @@
-import { ArenaMap } from './arena-map';
+import { ArenaMap } from '../../arena-map';
 import { Position } from './walls';
 
 /** A gnome's full speed, out of 100. */

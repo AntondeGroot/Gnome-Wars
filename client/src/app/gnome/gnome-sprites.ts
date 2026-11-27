@@ -1,5 +1,5 @@
 import { SpriteSheet } from '../sprite-atlas';
-import { nearestTile, TILE_UNITS } from '../walls';
+import { nearestTile, TILE_UNITS } from '../game/rules/walls';
 import { Gnome } from './gnome';
 import { knockoutStep } from './knockout';
 import { HAT_COLOURS, Palette, paletteWithHat } from './palette';

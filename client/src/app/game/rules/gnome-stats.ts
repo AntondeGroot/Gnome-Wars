@@ -1,4 +1,4 @@
-import STATS_LIMITS from '../../../../shared/rules/gnome-stats.json';
+import STATS_LIMITS from '../../../../../shared/rules/gnome-stats.json';
 
 /** Units per second each speed power-up adds: +33% of the starting 30. */
 const SPEED_STEP = 10;

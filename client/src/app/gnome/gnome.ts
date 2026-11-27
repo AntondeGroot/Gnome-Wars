@@ -1,9 +1,9 @@
-import { Direction } from '../direction';
-import { FULL_SPEED_PERCENT } from '../terrain';
-import { anyOf, Obstacles } from '../walls';
-import { GnomeStats } from './gnome-stats';
+import { Direction } from '../game/rules/direction';
+import { FULL_SPEED_PERCENT } from '../game/rules/terrain';
+import { anyOf, Obstacles } from '../game/rules/walls';
+import { GnomeStats } from '../game/rules/gnome-stats';
 import { Lives } from './lives';
-import { stepToward } from './step';
+import { stepToward } from '../game/rules/step';
 
 /** The atlas draws four walk frames per direction: down_walk_0 to down_walk_3. */
 const WALK_FRAMES = 4;

@@ -1,5 +1,5 @@
-import { Direction } from '../direction';
-import { Walls } from '../walls';
+import { Direction } from '../game/rules/direction';
+import { Walls } from '../game/rules/walls';
 import { Gnome } from './gnome';
 
 /** An 8 × 8 tile lawn without walls, so a gnome near its middle can walk freely. */

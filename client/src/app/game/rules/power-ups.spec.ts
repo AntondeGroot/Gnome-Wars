@@ -1,8 +1,8 @@
-import POWER_UP_RULES from '../../../../shared/rules/power-ups.json';
-import { Gnome } from '../gnome/gnome';
-import { Blast } from '../pods/blast';
-import { RandomInts } from '../seeded-random';
-import { Walls } from '../walls';
+import POWER_UP_RULES from '../../../../../shared/rules/power-ups.json';
+import { Gnome } from '../../gnome/gnome';
+import { Blast } from '../../pods/blast';
+import { RandomInts } from './seeded-random';
+import { Walls } from './walls';
 import { PowerUps } from './power-ups';
 
 /** An 8 × 8 tile lawn without walls, so a gnome can stand anywhere near its middle. */

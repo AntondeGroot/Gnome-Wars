@@ -1,8 +1,8 @@
-import POD_RULES from '../../../../shared/rules/pods.json';
-import { Breakables } from '../breakables';
-import { Direction } from '../direction';
-import { Gnome } from '../gnome/gnome';
-import { TILE_UNITS, Walls } from '../walls';
+import POD_RULES from '../../../../../shared/rules/pods.json';
+import { Breakables } from './breakables';
+import { Direction } from './direction';
+import { Gnome } from '../../gnome/gnome';
+import { TILE_UNITS, Walls } from './walls';
 import { PodsOnLawn } from './pods-on-lawn';
 
 /** An 8 × 8 tile lawn without walls, so a gnome can stand anywhere near its middle. */
