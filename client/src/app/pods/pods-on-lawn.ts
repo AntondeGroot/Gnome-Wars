@@ -1,7 +1,7 @@
 import { Breakables } from '../breakables';
 import { Gnome } from '../gnome/gnome';
-import { Obstacles, Position, TILE_UNITS, Walls } from '../walls';
-import { Blast, burst, hasFaded } from './blast';
+import { Obstacles, Position, sameTile, TILE_UNITS, Walls } from '../walls';
+import { Blast, burst, covers, hasFaded } from './blast';
 import { TileSet } from './blast-cells';
 import { hasBurntOut } from './fuse';
 import { plantPod } from './plant-pod';
@@ -121,12 +121,4 @@ function overlapsTile(position: Position, tile: Position): boolean {
   const apartX = Math.abs(position.x - tile.x * TILE_UNITS);
   const apartY = Math.abs(position.y - tile.y * TILE_UNITS);
   return apartX < TILE_UNITS && apartY < TILE_UNITS;
-}
-
-function covers(blast: Blast, tile: Position): boolean {
-  return blast.cells.some((cell) => sameTile(cell.tile, tile));
-}
-
-function sameTile(a: Position, b: Position): boolean {
-  return a.x === b.x && a.y === b.y;
 }

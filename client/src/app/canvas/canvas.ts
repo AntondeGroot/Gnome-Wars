@@ -12,6 +12,7 @@ import { cameraPosition, viewSize } from '../camera';
 import { FixedTicks } from '../fixed-ticks';
 import { FrameRate } from '../frame-rate';
 import { PlayerInput } from '../game/input/player-input';
+import { hitGnomesInBlasts } from '../pods/knock-outs';
 import { drawPods } from '../pods/pod-sprites';
 
 const TICKS_PER_SECOND = 30;
@@ -134,7 +135,7 @@ export class Canvas {
     ctx.restore();
   }
 
-  /** One step of the game, 30 times per second. For now only the birds, the ladybug and the player move. */
+  /** One step of the game, 30 times per second: the critters, the player, the pods and hits. */
   private tick(view: ArenaView): void {
     this.tickCount++;
     for (const bird of view.birds) {
@@ -148,6 +149,7 @@ export class Canvas {
       view.player.move(direction, view.pods.obstaclesFor(view.player));
     }
     view.pods.update(view.player, this.playerInput.podHeld(), this.tickCount);
+    hitGnomesInBlasts(view.gnomes, view.pods.allBlasts, this.tickCount);
   }
 
   private drawAnimatedTiles({ ctx, backyardSheet, animatedTiles }: ArenaView): void {
@@ -174,7 +176,7 @@ export class Canvas {
 
   private drawGnomes({ ctx, gnomeSprites, gnomes }: ArenaView): void {
     for (const gnome of gnomes) {
-      gnomeSprites.draw(ctx, gnome);
+      gnomeSprites.draw(ctx, gnome, this.tickCount);
     }
   }
 
