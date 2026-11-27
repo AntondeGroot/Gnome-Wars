@@ -2,6 +2,7 @@ import { Breakables } from '../breakables';
 import { Gnome } from '../gnome/gnome';
 import { Obstacles, Position, TILE_UNITS, Walls } from '../walls';
 import { Blast, burst, hasFaded } from './blast';
+import { TileSet } from './blast-cells';
 import { hasBurntOut } from './fuse';
 import { plantPod } from './plant-pod';
 import { Pod } from './pod';
@@ -64,15 +65,34 @@ export class PodsOnLawn {
     }
   }
 
+  /** Bursts the pods whose fuse ran out, then every pod their blasts reach, and so on: a chain. */
   private burstPodsOutOfFuse(tick: number): void {
-    const bursting = this.pods.filter((pod) => hasBurntOut(pod, tick));
-    this.pods = this.pods.filter((pod) => !hasBurntOut(pod, tick));
-    const surroundings = { walls: this.blastWalls, breakables: this.breakables };
-    const newBlasts = bursting.map((pod) => burst(pod, surroundings, tick));
+    const surroundings = { walls: this.blastWalls, stopsOn: this.stoppers() };
+    const newBlasts: Blast[] = [];
+    let bursting = this.pods.filter((pod) => hasBurntOut(pod, tick));
+    while (bursting.length > 0) {
+      const blasts = bursting.map((pod) => burst(pod, surroundings, tick));
+      newBlasts.push(...blasts);
+      this.remove(bursting);
+      bursting = this.pods.filter((pod) => blasts.some((blast) => covers(blast, pod.tile)));
+    }
     // Only after every blast of this tick is worked out, so none reaches past another's breakable.
     newBlasts.forEach((blast) => this.destroyBreakablesUnder(blast));
     this.blasts.push(...newBlasts);
-    bursting.forEach((pod) => this.plantersStillOn.delete(pod));
+  }
+
+  /** What blast arms stop on this tick: breakables, and the pods as they lay when it started. */
+  private stoppers(): TileSet {
+    const podsAtStart = this.pods;
+    return {
+      has: (tile) =>
+        this.breakables.has(tile) || podsAtStart.some((pod) => sameTile(pod.tile, tile)),
+    };
+  }
+
+  private remove(gone: Pod[]): void {
+    this.pods = this.pods.filter((pod) => !gone.includes(pod));
+    gone.forEach((pod) => this.plantersStillOn.delete(pod));
   }
 
   private destroyBreakablesUnder(blast: Blast): void {
@@ -101,4 +121,12 @@ function overlapsTile(position: Position, tile: Position): boolean {
   const apartX = Math.abs(position.x - tile.x * TILE_UNITS);
   const apartY = Math.abs(position.y - tile.y * TILE_UNITS);
   return apartX < TILE_UNITS && apartY < TILE_UNITS;
+}
+
+function covers(blast: Blast, tile: Position): boolean {
+  return blast.cells.some((cell) => sameTile(cell.tile, tile));
+}
+
+function sameTile(a: Position, b: Position): boolean {
+  return a.x === b.x && a.y === b.y;
 }

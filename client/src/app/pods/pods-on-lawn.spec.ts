@@ -42,6 +42,72 @@ function walkAmongPods(gnome: Gnome, pods: PodsOnLawn, direction: Direction, uni
 }
 
 describe('PodsOnLawn', () => {
+  it('bursts a pod that a blast reaches on that tick, long before its own fuse runs out', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    // Side by side, on tiles (2, 3) and (3, 3): the first pod's blast reaches the second.
+    const first = new Gnome(32, 48, OPEN_LAWN);
+    const second = new Gnome(48, 48, OPEN_LAWN);
+
+    pods.update(first, true, PLANTED_AT);
+    pods.update(second, false, PLANTED_AT + 29);
+    pods.update(second, true, PLANTED_AT + 30);
+    pods.update(first, false, BURNT_OUT_AT);
+
+    expect(pods.all).toEqual([]);
+    expect(pods.allBlasts.map((blast) => blast.startedAt)).toEqual([BURNT_OUT_AT, BURNT_OUT_AT]);
+  });
+
+  it('carries the chain on to a pod only the second blast reaches', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    // In a row on tiles (1, 3), (2, 3) and (3, 3), with a range of 1: only the middle pod's blast
+    // reaches the last one.
+    const [first, middle, last] = [16, 32, 48].map((x) => new Gnome(x, 48, OPEN_LAWN));
+
+    pods.update(first, true, PLANTED_AT);
+    pods.update(middle, false, PLANTED_AT + 1);
+    pods.update(middle, true, PLANTED_AT + 2);
+    pods.update(last, false, PLANTED_AT + 3);
+    pods.update(last, true, PLANTED_AT + 4);
+    pods.update(first, false, BURNT_OUT_AT);
+
+    expect(pods.all).toEqual([]);
+    expect(pods.allBlasts).toHaveLength(3);
+  });
+
+  it('ends a blast arm on the pod it reaches, even with range to spare', () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    // On tile (2, 3) with a range of 3, next to a pod on (3, 3).
+    const first = new Gnome(32, 48, OPEN_LAWN);
+    const second = new Gnome(48, 48, OPEN_LAWN);
+    first.stats.addBlastRange();
+    first.stats.addBlastRange();
+
+    pods.update(first, true, PLANTED_AT);
+    pods.update(second, false, PLANTED_AT + 1);
+    pods.update(second, true, PLANTED_AT + 2);
+    pods.update(first, false, BURNT_OUT_AT);
+
+    const [firstBlast] = pods.allBlasts;
+    expect(firstBlast.cells.filter((cell) => cell.direction === 'right')).toEqual([
+      { tile: { x: 3, y: 3 }, part: 'end', direction: 'right' },
+    ]);
+  });
+
+  it("leaves a pod out of the blast's reach to its own fuse", () => {
+    const pods = new PodsOnLawn(OPEN_LAWN);
+    // On tiles (2, 3) and (4, 3), with a range of 1: the first blast stops a tile short.
+    const first = new Gnome(32, 48, OPEN_LAWN);
+    const farOff = new Gnome(64, 48, OPEN_LAWN);
+
+    pods.update(first, true, PLANTED_AT);
+    pods.update(farOff, false, PLANTED_AT + 1);
+    pods.update(farOff, true, PLANTED_AT + 2);
+    pods.update(first, false, BURNT_OUT_AT);
+
+    expect(pods.all).toEqual([{ tile: { x: 4, y: 3 }, owner: farOff, plantedAt: PLANTED_AT + 2 }]);
+    expect(pods.allBlasts).toHaveLength(1);
+  });
+
   it('destroys only the first breakable in a direction, even with range to spare', () => {
     const hedgeRow = { grid: ['...hh'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
     const breakables = Breakables.of(hedgeRow);
