@@ -5,9 +5,7 @@ describe('Breakables', () => {
     // One row: grass, then a hedge at (1, 0).
     const breakables = Breakables.of({
       grid: ['.h'],
-      legend: { h: 'hedge' },
-      walkable: ['.'],
-      breakable: ['h'],
+      tiles: { '.': { walkable: true }, h: { frame: 'hedge', breakable: true } },
     });
     const halfOnTheHedge = { x: 8, y: 0 };
 

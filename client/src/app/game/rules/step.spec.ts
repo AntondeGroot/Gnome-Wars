@@ -3,7 +3,7 @@ import { stepToward } from './step';
 
 /** Walls from rows of tiles, where '#' is solid and '.' is open. */
 function wallsFrom(...rows: string[]): Walls {
-  return Walls.of({ grid: rows, legend: {}, walkable: ['.'] });
+  return Walls.of({ grid: rows, tiles: { '.': { walkable: true } } });
 }
 
 describe('stepToward', () => {

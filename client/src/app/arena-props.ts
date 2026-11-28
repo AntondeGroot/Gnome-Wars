@@ -14,12 +14,12 @@ export interface PlacedProp {
  * The map's rows and letters are checked by arena-map.spec.ts, so this can trust them.
  */
 export function propsIn(map: ArenaMap): PlacedProp[] {
-  const breakable = new Set(map.breakable ?? []);
   const props: PlacedProp[] = [];
   for (const [y, row] of map.grid.entries()) {
     for (const [x, letter] of [...row].entries()) {
-      const name = map.legend[letter];
-      if (name === null || breakable.has(letter)) continue;
+      const tile = map.tiles[letter];
+      const name = tile?.frame;
+      if (name === undefined || tile?.breakable) continue;
 
       const frame = isAutotile(name) ? autotileFrame(name, map.grid, x, y) : name;
       props.push({ x, y, frame });

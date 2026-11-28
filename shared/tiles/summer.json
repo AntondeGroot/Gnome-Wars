@@ -1,0 +1,16 @@
+{
+  "." : { "walkable": true },
+  "1" : { "walkable": true },
+  "2" : { "walkable": true },
+  "3" : { "walkable": true },
+  "4" : { "walkable": true },
+  "-" : { "frame": "fence_h" },
+  "|" : { "frame": "fence_v" },
+  "#" : { "frame": "gate" },
+  "+" : { "frame": "corner_stone" },
+  "■" : { "frame": "flower_bed_a" },
+  "b" : { "frame": "birdbath" },
+  "░" : { "frame": "sandbox", "walkable": true, "speedPercent": 50 },
+  "≈" : { "frame": "pond", "blastsCross": true },
+  "⌂" : { "frame": "shed" }
+}

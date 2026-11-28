@@ -3,7 +3,10 @@ import { Walls } from '../game/rules/walls';
 import { Gnome } from './gnome';
 
 /** An 8 × 8 tile lawn without walls, so a gnome near its middle can walk freely. */
-const OPEN_LAWN = Walls.of({ grid: Array<string>(8).fill('........'), legend: {}, walkable: ['.'] });
+const OPEN_LAWN = Walls.of({
+  grid: Array<string>(8).fill('........'),
+  tiles: { '.': { walkable: true } },
+});
 
 /** Where a gnome ends up after one move from (32, 48), a start tile at tile × 16. */
 function positionAfterMoving(direction: Direction): { x: number; y: number } {

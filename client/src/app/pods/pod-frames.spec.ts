@@ -9,8 +9,7 @@ import { blastFrame, fuseFrame } from './pod-frames';
 /** An 8 × 8 tile lawn without walls; the gnome is only there to own the pod. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(8).fill('........'),
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const PLANTED_AT = 10;
 const THIRD_OF_FUSE = POD_RULES.fuseTicks / 3;

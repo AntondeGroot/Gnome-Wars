@@ -13,8 +13,7 @@ function rolls(...numbers: number[]): RandomInts {
 /** A 5 × 3 lawn with start tile 1 in the top-left corner; any grass tile may get a hedge. */
 const LAWN_WITH_START: ArenaMap = {
   grid: ['1....', '.....', '.....'],
-  legend: { '1': null },
-  walkable: ['.', '1'],
+  tiles: { '.': { walkable: true }, '1': { walkable: true } },
   scatter: { '.': { hedge: 100 } },
 };
 
@@ -51,8 +50,7 @@ describe('scatterBreakables', () => {
     // One row: four grass tiles, then sand.
     const row: ArenaMap = {
       grid: ['....░'],
-      legend: {},
-      walkable: ['.', '░'],
+      tiles: { '.': { walkable: true }, '░': { walkable: true } },
       scatter: { '.': { hedge: 25, flower_pot: 25 }, '░': { sandcastle: 50 } },
     };
     // Grass: 0 to 24 is a hedge, 25 to 49 a pot, 50 and up nothing. Sand: 0 to 49 a sandcastle.

@@ -26,8 +26,8 @@ function autotileTilesIn(map: ArenaMap): AutotileTile[] {
   const tiles: AutotileTile[] = [];
   for (const [y, row] of map.grid.entries()) {
     for (const [x, letter] of [...row].entries()) {
-      const name = map.legend[letter];
-      if (name !== null && isAutotile(name)) {
+      const name = map.tiles[letter]?.frame;
+      if (name !== undefined && isAutotile(name)) {
         tiles.push({ x, y, letter, name });
       }
     }
@@ -55,33 +55,33 @@ describe('the backyard map', () => {
     expect(rowsWithDifferentWidth).toEqual([]);
   });
 
-  it('has a legend entry for every letter in the grid', () => {
+  it('has a tile for every letter in the grid', () => {
     const lettersInGrid = new Set(BACKYARD.grid.flatMap((row) => [...row]));
 
     const lettersWithoutEntry = [...lettersInGrid].filter(
-      (letter) => !Object.hasOwn(BACKYARD.legend, letter),
+      (letter) => !Object.hasOwn(BACKYARD.tiles, letter),
     );
 
     expect(lettersWithoutEntry).toEqual([]);
   });
 
-  it('only lists walkable letters that the legend knows', () => {
-    // A typo here, like a start tile '1' typed as another letter, would leave that tile solid.
-    const unknownWalkable = BACKYARD.walkable.filter(
-      (letter) => !Object.hasOwn(BACKYARD.legend, letter),
+  it('makes every start tile walkable', () => {
+    // A start tile without "walkable" would be solid, and the gnome on it stuck from the start.
+    const solidStarts = ['1', '2', '3', '4'].filter(
+      (letter) => BACKYARD.tiles[letter]?.walkable !== true,
     );
 
-    expect(unknownWalkable).toEqual([]);
+    expect(solidStarts).toEqual([]);
   });
 
   it('only names frames or multi-tile pieces that exist in the backyard atlas', () => {
     const atlas: AtlasFrames = backyardAtlas;
-    // null in the legend means "no prop on this tile", so it names nothing.
-    const namesInLegend = new Set(
-      Object.values(BACKYARD.legend).filter((name): name is string => name !== null),
+    // A tile without a frame, such as grass, names nothing.
+    const namesInTiles = new Set(
+      Object.values(BACKYARD.tiles).flatMap(({ frame }) => (frame === undefined ? [] : [frame])),
     );
 
-    const unknownNames = [...namesInLegend].filter(
+    const unknownNames = [...namesInTiles].filter(
       (name) => !Object.hasOwn(atlas.frames, name) && !Object.hasOwn(atlas.multi_tile, name),
     );
 
