@@ -7,8 +7,7 @@ import { Lives } from './lives';
 /** An 8 × 8 tile lawn without walls, so a gnome near its middle can walk freely. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(8).fill('........'),
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const HIT_AT = 10;
 
@@ -77,7 +76,7 @@ describe('frameNameOf', () => {
   it('stands idle facing a wall it walks into, without moving', () => {
     // A column of three tiles with a wall at the top. The gnome walks up one tile, to y 16, and
     // then into the wall.
-    const walls = Walls.of({ grid: ['#', '.', '.'], legend: {}, walkable: ['.'] });
+    const walls = Walls.of({ grid: ['#', '.', '.'], tiles: { '.': { walkable: true } } });
     const gnome = new Gnome(0, 32, walls);
     for (let tick = 1; tick <= 17; tick++) {
       gnome.move('up');

@@ -9,8 +9,7 @@ import { plantPod } from './plant-pod';
 /** An 8 × 8 tile lawn without walls, so a gnome can stand anywhere near its middle. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(8).fill('........'),
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const BURST_AT = 10;
 

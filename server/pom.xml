@@ -73,13 +73,14 @@
       <resource>
         <directory>src/main/resources</directory>
       </resource>
-      <!-- The maps and rules the client reads too, copied onto the classpath under shared/, so
-           SharedJson finds them from any working directory and inside the war. -->
+      <!-- The maps, tiles and rules the client reads too, copied onto the classpath under
+           shared/, so SharedJson finds them from any working directory and inside the war. -->
       <resource>
         <directory>../shared</directory>
         <targetPath>shared</targetPath>
         <includes>
           <include>maps/**</include>
+          <include>tiles/**</include>
           <include>rules/**</include>
         </includes>
       </resource>

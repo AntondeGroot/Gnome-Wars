@@ -12,9 +12,7 @@ describe('Match', () => {
     // One row of sand, walked at 50%: the player starts on (0, 0) at 30 units a second.
     const sandRow = {
       grid: ['░░░░░'],
-      legend: {},
-      walkable: ['░'],
-      speedPercentOn: { '░': 50 },
+      tiles: { '░': { walkable: true, speedPercent: 50 } },
     };
     const match = new Match(sandRow, [{ tile: { x: 0, y: 0 }, skin: 'red' }], ALWAYS_ZERO);
 
@@ -28,9 +26,7 @@ describe('Match', () => {
     // Grass on (0, 0) and (1, 0), sand from (2, 0). The player starts on (1, 0), at x = 16.
     const grassThenSand = {
       grid: ['..░░░'],
-      legend: {},
-      walkable: ['.', '░'],
-      speedPercentOn: { '░': 50 },
+      tiles: { '.': { walkable: true }, '░': { walkable: true, speedPercent: 50 } },
     };
     const match = new Match(grassThenSand, [{ tile: { x: 1, y: 0 }, skin: 'red' }], ALWAYS_ZERO);
 
@@ -46,7 +42,10 @@ describe('Match', () => {
 
   it('keeps the power-up a hedge drops, though the blast that broke it lies on its tile', () => {
     // One row: the player on (0, 0), a hedge right next to it on (1, 0).
-    const hedgeRow = { grid: ['.h...'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
+    const hedgeRow = {
+      grid: ['.h...'],
+      tiles: { '.': { walkable: true }, h: { frame: 'hedge', breakable: true } },
+    };
     const match = new Match(hedgeRow, [{ tile: { x: 0, y: 0 }, skin: 'red' }], ALWAYS_ZERO);
 
     match.tick(null, true, PLANTED_AT);

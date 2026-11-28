@@ -23,13 +23,13 @@ export class Breakables implements Obstacles {
     return new Breakables(breakables);
   }
 
-  /** Every tile whose letter is in the map's breakable list. */
+  /** Every tile whose letter is a breakable tile. */
   static of(map: ArenaMap): Breakables {
-    const breakable = new Set(map.breakable ?? []);
     const found = map.grid.flatMap((row, y) =>
-      [...row].flatMap((letter, x) =>
-        breakable.has(letter) ? [{ tile: { x, y }, frame: map.legend[letter] ?? letter }] : [],
-      ),
+      [...row].flatMap((letter, x) => {
+        const tile = map.tiles[letter];
+        return tile?.breakable ? [{ tile: { x, y }, frame: tile.frame ?? letter }] : [];
+      }),
     );
     return new Breakables(found);
   }

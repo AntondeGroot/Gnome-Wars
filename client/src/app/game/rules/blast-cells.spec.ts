@@ -8,16 +8,14 @@ import { blastCells } from './blast-cells';
  */
 const WALLED_LAWN = Walls.of({
   grid: ['..#..', '.....', '.#...', '.....', '.....'],
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const POD_TILE = { x: 2, y: 2 };
 
 /** A 7 × 7 lawn without walls: from its centre a range of 2 stops a tile short of every edge. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(7).fill('.......'),
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const OPEN_LAWN_CENTRE = { x: 3, y: 3 };
 

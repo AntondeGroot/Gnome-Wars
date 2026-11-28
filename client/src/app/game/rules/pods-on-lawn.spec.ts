@@ -8,8 +8,7 @@ import { PodsOnLawn } from './pods-on-lawn';
 /** An 8 × 8 tile lawn without walls, so a gnome can stand anywhere near its middle. */
 const OPEN_LAWN = Walls.of({
   grid: Array<string>(8).fill('........'),
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 /**
  * A 5 × 3 lawn with a wall at (3, 2): a gnome walking down over columns 2 and 3 runs into it, and
@@ -17,8 +16,7 @@ const OPEN_LAWN = Walls.of({
  */
 const CORNER_LAWN = Walls.of({
   grid: ['.....', '.....', '...#.'],
-  legend: {},
-  walkable: ['.'],
+  tiles: { '.': { walkable: true } },
 });
 const PLANTED_AT = 10;
 const BURNT_OUT_AT = PLANTED_AT + POD_RULES.fuseTicks;
@@ -124,7 +122,10 @@ describe('PodsOnLawn', () => {
   });
 
   it('destroys only the first breakable in a direction, even with range to spare', () => {
-    const hedgeRow = { grid: ['...hh'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
+    const hedgeRow = {
+      grid: ['...hh'],
+      tiles: { '.': { walkable: true }, h: { frame: 'hedge', breakable: true } },
+    };
     const breakables = Breakables.of(hedgeRow);
     const pods = new PodsOnLawn(Walls.forBlasts(hedgeRow), breakables);
     // On tile (1, 0), with a blast range of 3: enough to reach both hedges, at (3, 0) and (4, 0).
@@ -143,9 +144,7 @@ describe('PodsOnLawn', () => {
     // A hedge right next to the pod's tile, (2, 2), on every side.
     const hedgeCross = {
       grid: ['.....', '..h..', '.h.h.', '..h..', '.....'],
-      legend: { h: 'hedge' },
-      walkable: ['.'],
-      breakable: ['h'],
+      tiles: { '.': { walkable: true }, h: { frame: 'hedge', breakable: true } },
     };
     const breakables = Breakables.of(hedgeCross);
     const pods = new PodsOnLawn(Walls.forBlasts(hedgeCross), breakables);
@@ -158,7 +157,10 @@ describe('PodsOnLawn', () => {
   });
 
   it('stops two pods bursting on one tick at the same first breakable in a line', () => {
-    const hedgeRow = { grid: ['..hh.'], legend: { h: 'hedge' }, walkable: ['.'], breakable: ['h'] };
+    const hedgeRow = {
+      grid: ['..hh.'],
+      tiles: { '.': { walkable: true }, h: { frame: 'hedge', breakable: true } },
+    };
     const breakables = Breakables.of(hedgeRow);
     const pods = new PodsOnLawn(Walls.forBlasts(hedgeRow), breakables);
     // Both with a range of 2. The first, on (0, 0), reaches the hedge at (2, 0). The second, on

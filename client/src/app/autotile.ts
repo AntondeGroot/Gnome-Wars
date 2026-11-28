@@ -2,7 +2,7 @@
  * Autotiles: areas such as a pond that can be any rectangle from 2 × 2 up. Each tile picks its own
  * frame from its neighbours: a corner (tl, tr, bl, br), an edge (t, b, l, r) or the centre (c), so
  * a bigger pond just repeats more edge and centre frames.
- * Keyed by the name used in the map legend; the value is the prefix of the atlas frames, which
+ * Keyed by the frame name a tile gives; the value is the prefix of the atlas frames, which
  * doesn't always match ("sandbox" → sand_tl, sand_t, …).
  */
 export const AUTOTILE_PREFIXES: Record<string, string> = {

@@ -1,4 +1,4 @@
-import { ArenaMap } from '../../arena-map';
+import { ArenaMap, lettersWhere } from '../../arena-map';
 
 /** A tile is 16 units wide and high; positions are in units. */
 export const TILE_UNITS = 16;
@@ -24,12 +24,19 @@ export class Walls implements Obstacles {
    * can be destroyed; Breakables blocks those tiles while they stand.
    */
   static of(map: ArenaMap): Walls {
-    return Walls.allExcept(map.grid, [...map.walkable, ...(map.breakable ?? [])]);
+    const open = lettersWhere(
+      map.tiles,
+      (tile) => tile.walkable === true || tile.breakable === true,
+    );
+    return Walls.allExcept(map.grid, open);
   }
 
   /** What stops a blast: the same walls, except that blasts cross the map's blastsCross tiles. */
   static forBlasts(map: ArenaMap): Walls {
-    const open = [...map.walkable, ...(map.blastsCross ?? []), ...(map.breakable ?? [])];
+    const open = lettersWhere(
+      map.tiles,
+      (tile) => tile.walkable === true || tile.blastsCross === true || tile.breakable === true,
+    );
     return Walls.allExcept(map.grid, open);
   }
 
