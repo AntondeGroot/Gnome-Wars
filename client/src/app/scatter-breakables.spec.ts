@@ -15,7 +15,7 @@ const LAWN_WITH_START: ArenaMap = {
   grid: ['1....', '.....', '.....'],
   legend: { '1': null },
   walkable: ['.', '1'],
-  scatter: { percent: 100, on: { '.': ['hedge'] } },
+  scatter: { '.': { hedge: 100 } },
 };
 
 describe('scatterBreakables', () => {
@@ -38,20 +38,31 @@ describe('scatterBreakables', () => {
     expect(layoutFor(2)).not.toEqual(layoutFor(1));
   });
 
-  it('places one when the roll is below percent, picked from what its letter allows', () => {
-    // One row: grass, sand, grass.
+  it('shares out 100 or less on every letter of the backyard, so no share is cut off', () => {
+    const totals = Object.values(BACKYARD.scatter ?? {}).map((shares) =>
+      Object.values(shares).reduce((sum, share) => sum + share, 0),
+    );
+
+    expect(totals.length).toBeGreaterThan(0);
+    expect(totals.every((total) => total <= 100)).toBe(true);
+  });
+
+  it('rolls once per tile and gives each breakable its share, then nothing', () => {
+    // One row: four grass tiles, then sand.
     const row: ArenaMap = {
-      grid: ['.░.'],
+      grid: ['....░'],
       legend: {},
       walkable: ['.', '░'],
-      scatter: { percent: 50, on: { '.': ['hedge', 'flower_pot'], '░': ['sandcastle'] } },
+      scatter: { '.': { hedge: 25, flower_pot: 25 }, '░': { sandcastle: 50 } },
     };
-    // Grass rolls 49, then picks 1 (flower_pot); sand rolls 49, then picks 0; grass rolls 50.
-    const random = rolls(49, 1, 49, 0, 50);
+    // Grass: 0 to 24 is a hedge, 25 to 49 a pot, 50 and up nothing. Sand: 0 to 49 a sandcastle.
+    const random = rolls(24, 25, 49, 50, 49);
 
     expect(scatterBreakables(row, random)).toEqual([
-      { tile: { x: 0, y: 0 }, frame: 'flower_pot' },
-      { tile: { x: 1, y: 0 }, frame: 'sandcastle' },
+      { tile: { x: 0, y: 0 }, frame: 'hedge' },
+      { tile: { x: 1, y: 0 }, frame: 'flower_pot' },
+      { tile: { x: 2, y: 0 }, frame: 'flower_pot' },
+      { tile: { x: 4, y: 0 }, frame: 'sandcastle' },
     ]);
   });
 });

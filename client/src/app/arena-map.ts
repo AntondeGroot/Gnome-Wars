@@ -24,12 +24,12 @@ export interface ArenaMap {
   scatter?: Scatter;
 }
 
-/** Which breakables may be scattered where, and how many. */
-export interface Scatter {
-  /** The share of the allowed tiles that get one, out of 100. */
-  percent: number;
-  /** For each letter they may stand on, the frames of the breakables to pick from. */
-  on: Record<string, string[]>;
-}
+/**
+ * Which breakables may be scattered where, and how often: for each letter they may stand on, the
+ * frame of each breakable with the share of those tiles it gets, out of 100. A tile's letter adds
+ * up to 100 or less; the rest of its tiles stay empty. `{ '.': { hedge: 30, flower_pot: 15 } }`
+ * puts a hedge on 30% of the grass, a pot on 15%, and nothing on the other 55%.
+ */
+export type Scatter = Record<string, Record<string, number>>;
 
 export const BACKYARD: ArenaMap = backyard;
