@@ -35,10 +35,7 @@
   "blastsCross": ["≈"],
   "speedPercentOn": { "░": 50 },
   "scatter": {
-    "percent": 50,
-    "on": {
-      ".": ["hedge", "flower_pot"],
-      "░": ["sandcastle"]
-    }
+    ".": { "hedge": 25, "flower_pot": 25 },
+    "░": { "sandcastle": 50 }
   }
 }
